@@ -1,8 +1,12 @@
-import { drizzle, tables, Items } from "@blahaj-app/database";
+import { drizzle, tables, Items, sql } from "@blahaj-app/database";
 import { IkeaResponse } from "./ikea-response";
 
 function toUnixTime(date: string) {
   return Math.floor(new Date(date).getTime() / 1000);
+}
+
+function getCurrentDay() {
+  return Math.floor(Date.now() / 1000 / 60 / 60 / 24);
 }
 
 async function checkIkeaStock(country: string, articleID: string) {
@@ -90,6 +94,7 @@ async function handleCron(event: ScheduledController, env: Bindings, ctx: Execut
                 type: item,
                 quantity: itemData.stock.quantity,
                 time: toUnixTime(itemData.stock.time),
+                day: getCurrentDay(),
               });
             }
 
@@ -121,6 +126,10 @@ async function handleCron(event: ScheduledController, env: Bindings, ctx: Execut
         ? db
             .insert(tables.stockRecords)
             .values(...stockValues)
+            .onConflictDoUpdate({
+              set: { quantity: sql`excluded.quantity` },
+              target: [tables.stockRecords.storeId, tables.stockRecords.type, tables.stockRecords.day],
+            })
             .run()
         : null,
 

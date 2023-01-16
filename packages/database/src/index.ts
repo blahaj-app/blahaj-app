@@ -1,4 +1,4 @@
-import { int, real, sqliteTable, text } from "drizzle-orm-sqlite";
+import { int, real, sqliteTable, text, uniqueIndex } from "drizzle-orm-sqlite";
 
 export const stores = sqliteTable("stores", {
   id: text("id").primaryKey(),
@@ -14,13 +14,20 @@ export const articleIDs = sqliteTable("article_ids", {
   articleID: text("article_id").notNull(),
 });
 
-export const stockRecords = sqliteTable("stock_records", {
-  id: int("id").primaryKey(),
-  storeId: text("store_id").notNull(),
-  type: text("type").notNull(),
-  quantity: int("quantity"),
-  time: int("timestamp").notNull(),
-});
+export const stockRecords = sqliteTable(
+  "stock_records",
+  {
+    id: int("id").primaryKey(),
+    storeId: text("store_id").notNull(),
+    type: text("type").notNull(),
+    quantity: int("quantity"),
+    time: int("timestamp").notNull(),
+    day: int("day").notNull(),
+  },
+  (table) => ({
+    onePerDay: uniqueIndex("idx_one_per_day").on(table.storeId, table.type, table.day),
+  }),
+);
 
 export const restocks = sqliteTable("restocks", {
   id: int("id").primaryKey(),
@@ -39,3 +46,4 @@ export enum Items {
 
 export const tables = { stores, articleIDs, stockRecords, restocks };
 export { drizzle } from "drizzle-orm-sqlite/d1";
+export { sql } from "drizzle-orm";
