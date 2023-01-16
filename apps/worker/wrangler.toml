@@ -1,0 +1,12 @@
+name = "miniflare-typescript-esbuild-jest"
+main = "dist/index.mjs"
+compatibility_date = "2022-05-28"
+compatibility_flags = []
+
+[build]
+command = "node build.js"
+
+[[ d1_databases ]]
+binding = "DB"
+database_name = "blahaj-app"
+database_id = "1678a156-dbb8-4046-8ee2-a415f59b6a48"

@@ -1,0 +1,30 @@
+{
+  "name": "blahaj-app",
+  "description": "Blahaj & Smolhaj stock tracker",
+  "private": true,
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "clean": "pnpm run -r clean",
+    "build": "pnpm run -r build",
+    "lint": "eslint --ext js,jsx,ts,tsx ."
+  },
+  "devDependencies": {
+    "@trivago/prettier-plugin-sort-imports": "^4.0.0",
+    "@typescript-eslint/eslint-plugin": "^5.48.1",
+    "@typescript-eslint/parser": "^5.48.1",
+    "eslint": "~8.31.0",
+    "eslint-config-prettier": "^8.6.0",
+    "eslint-plugin-import": "~2.27.4",
+    "eslint-plugin-prettier": "^4.2.1",
+    "prettier": "^2.8.3",
+    "typescript": "~4.9.4"
+  },
+  "pnpm": {
+    "patchedDependencies": {
+      "@miniflare/d1@2.11.0": "patches/@miniflare__d1@2.11.0.patch"
+    }
+  }
+}

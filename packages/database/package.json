@@ -1,0 +1,27 @@
+{
+  "name": "@blahaj-app/database",
+  "version": "1.0.0",
+  "main": "dist/index",
+  "types": "dist/index",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "pnpm run clean && pnpm run compile",
+    "clean": "rimraf ./dist",
+    "generate": "drizzle-kit generate:sqlite --schema=src/index.ts",
+    "compile": "tsc",
+    "prepublishOnly": "pnpm run build"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20221111.1",
+    "drizzle-kit": "^0.16.1",
+    "esbuild": "^0.17.0",
+    "rimraf": "~4.0.0",
+    "typescript": "~4.9.0"
+  },
+  "dependencies": {
+    "drizzle-orm": "^0.15.1",
+    "drizzle-orm-sqlite": "^0.15.0"
+  }
+}
