@@ -9,4 +9,4 @@ command = "node build.js"
 [[ d1_databases ]]
 binding = "DB"
 database_name = "blahaj-app"
-database_id = "1678a156-dbb8-4046-8ee2-a415f59b6a48"
+database_id = "ef34adf7-e2e3-426c-b268-dd625bb80063"

@@ -1,7 +1,7 @@
 {
   "name": "@blahaj-app/worker",
-  "version": "1.0.0",
-  "description": "Example project using Miniflare, TypeScript, esbuild and Jest",
+  "private": true,
+  "sideEffects": false,
   "type": "module",
   "module": "./dist/index.mjs",
   "scripts": {
@@ -12,11 +12,8 @@
     "deploy": "wrangler publish",
     "clean": "rimraf dist .wrangler"
   },
-  "keywords": [],
-  "author": "",
-  "license": "MIT",
   "dependencies": {
-    "@blahaj-app/database": "workspace:^1.0.0",
+    "@blahaj-app/database": "workspace:*",
     "drizzle-orm": "^0.15.1"
   },
   "devDependencies": {

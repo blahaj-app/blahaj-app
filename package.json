@@ -24,7 +24,8 @@
   },
   "pnpm": {
     "patchedDependencies": {
-      "@miniflare/d1@2.11.0": "patches/@miniflare__d1@2.11.0.patch"
+      "@miniflare/d1@2.11.0": "patches/@miniflare__d1@2.11.0.patch",
+      "@eslint/eslintrc@1.4.1": "patches/@eslint__eslintrc@1.4.1.patch"
     }
   }
 }

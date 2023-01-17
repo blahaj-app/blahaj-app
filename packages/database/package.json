@@ -1,11 +1,10 @@
 {
   "name": "@blahaj-app/database",
-  "version": "1.0.0",
+  "private": true,
+  "sideEffects": false,
   "main": "dist/index",
   "types": "dist/index",
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "scripts": {
     "build": "pnpm run clean && pnpm run compile",
     "clean": "rimraf ./dist",

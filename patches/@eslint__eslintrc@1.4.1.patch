@@ -1,0 +1,39 @@
+diff --git a/dist/eslintrc.cjs b/dist/eslintrc.cjs
+index b3bc1151dc8c057499b2dcaf1374e2fa76a99bb5..94d0a4e16c33353f54da7ebad401a57c59e1c39b 100644
+--- a/dist/eslintrc.cjs
++++ b/dist/eslintrc.cjs
+@@ -563,12 +563,24 @@ class PluginConflictError extends Error {
+      * @param {{filePath:string, importerName:string}[]} plugins The resolved plugins.
+      */
+     constructor(pluginId, plugins) {
+-        super(`Plugin "${pluginId}" was conflicted between ${plugins.map(p => `"${p.importerName}"`).join(" and ")}.`);
++        super(`Plugin "${pluginId}" was conflicted between ${plugins.map(p => `"${p.importerName}"`).join(" and ")}. Files not linking to the same place on disk: ${plugins.map(p => p.filePath).join(' and ')}`);
+         this.messageTemplate = "plugin-conflict";
+         this.messageData = { pluginId, plugins };
+     }
+ }
+ 
++function isSameFile(pathA, pathB) {
++  try {
++    const statA = fs.statSync(pathA)
++    const statB = fs.statSync(pathB)
++    if(typeof statA?.ino !== 'number' || typeof statB?.ino !== 'number') return false
++    else return statA.ino === statB.ino
++  } catch(error) {
++    console.error(error)
++    return false
++  }
++}
++
+ /**
+  * Merge plugins.
+  * `target`'s definition is prior to `source`'s.
+@@ -594,7 +606,7 @@ function mergePlugins(target, source) {
+                 throw sourceValue.error;
+             }
+             target[key] = sourceValue;
+-        } else if (sourceValue.filePath !== targetValue.filePath) {
++        } else if (!isSameFile(sourceValue.filePath, targetValue.filePath)) {
+             throw new PluginConflictError(key, [
+                 {
+                     filePath: targetValue.filePath,
