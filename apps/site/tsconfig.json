@@ -12,6 +12,9 @@
     "strict": true,
     "allowJs": true,
     "forceConsistentCasingInFileNames": true,
+    "plugins": [
+      { "name": "typescript-remix-routes-plugin" }
+    ],
 
 
     // Remix takes care of building everything in `remix build`.

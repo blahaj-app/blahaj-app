@@ -1,13 +1,10 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const { withEsbuildOverride } = require("remix-esbuild-override");
-const path = require("node:path");
 const GlobalsPolyfills = require("@esbuild-plugins/node-globals-polyfill").default;
 
-withEsbuildOverride((option, { isServer }) => {
-  option.jsxFactory = "jsx";
-  option.inject = [path.resolve(__dirname, "app", "reactShims.ts")];
+console.log("1bruh!!");
 
-  // 🔽 This block is for Cloudflare Workers/Pages. 🔽
+withEsbuildOverride((option, { isServer }) => {
   if (isServer)
     option.plugins = [
       GlobalsPolyfills({
@@ -15,7 +12,6 @@ withEsbuildOverride((option, { isServer }) => {
       }),
       ...option.plugins,
     ];
-  // 🔼 This block is for Cloudflare Workers/Pages. 🔼
 
   return option;
 });

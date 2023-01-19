@@ -17,7 +17,7 @@ const Index: FC = () => {
   return (
     <Box background="red.100">
       <code>
-        <pre>{JSON.stringify(data, null, 2)}</pre>
+        <pre>{data.length}</pre>
       </code>
     </Box>
   );

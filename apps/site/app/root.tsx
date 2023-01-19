@@ -1,11 +1,13 @@
-import { ChakraProvider } from "@chakra-ui/react";
+import { ChakraProvider, extendTheme } from "@chakra-ui/react";
 import { withEmotionCache } from "@emotion/react";
 import type { LinksFunction, MetaFunction } from "@remix-run/cloudflare";
-import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration } from "@remix-run/react";
+import { Links, LiveReload, Meta, Scripts, ScrollRestoration } from "@remix-run/react";
 import type { FC } from "react";
 import { useContext } from "react";
 import { useEffectOnce } from "usehooks-ts";
 import { ClientStyleContext } from "./context";
+import Layout from "./layout";
+// import mapboxStyles from "mapbox-gl/dist/mapbox-gl.css";
 
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
@@ -15,6 +17,7 @@ export const meta: MetaFunction = () => ({
 
 export const links: LinksFunction = () => {
   return [
+    // { rel: "stylesheet", href: mapboxStyles },
     { rel: "preconnect", href: "https://fonts.googleapis.com" },
     { rel: "preconnect", href: "https://fonts.gstatic.com" },
     {
@@ -23,6 +26,16 @@ export const links: LinksFunction = () => {
     },
   ];
 };
+
+const sansSerifDefault =
+  "-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'";
+
+const theme = extendTheme({
+  fonts: {
+    heading: "'Poppins', " + sansSerifDefault,
+    body: "'Poppins', " + sansSerifDefault,
+  },
+});
 
 const App: FC = withEmotionCache((_, emotionCache) => {
   const clientStyleData = useContext(ClientStyleContext);
@@ -47,8 +60,8 @@ const App: FC = withEmotionCache((_, emotionCache) => {
         <Links />
       </head>
       <body>
-        <ChakraProvider>
-          <Root />
+        <ChakraProvider theme={theme}>
+          <Layout />
         </ChakraProvider>
         <ScrollRestoration />
         <Scripts />
@@ -58,12 +71,3 @@ const App: FC = withEmotionCache((_, emotionCache) => {
   );
 });
 export default App;
-
-const Root: FC = () => {
-  return (
-    <>
-      test 123
-      <Outlet />
-    </>
-  );
-};

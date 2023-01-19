@@ -13,5 +13,6 @@ module.exports = {
         singleReturnOnly: false,
       },
     ],
+    "react/jsx-curly-brace-presence": ["error", "never"],
   },
 };

@@ -3,7 +3,7 @@ import createEmotionServer from "@emotion/server/create-instance";
 import type { EntryContext, HandleDocumentRequestFunction } from "@remix-run/cloudflare";
 import { RemixServer } from "@remix-run/react";
 import { renderToString } from "react-dom/server";
-import { createEmotionCache } from "./createEmotionCache";
+import { createEmotionCache } from "./create-emotion-cache";
 
 const cache = createEmotionCache();
 

@@ -4,7 +4,7 @@ import type { FC, PropsWithChildren } from "react";
 import { startTransition, useState } from "react";
 import { hydrateRoot } from "react-dom/client";
 import { ClientStyleContext } from "./context";
-import { createEmotionCache, defaultCache } from "./createEmotionCache";
+import { createEmotionCache, defaultCache } from "./create-emotion-cache";
 
 const ClientCacheProvider: FC<PropsWithChildren> = ({ children }) => {
   const [cache, setCache] = useState(defaultCache);
