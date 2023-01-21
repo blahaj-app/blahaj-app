@@ -2,13 +2,13 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "target": "esnext",
-    "module": "esnext",
-    "lib": ["esnext"],
-    "types": ["@cloudflare/workers-types"],
+    "module": "CommonJS",
+    "lib": ["ESNext"],
+    "types": ["node"],
     "moduleResolution": "node",
-    "outDir": "dist",
+    "esModuleInterop": true,
   },
   "include": [
-    "src/**/*"
+    "scripts/**/*"
   ]
 }

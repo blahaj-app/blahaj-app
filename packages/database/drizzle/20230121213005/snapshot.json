@@ -1,8 +1,8 @@
 {
   "version": "4",
   "dialect": "sqlite",
-  "id": "941fafff-9d4d-4973-a038-a2bd46300872",
-  "prevId": "c5445fbf-1b12-4788-9e3c-7f0da55fd973",
+  "id": "a419754b-7f1c-4858-95ba-75860559d949",
+  "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "article_ids": {
       "name": "article_ids",
@@ -10,7 +10,7 @@
         "country": {
           "name": "country",
           "type": "text",
-          "primaryKey": true,
+          "primaryKey": false,
           "notNull": true
         },
         "type": {
@@ -26,7 +26,16 @@
           "notNull": true
         }
       },
-      "indexes": {},
+      "indexes": {
+        "idx_unique_article_id": {
+          "name": "idx_unique_article_id",
+          "columns": [
+            "country",
+            "type"
+          ],
+          "isUnique": true
+        }
+      },
       "foreignKeys": {},
       "compositePrimaryKeys": {}
     },

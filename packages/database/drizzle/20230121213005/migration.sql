@@ -1,5 +1,5 @@
 CREATE TABLE article_ids (
-	`country` text PRIMARY KEY NOT NULL,
+	`country` text NOT NULL,
 	`type` text NOT NULL,
 	`article_id` text NOT NULL
 );
@@ -19,7 +19,8 @@ CREATE TABLE stock_records (
 	`store_id` text NOT NULL,
 	`type` text NOT NULL,
 	`quantity` integer,
-	`timestamp` integer NOT NULL
+	`timestamp` integer NOT NULL,
+	`day` integer NOT NULL
 );
 
 CREATE TABLE stores (
@@ -29,3 +30,6 @@ CREATE TABLE stores (
 	`latitude` real NOT NULL,
 	`longitude` real NOT NULL
 );
+
+CREATE UNIQUE INDEX idx_unique_article_id ON article_ids (`country`,`type`);
+CREATE UNIQUE INDEX idx_one_per_day ON stock_records (`store_id`,`type`,`day`);

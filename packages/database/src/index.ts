@@ -8,11 +8,17 @@ export const stores = sqliteTable("stores", {
   longitude: real("longitude").notNull(),
 });
 
-export const articleIDs = sqliteTable("article_ids", {
-  country: text("country").primaryKey(),
-  type: text("type").notNull(),
-  articleID: text("article_id").notNull(),
-});
+export const articleIDs = sqliteTable(
+  "article_ids",
+  {
+    country: text("country").notNull(),
+    type: text("type").notNull(),
+    articleID: text("article_id").notNull(),
+  },
+  (table) => ({
+    uniqueArticleID: uniqueIndex("idx_unique_article_id").on(table.country, table.type),
+  }),
+);
 
 export const stockRecords = sqliteTable(
   "stock_records",
