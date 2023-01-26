@@ -1,4 +1,5 @@
 import { int, real, sqliteTable, text, uniqueIndex } from "drizzle-orm-sqlite";
+import { DrizzleD1Database } from "drizzle-orm-sqlite/d1";
 
 export const stores = sqliteTable("stores", {
   id: text("id").primaryKey(),
@@ -52,4 +53,7 @@ export enum Items {
 
 export const tables = { stores, articleIDs, stockRecords, restocks };
 export { drizzle } from "drizzle-orm-sqlite/d1";
-export { sql } from "drizzle-orm";
+export * as drzl from "drizzle-orm";
+export * as drzlSqlite from "drizzle-orm-sqlite";
+export * as drzlD1 from "drizzle-orm-sqlite/d1";
+export * as expr from "drizzle-orm/expressions";

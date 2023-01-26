@@ -2,13 +2,13 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "target": "esnext",
-    "module": "CommonJS",
-    "lib": ["ESNext"],
-    "types": ["node"],
+    "module": "esnext",
+    "lib": ["esnext"],
+    "types": [""],
     "moduleResolution": "node",
-    "esModuleInterop": true,
+    "outDir": "dist",
   },
   "include": [
-    "scripts/**/*"
+    "src/**/*"
   ]
 }

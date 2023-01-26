@@ -1,3 +1,3 @@
 interface Bindings {
-  DB: D1Database;
+  DATABASE_URL: string;
 }

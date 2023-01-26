@@ -1,13 +1,8 @@
-import { drizzle, tables, Items, sql } from "@blahaj-app/database";
+import { ALL_STORES, ARTICLE_IDS } from "@blahaj-app/data";
+import type { DB, Restock, Stock } from "@blahaj-app/newdb";
+import { Pool } from "@neondatabase/serverless";
+import { Insertable, Kysely, PostgresDialect, sql } from "kysely";
 import { IkeaResponse } from "./ikea-response";
-
-function toUnixTime(date: string) {
-  return Math.floor(new Date(date).getTime() / 1000);
-}
-
-function getCurrentDay() {
-  return Math.floor(Date.now() / 1000 / 60 / 60 / 24);
-}
 
 async function checkIkeaStock(country: string, articleID: string) {
   const res = await fetch(
@@ -48,107 +43,77 @@ async function checkIkeaStock(country: string, articleID: string) {
 }
 
 async function handleCron(event: ScheduledController, env: Bindings, ctx: ExecutionContext) {
-  const db = drizzle(env.DB);
-
-  const [stores, articleIDs] = await Promise.all([db.select(tables.stores).all(), db.select(tables.articleIDs).all()]);
-
-  const countries = stores
-    .map(({ country }) => country)
-    .filter((c, i, a) => a.indexOf(c) === i)
-    .map((country) => {
-      const articles = articleIDs.filter((a) => a.country === country);
-
-      return {
-        code: country,
-        articleIDs: {
-          [Items.BLAHAJ]: articles.find((a) => a.type === "blahaj")?.articleID ?? null,
-          [Items.SMOLHAJ]: articles.find((a) => a.type === "smolhaj")?.articleID ?? null,
-        },
-        stores: stores.filter((s) => s.country === country),
-      };
-    });
-
-  const promises = countries.map(({ code, articleIDs, stores }) =>
-    Promise.all([
-      articleIDs[Items.BLAHAJ] ? checkIkeaStock(code, articleIDs[Items.BLAHAJ]) : null,
-      articleIDs[Items.SMOLHAJ] ? checkIkeaStock(code, articleIDs[Items.SMOLHAJ]) : null,
-    ])
-      .then(([blahaj, smolhaj]) => ({
-        [Items.BLAHAJ]: blahaj,
-        [Items.SMOLHAJ]: smolhaj,
-      }))
-      .then((data) => {
-        const insertStock = db.insert(tables.stockRecords).values;
-        const stockValues: Parameters<typeof insertStock>[0][] = [];
-
-        const insertRestock = db.insert(tables.restocks).values;
-        const restockValues: Parameters<typeof insertRestock>[0][] = [];
-
-        for (const store of stores) {
-          for (const item of Object.values(Items)) {
-            const itemData = data[item]?.[store.id];
-
-            if (itemData?.stock) {
-              stockValues.push({
-                storeId: store.id,
-                type: item,
-                quantity: itemData.stock.quantity,
-                time: toUnixTime(itemData.stock.time),
-                day: getCurrentDay(),
-              });
-            }
-
-            if (itemData?.restocks) {
-              restockValues.push(
-                ...itemData.restocks.map((restock) => ({
-                  storeId: store.id,
-                  type: item,
-                  quantity: restock.quantity,
-                  earliest: toUnixTime(restock.earliest),
-                  latest: toUnixTime(restock.latest),
-                  time: toUnixTime(restock.time),
-                })),
-              );
-            }
-          }
-        }
-
-        return [stockValues, restockValues] as const;
-      }),
-  );
-
-  const everything = Promise.all(promises).then((values) => {
-    const stockValues = values.map(([stock]) => stock).flat();
-    const restockValues = values.map(([, restock]) => restock).flat();
-
-    return Promise.all([
-      stockValues.length > 0
-        ? db
-            .insert(tables.stockRecords)
-            .values(...stockValues)
-            .onConflictDoUpdate({
-              set: { quantity: sql`excluded.quantity` },
-              target: [tables.stockRecords.storeId, tables.stockRecords.type, tables.stockRecords.day],
-            })
-            .run()
-        : null,
-
-      db
-        .delete(tables.restocks)
-        .run()
-        .then(() =>
-          restockValues.length > 0
-            ? db
-                .insert(tables.restocks)
-                .values(...restockValues)
-                .run()
-            : null,
-        ),
-      // eslint-disable-next-line @typescript-eslint/no-empty-function
-    ]).then(() => {});
+  const db = new Kysely<DB>({
+    dialect: new PostgresDialect({
+      pool: new Pool({ connectionString: env.DATABASE_URL }),
+    }),
   });
 
-  ctx.waitUntil(everything);
+  const promises = Promise.all(
+    ALL_STORES.map(({ country }) => country)
+      .filter((c, i, a) => a.indexOf(c) === i)
+      .map((country) =>
+        Promise.all(
+          Object.entries(ARTICLE_IDS[country] ?? {})
+            .filter((tuple): tuple is [string, string] => tuple[1] !== null)
+            .map(async ([item, articleId]) => [item, await checkIkeaStock(country, articleId)] as const),
+        ).then((data) => {
+          const stocks: Insertable<Stock>[] = [];
+          let restocks: Insertable<Restock>[] = [];
+
+          for (const store of ALL_STORES.filter((s) => s.country === country)) {
+            for (const [item, itemData] of data) {
+              const storeItemData = itemData?.[store.id];
+
+              if (storeItemData?.stock) {
+                stocks.push({
+                  store_id: store.id,
+                  type: item,
+                  quantity: storeItemData.stock.quantity,
+                  reported_at: new Date(storeItemData.stock.time),
+                });
+              }
+
+              if (storeItemData?.restocks) {
+                restocks = restocks.concat(
+                  storeItemData.restocks.map((restock) => ({
+                    store_id: store.id,
+                    type: item,
+                    quantity: restock.quantity,
+                    earliest: new Date(restock.earliest),
+                    latest: new Date(restock.latest),
+                    reported_at: new Date(restock.time),
+                  })),
+                );
+              }
+            }
+          }
+
+          return [stocks, restocks] as const;
+        }),
+      ),
+  )
+    .then((values) => [values.map(([stock]) => stock).flat(), values.map(([, restock]) => restock).flat()] as const)
+    .then(async ([stocks, restocks]) => {
+      await Promise.all([
+        db
+          .insertInto("stock")
+          .values(stocks)
+          .onConflict((oc) =>
+            oc.columns(["store_id", "type", "created_at"]).doUpdateSet({
+              quantity: sql`EXCLUDED.quantity`,
+              reported_at: sql`EXCLUDED.reported_at`,
+            }),
+          )
+          .execute(),
+        db
+          .deleteFrom("restock")
+          .execute()
+          .then(() => db.insertInto("restock").values(restocks).execute()),
+      ]);
+    });
+
+  ctx.waitUntil(promises);
 }
 
 export default { scheduled: handleCron };
