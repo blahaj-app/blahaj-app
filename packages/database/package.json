@@ -1,5 +1,5 @@
 {
-  "name": "@blahaj-app/static",
+  "name": "@blahaj-app/database",
   "private": true,
   "sideEffects": false,
   "main": "dist/index",
