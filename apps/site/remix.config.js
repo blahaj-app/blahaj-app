@@ -1,16 +1,12 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const { withEsbuildOverride } = require("remix-esbuild-override");
-const GlobalsPolyfills = require("@esbuild-plugins/node-globals-polyfill").default;
-
-console.log("1bruh!!");
 
 withEsbuildOverride((option, { isServer }) => {
   if (isServer)
-    option.plugins = [
-      GlobalsPolyfills({
-        buffer: true,
-      }),
-      ...option.plugins,
+    option.inject = [
+      ...(option.inject ?? []),
+      require.resolve("@esbuild-plugins/node-globals-polyfill/Buffer.js"),
+      require.resolve("@esbuild-plugins/node-globals-polyfill/process.js"),
     ];
 
   return option;

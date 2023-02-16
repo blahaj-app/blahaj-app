@@ -13,19 +13,19 @@
   },
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^4.0.0",
-    "@typescript-eslint/eslint-plugin": "^5.49.0",
-    "@typescript-eslint/parser": "^5.49.0",
+    "@typescript-eslint/eslint-plugin": "^5.50.0",
+    "@typescript-eslint/parser": "^5.50.0",
     "eslint": "~8.31.0",
     "eslint-config-prettier": "^8.6.0",
     "eslint-plugin-import": "~2.27.5",
     "eslint-plugin-prettier": "^4.2.1",
     "prettier": "^2.8.3",
-    "typescript": "~4.9.4"
+    "typescript": "~4.9.5"
   },
   "pnpm": {
     "patchedDependencies": {
-      "@miniflare/d1@2.11.0": "patches/@miniflare__d1@2.11.0.patch",
-      "@eslint/eslintrc@1.4.1": "patches/@eslint__eslintrc@1.4.1.patch"
+      "@eslint/eslintrc@1.4.1": "patches/@eslint__eslintrc@1.4.1.patch",
+      "@cloudflare/workers-types@4.20230115.0": "patches/@cloudflare__workers-types@4.20230115.0.patch"
     }
   }
 }

@@ -1,0 +1,234 @@
+diff --git a/2021-11-03/index.d.ts b/2021-11-03/index.d.ts
+index fb936a28f5c83f73a49295dc9f743d1cfa39851d..7504f9fe859bf14facdbdea574b40f63e3298986 100644
+--- a/2021-11-03/index.d.ts
++++ b/2021-11-03/index.d.ts
+@@ -2231,7 +2231,7 @@ declare interface IncomingRequestCfPropertiesExportedAuthenticatorMetadata {
+  * Geographic data about the request's origin.
+  */
+ declare type IncomingRequestCfPropertiesGeographicInformation =
+-  | {}
++  | Record<string, never>
+   | {
+       /** The country code `"T1"` is used for requests originating on TOR  */
+       country: "T1";
+diff --git a/2021-11-03/index.ts b/2021-11-03/index.ts
+index fe4bfb2c0f195800ef0b948a12af8dfe95da6b0f..725186da6d3903e7d66920dd55c5caf7f830fa6e 100644
+--- a/2021-11-03/index.ts
++++ b/2021-11-03/index.ts
+@@ -2236,7 +2236,7 @@ export interface IncomingRequestCfPropertiesExportedAuthenticatorMetadata {
+  * Geographic data about the request's origin.
+  */
+ export type IncomingRequestCfPropertiesGeographicInformation =
+-  | {}
++  | Record<string, never>
+   | {
+       /** The country code `"T1"` is used for requests originating on TOR  */
+       country: "T1";
+diff --git a/2022-01-31/index.d.ts b/2022-01-31/index.d.ts
+index b83ae4101c6d3bf23c5bd9b4e734fc3a1c47d1de..1cd6e7253bd8c2763b098d7e615ef485b0aceb55 100644
+--- a/2022-01-31/index.d.ts
++++ b/2022-01-31/index.d.ts
+@@ -2219,7 +2219,7 @@ declare interface IncomingRequestCfPropertiesExportedAuthenticatorMetadata {
+  * Geographic data about the request's origin.
+  */
+ declare type IncomingRequestCfPropertiesGeographicInformation =
+-  | {}
++  | Record<string, never>
+   | {
+       /** The country code `"T1"` is used for requests originating on TOR  */
+       country: "T1";
+diff --git a/2022-01-31/index.ts b/2022-01-31/index.ts
+index 342a43979cc642b9ad1c341ced3012366ea95538..cd3c397d47201a993a47780adb600f25d3a5d1f0 100644
+--- a/2022-01-31/index.ts
++++ b/2022-01-31/index.ts
+@@ -2224,7 +2224,7 @@ export interface IncomingRequestCfPropertiesExportedAuthenticatorMetadata {
+  * Geographic data about the request's origin.
+  */
+ export type IncomingRequestCfPropertiesGeographicInformation =
+-  | {}
++  | Record<string, never>
+   | {
+       /** The country code `"T1"` is used for requests originating on TOR  */
+       country: "T1";
+diff --git a/2022-03-21/index.d.ts b/2022-03-21/index.d.ts
+index 79a4d27d4c1e07e93a82276dd46f5582a1ac9096..89260d60867b8d337f29d2fa450706e7de7be29d 100644
+--- a/2022-03-21/index.d.ts
++++ b/2022-03-21/index.d.ts
+@@ -2225,7 +2225,7 @@ declare interface IncomingRequestCfPropertiesExportedAuthenticatorMetadata {
+  * Geographic data about the request's origin.
+  */
+ declare type IncomingRequestCfPropertiesGeographicInformation =
+-  | {}
++  | Record<string, never>
+   | {
+       /** The country code `"T1"` is used for requests originating on TOR  */
+       country: "T1";
+diff --git a/2022-03-21/index.ts b/2022-03-21/index.ts
+index 7c546996c6e67ce685c0d702dd7117cab02c756a..b3b167b66e44ada127f388b5189650084f852371 100644
+--- a/2022-03-21/index.ts
++++ b/2022-03-21/index.ts
+@@ -2230,7 +2230,7 @@ export interface IncomingRequestCfPropertiesExportedAuthenticatorMetadata {
+  * Geographic data about the request's origin.
+  */
+ export type IncomingRequestCfPropertiesGeographicInformation =
+-  | {}
++  | Record<string, never>
+   | {
+       /** The country code `"T1"` is used for requests originating on TOR  */
+       country: "T1";
+diff --git a/2022-08-04/index.d.ts b/2022-08-04/index.d.ts
+index b685b7a94c4cc75aed1b4f3be2f98bc3c87115c7..51a0304f5ffb22f26c4c2462f522c3b95a13285d 100644
+--- a/2022-08-04/index.d.ts
++++ b/2022-08-04/index.d.ts
+@@ -2226,7 +2226,7 @@ declare interface IncomingRequestCfPropertiesExportedAuthenticatorMetadata {
+  * Geographic data about the request's origin.
+  */
+ declare type IncomingRequestCfPropertiesGeographicInformation =
+-  | {}
++  | Record<string, never>
+   | {
+       /** The country code `"T1"` is used for requests originating on TOR  */
+       country: "T1";
+diff --git a/2022-08-04/index.ts b/2022-08-04/index.ts
+index 18cf3e71c03563af3fefb536f679410442fff9fb..5d1d5d60e67ad90c5d9755a2a8ed5c3764648d2f 100644
+--- a/2022-08-04/index.ts
++++ b/2022-08-04/index.ts
+@@ -2231,7 +2231,7 @@ export interface IncomingRequestCfPropertiesExportedAuthenticatorMetadata {
+  * Geographic data about the request's origin.
+  */
+ export type IncomingRequestCfPropertiesGeographicInformation =
+-  | {}
++  | Record<string, never>
+   | {
+       /** The country code `"T1"` is used for requests originating on TOR  */
+       country: "T1";
+diff --git a/2022-10-31/index.d.ts b/2022-10-31/index.d.ts
+index b032d845590ce07d5e3d3f68e75e690a9c9f6ea3..f7a5434745e7b8035ca5012dcefe06f4c91301b3 100644
+--- a/2022-10-31/index.d.ts
++++ b/2022-10-31/index.d.ts
+@@ -2222,7 +2222,7 @@ declare interface IncomingRequestCfPropertiesExportedAuthenticatorMetadata {
+  * Geographic data about the request's origin.
+  */
+ declare type IncomingRequestCfPropertiesGeographicInformation =
+-  | {}
++  | Record<string, never>
+   | {
+       /** The country code `"T1"` is used for requests originating on TOR  */
+       country: "T1";
+diff --git a/2022-10-31/index.ts b/2022-10-31/index.ts
+index 9daabd83581a1b43f788e326f6f8082a2dd35f14..2de9c5010609e11cb53346eaf379e200b722bf98 100644
+--- a/2022-10-31/index.ts
++++ b/2022-10-31/index.ts
+@@ -2227,7 +2227,7 @@ export interface IncomingRequestCfPropertiesExportedAuthenticatorMetadata {
+  * Geographic data about the request's origin.
+  */
+ export type IncomingRequestCfPropertiesGeographicInformation =
+-  | {}
++  | Record<string, never>
+   | {
+       /** The country code `"T1"` is used for requests originating on TOR  */
+       country: "T1";
+diff --git a/2022-11-30/index.d.ts b/2022-11-30/index.d.ts
+index 35d044f537d25810a1b7ade6430e174e88cb28c7..ed80063f7d8aa0d6ab1297f2fc115fed4fdf5430 100644
+--- a/2022-11-30/index.d.ts
++++ b/2022-11-30/index.d.ts
+@@ -2225,7 +2225,7 @@ declare interface IncomingRequestCfPropertiesExportedAuthenticatorMetadata {
+  * Geographic data about the request's origin.
+  */
+ declare type IncomingRequestCfPropertiesGeographicInformation =
+-  | {}
++  | Record<string, never>
+   | {
+       /** The country code `"T1"` is used for requests originating on TOR  */
+       country: "T1";
+diff --git a/2022-11-30/index.ts b/2022-11-30/index.ts
+index 4886502ff69f90733420f156456e235490596e1f..ff1dd721fb83821660f9a8e81189f52d8a0ccf48 100644
+--- a/2022-11-30/index.ts
++++ b/2022-11-30/index.ts
+@@ -2230,7 +2230,7 @@ export interface IncomingRequestCfPropertiesExportedAuthenticatorMetadata {
+  * Geographic data about the request's origin.
+  */
+ export type IncomingRequestCfPropertiesGeographicInformation =
+-  | {}
++  | Record<string, never>
+   | {
+       /** The country code `"T1"` is used for requests originating on TOR  */
+       country: "T1";
+diff --git a/experimental/index.d.ts b/experimental/index.d.ts
+index 35d044f537d25810a1b7ade6430e174e88cb28c7..ed80063f7d8aa0d6ab1297f2fc115fed4fdf5430 100644
+--- a/experimental/index.d.ts
++++ b/experimental/index.d.ts
+@@ -2225,7 +2225,7 @@ declare interface IncomingRequestCfPropertiesExportedAuthenticatorMetadata {
+  * Geographic data about the request's origin.
+  */
+ declare type IncomingRequestCfPropertiesGeographicInformation =
+-  | {}
++  | Record<string, never>
+   | {
+       /** The country code `"T1"` is used for requests originating on TOR  */
+       country: "T1";
+diff --git a/experimental/index.ts b/experimental/index.ts
+index 4886502ff69f90733420f156456e235490596e1f..ff1dd721fb83821660f9a8e81189f52d8a0ccf48 100644
+--- a/experimental/index.ts
++++ b/experimental/index.ts
+@@ -2230,7 +2230,7 @@ export interface IncomingRequestCfPropertiesExportedAuthenticatorMetadata {
+  * Geographic data about the request's origin.
+  */
+ export type IncomingRequestCfPropertiesGeographicInformation =
+-  | {}
++  | Record<string, never>
+   | {
+       /** The country code `"T1"` is used for requests originating on TOR  */
+       country: "T1";
+diff --git a/index.d.ts b/index.d.ts
+index ccdae9645d9239a8e6f61df9dbfb483c1c1d060e..0efc5bc5200b4f45dff7c8e014ecd9e4dc1a2649 100644
+--- a/index.d.ts
++++ b/index.d.ts
+@@ -2231,7 +2231,7 @@ declare interface IncomingRequestCfPropertiesExportedAuthenticatorMetadata {
+  * Geographic data about the request's origin.
+  */
+ declare type IncomingRequestCfPropertiesGeographicInformation =
+-  | {}
++  | Record<string, never>
+   | {
+       /** The country code `"T1"` is used for requests originating on TOR  */
+       country: "T1";
+diff --git a/index.ts b/index.ts
+index 9cda9496515bc3f2c28cf41d6a471befe374cafd..68f24a0436dccf908fd5ff4d0148c29422c68dbf 100644
+--- a/index.ts
++++ b/index.ts
+@@ -2236,7 +2236,7 @@ export interface IncomingRequestCfPropertiesExportedAuthenticatorMetadata {
+  * Geographic data about the request's origin.
+  */
+ export type IncomingRequestCfPropertiesGeographicInformation =
+-  | {}
++  | Record<string, never>
+   | {
+       /** The country code `"T1"` is used for requests originating on TOR  */
+       country: "T1";
+diff --git a/oldest/index.d.ts b/oldest/index.d.ts
+index ccdae9645d9239a8e6f61df9dbfb483c1c1d060e..0efc5bc5200b4f45dff7c8e014ecd9e4dc1a2649 100644
+--- a/oldest/index.d.ts
++++ b/oldest/index.d.ts
+@@ -2231,7 +2231,7 @@ declare interface IncomingRequestCfPropertiesExportedAuthenticatorMetadata {
+  * Geographic data about the request's origin.
+  */
+ declare type IncomingRequestCfPropertiesGeographicInformation =
+-  | {}
++  | Record<string, never>
+   | {
+       /** The country code `"T1"` is used for requests originating on TOR  */
+       country: "T1";
+diff --git a/oldest/index.ts b/oldest/index.ts
+index 9cda9496515bc3f2c28cf41d6a471befe374cafd..68f24a0436dccf908fd5ff4d0148c29422c68dbf 100644
+--- a/oldest/index.ts
++++ b/oldest/index.ts
+@@ -2236,7 +2236,7 @@ export interface IncomingRequestCfPropertiesExportedAuthenticatorMetadata {
+  * Geographic data about the request's origin.
+  */
+ export type IncomingRequestCfPropertiesGeographicInformation =
+-  | {}
++  | Record<string, never>
+   | {
+       /** The country code `"T1"` is used for requests originating on TOR  */
+       country: "T1";

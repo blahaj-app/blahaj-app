@@ -4,9 +4,14 @@
     "target": "esnext",
     "module": "esnext",
     "lib": ["esnext"],
-    "types": ["@cloudflare/workers-types"],
+    "types": [],
     "moduleResolution": "node",
     "outDir": "dist",
+  },
+  "ts-node": {
+    "compilerOptions": {
+      "module": "commonjs"
+    }
   },
   "include": [
     "src/**/*"

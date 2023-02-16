@@ -1,8 +1,8 @@
-import { Migrator, Kysely, PostgresDialect, FileMigrationProvider } from "kysely";
-import { Pool } from "pg";
-import fs from "fs/promises";
-import path from "path";
 import dotenv from "dotenv";
+import fs from "fs/promises";
+import { Migrator, Kysely, PostgresDialect, FileMigrationProvider } from "kysely";
+import path from "path";
+import { Pool } from "pg";
 
 async function migrateToLatest() {
   dotenv.config();

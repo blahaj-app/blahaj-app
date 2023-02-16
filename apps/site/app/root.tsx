@@ -2,12 +2,13 @@ import { ChakraProvider, extendTheme } from "@chakra-ui/react";
 import { withEmotionCache } from "@emotion/react";
 import type { LinksFunction, MetaFunction } from "@remix-run/cloudflare";
 import { Links, LiveReload, Meta, Scripts, ScrollRestoration } from "@remix-run/react";
+import mapboxStyles from "mapbox-gl/dist/mapbox-gl.css";
 import type { FC } from "react";
 import { useContext } from "react";
 import { useEffectOnce } from "usehooks-ts";
 import { ClientStyleContext } from "./context";
 import Layout from "./layout";
-// import mapboxStyles from "mapbox-gl/dist/mapbox-gl.css";
+import simpleBarStyles from "./styles/simplebar.css";
 
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
@@ -17,7 +18,8 @@ export const meta: MetaFunction = () => ({
 
 export const links: LinksFunction = () => {
   return [
-    // { rel: "stylesheet", href: mapboxStyles },
+    { rel: "stylesheet", href: mapboxStyles },
+    { rel: "stylesheet", href: simpleBarStyles },
     { rel: "preconnect", href: "https://fonts.googleapis.com" },
     { rel: "preconnect", href: "https://fonts.gstatic.com" },
     {
@@ -31,6 +33,20 @@ const sansSerifDefault =
   "-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'";
 
 const theme = extendTheme({
+  colors: {
+    blahaj: {
+      50: "#EEF5F6",
+      100: "#E1ECEF",
+      200: "#C6DCE1",
+      300: "#ABCBD4",
+      400: "#90BBC6",
+      500: "#75AAB8",
+      600: "#5A9AAA",
+      700: "#457A87",
+      800: "#325862",
+      900: "#1F373D",
+    },
+  },
   fonts: {
     heading: "'Poppins', " + sansSerifDefault,
     body: "'Poppins', " + sansSerifDefault,

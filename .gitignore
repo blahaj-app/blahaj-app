@@ -4,3 +4,4 @@ results
 .nyc_output
 *.tsbuildinfo
 .env
+.dev.vars

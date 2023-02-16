@@ -1,5 +1,5 @@
-import { ALL_STORES, ARTICLE_IDS } from "@blahaj-app/data";
-import type { DB, Restock, Stock } from "@blahaj-app/newdb";
+import { ALL_STORES, ARTICLE_IDS } from "@blahaj-app/static";
+import type { DB, Restock, Stock } from "@blahaj-app/static";
 import { Pool } from "@neondatabase/serverless";
 import { Insertable, Kysely, PostgresDialect, sql } from "kysely";
 import { IkeaResponse } from "./ikea-response";

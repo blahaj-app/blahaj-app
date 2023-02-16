@@ -1,5 +1,5 @@
 {
-  "name": "@blahaj-app/data",
+  "name": "@blahaj-app/static",
   "private": true,
   "scripts": {
     "build": "pnpm run clean && pnpm run compile",
@@ -8,10 +8,7 @@
     "prepublishOnly": "pnpm run build"
   },
   "devDependencies": {
-    "esbuild": "^0.17.0",
     "rimraf": "~4.0.0",
     "typescript": "~4.9.0"
-  },
-  "dependencies": {
   }
 }
