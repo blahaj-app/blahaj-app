@@ -39,6 +39,7 @@ jobs:
 
       - name: Install dependencies
         run: |
+          npm install -g wrangler &&
           echo "recursive-install=false" >> .npmrc &&
           cd apps/site &&
           pnpm install
