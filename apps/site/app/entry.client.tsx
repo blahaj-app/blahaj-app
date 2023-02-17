@@ -1,7 +1,7 @@
 import { CacheProvider } from "@emotion/react";
 import { RemixBrowser } from "@remix-run/react";
 import type { FC, PropsWithChildren } from "react";
-import { startTransition, useState } from "react";
+import { useState } from "react";
 import { hydrateRoot } from "react-dom/client";
 import { ClientStyleContext } from "./context";
 import { createEmotionCache, defaultCache } from "./create-emotion-cache";
@@ -21,14 +21,12 @@ const ClientCacheProvider: FC<PropsWithChildren> = ({ children }) => {
 };
 
 const hydrate = () => {
-  startTransition(() => {
-    hydrateRoot(
-      document,
-      <ClientCacheProvider>
-        <RemixBrowser />
-      </ClientCacheProvider>,
-    );
-  });
+  hydrateRoot(
+    document,
+    <ClientCacheProvider>
+      <RemixBrowser />
+    </ClientCacheProvider>,
+  );
 };
 
 if (typeof requestIdleCallback === "function") {
