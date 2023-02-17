@@ -12,7 +12,6 @@ import type { Transition } from "framer-motion";
 import { AnimatePresence } from "framer-motion";
 import type { MapLayerEventType } from "mapbox-gl";
 import type { FC, PropsWithChildren } from "react";
-import { useLayoutEffect } from "react";
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import type { LayerProps, MapRef, SourceProps } from "react-map-gl";
 import MapGL, { GeolocateControl, Layer, NavigationControl, Source } from "react-map-gl";
@@ -147,7 +146,7 @@ const Sidebar: FC = () => {
 
   const storeBasicsRef = useRef<HTMLDivElement>(null);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const storeBasics = storeBasicsRef.current;
     if (!storeBasics) return;
 
