@@ -539,7 +539,8 @@ const Map: FC = () => {
       }}
     >
       <MotionFlex
-        animate={{ "--store-basics-height": storeBasicsHeight ? storeBasicsHeight + "px" : "unset" } as any}
+        initial={false}
+        animate={{ "--store-basics-height": storeBasicsHeight + "px" } as any}
         transition={transition}
         height="100%"
         flexDirection={{ base: "column-reverse", md: "row" }}
@@ -547,10 +548,7 @@ const Map: FC = () => {
         <Sidebar />
         <Box
           width="100%"
-          height={{
-            base: storeBasicsHeight ? `calc(100vh - 19.25rem - var(--store-basics-height))` : "calc(100vh - 25rem)",
-            md: "unset",
-          }}
+          height={{ base: `calc(100vh - 19.25rem - var(--store-basics-height))`, md: "unset" }}
           flexGrow={{ base: "unset", md: "1" }}
           ref={mapContainerRef}
           position="relative"
