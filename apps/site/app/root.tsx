@@ -4,7 +4,8 @@ import type { LinksFunction, MetaFunction } from "@remix-run/cloudflare";
 import { Links, LiveReload, Meta, Scripts, ScrollRestoration } from "@remix-run/react";
 import mapboxStyles from "mapbox-gl/dist/mapbox-gl.css";
 import type { FC } from "react";
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
+import { useEffectOnce } from "usehooks-ts";
 import { ClientStyleContext } from "./context";
 import Layout from "./layout";
 import simpleBarStyles from "./styles/simplebar.css";
@@ -55,7 +56,7 @@ const theme = extendTheme({
 const App: FC = withEmotionCache((_, emotionCache) => {
   const clientStyleData = useContext(ClientStyleContext);
 
-  useEffect(() => {
+  useEffectOnce(() => {
     // re-link sheet container
     emotionCache.sheet.container = document.head;
     // re-inject tags
@@ -66,8 +67,7 @@ const App: FC = withEmotionCache((_, emotionCache) => {
     });
     // reset cache to reapply global styles
     clientStyleData?.reset();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  });
 
   return (
     <html lang="en">

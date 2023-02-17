@@ -6,7 +6,6 @@ import { renderToString } from "react-dom/server";
 import { createEmotionCache } from "./create-emotion-cache";
 
 const cache = createEmotionCache();
-const { extractCriticalToChunks, constructStyleTagsFromChunks } = createEmotionServer(cache);
 
 const handleRequest: HandleDocumentRequestFunction = (
   request: Request,
@@ -14,6 +13,8 @@ const handleRequest: HandleDocumentRequestFunction = (
   responseHeaders: Headers,
   remixContext: EntryContext,
 ) => {
+  const { extractCriticalToChunks, constructStyleTagsFromChunks } = createEmotionServer(cache);
+
   const markup = renderToString(
     <CacheProvider value={cache}>
       <RemixServer context={remixContext} url={request.url} />
