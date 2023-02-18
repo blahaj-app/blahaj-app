@@ -6,6 +6,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import type { FC, PropsWithChildren, ReactNode } from "react";
 import { createContext, useContext, useEffect, useState } from "react";
 import { TbBrandGithub, TbMap2 } from "react-icons/tb";
+import { RemoveScroll } from "react-remove-scroll";
 import Hamburger from "./components/hamburger";
 import { MotionBox } from "./components/motion-box";
 import blahajIcon from "./media/blahaj.png";
@@ -64,45 +65,47 @@ const Sidebar: FC<PropsWithChildren> = ({ children }) => {
   const { sidebarOpen, setSidebarOpen } = useLayoutContext();
 
   return (
-    <AnimatePresence>
-      {sidebarOpen && (
-        <>
+    <RemoveScroll enabled={sidebarOpen}>
+      <AnimatePresence>
+        {sidebarOpen && (
           <MotionBox
-            as={motion.div}
-            exit={{ translateX: "100%" }}
-            animate={{ translateX: "0%" }}
-            initial={{ translateX: "100%" }}
+            exit={{ backgroundColor: "#00000000" }}
+            animate={{ backgroundColor: "#00000029" }}
+            initial={{ backgroundColor: "#00000000" }}
             transition={{ type: "tween", duration: 0.35, ease: eases.cubicOut }}
             position="fixed"
-            bottom="0"
-            right="0"
-            width={{ base: "64", sm: "72" }}
-            height="calc(100vh - 4.25rem)"
-            zIndex="1010"
-            background="white"
-            shadow="lg"
-          >
-            <Flex as="ul" padding="2" flexDirection="column" height="100%" justifyContent="space-between">
-              {children}
-            </Flex>
-          </MotionBox>
-          <MotionBox
-            exit={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            initial={{ opacity: 0 }}
-            transition={{ type: "tween", duration: 0.35, ease: eases.cubicOut }}
-            background="blackAlpha.300"
-            position="absolute"
             top="0"
             bottom="0"
             left="0"
             right="0"
             zIndex="1000"
+            overflow="hidden"
             onClick={() => setSidebarOpen(false)}
-          />
-        </>
-      )}
-    </AnimatePresence>
+            onTouchMove={() => setSidebarOpen(false)}
+          >
+            <MotionBox
+              as={motion.div}
+              exit={{ translateX: "100%" }}
+              animate={{ translateX: "0%" }}
+              initial={{ translateX: "100%" }}
+              transition={{ type: "tween", duration: 0.35, ease: eases.cubicOut }}
+              position="absolute"
+              top="4.25rem"
+              bottom="0"
+              right="0"
+              width={{ base: "64", sm: "72" }}
+              background="white"
+              shadow="lg"
+              onTouchMove={(e) => e.stopPropagation()}
+            >
+              <Flex as="ul" padding="2" flexDirection="column" height="100%" justifyContent="space-between">
+                {children}
+              </Flex>
+            </MotionBox>
+          </MotionBox>
+        )}
+      </AnimatePresence>
+    </RemoveScroll>
   );
 };
 
@@ -146,26 +149,26 @@ const Layout: FC = () => {
 
   return (
     <LayoutContext.Provider value={{ sidebarOpen, setSidebarOpen }}>
-      <Flex flexDirection="column" height="100vh">
+      <Flex flexDirection="column" height="100vh" position="relative">
         <Navbar />
-        <Box position="relative" flexGrow="1">
-          <Sidebar>
-            <VStack alignItems="stretch" spacing="1">
-              <SidebarItem as={Link} to="/blahaj/map" icon={<TbMap2 size="28" />} active>
-                Store Map
-              </SidebarItem>
-            </VStack>
-            <VStack alignItems="stretch" spacing="1">
-              <SidebarItem
-                as="a"
-                href="https://github.com/repository/blahaj-app"
-                target="_blank"
-                icon={<TbBrandGithub size="28" />}
-              >
-                View on GitHub
-              </SidebarItem>
-            </VStack>
-          </Sidebar>
+        <Sidebar>
+          <VStack alignItems="stretch" spacing="1">
+            <SidebarItem as={Link} to="/blahaj/map" icon={<TbMap2 size="28" />} active>
+              Store Map
+            </SidebarItem>
+          </VStack>
+          <VStack alignItems="stretch" spacing="1">
+            <SidebarItem
+              as="a"
+              href="https://github.com/repository/blahaj-app"
+              target="_blank"
+              icon={<TbBrandGithub size="28" />}
+            >
+              View on GitHub
+            </SidebarItem>
+          </VStack>
+        </Sidebar>
+        <Box flexGrow="1">
           <Outlet />
         </Box>
       </Flex>

@@ -78,6 +78,7 @@ importers:
       react-dom: ^18.2.0
       react-icons: ^4.7.1
       react-map-gl: ^7.0.21
+      react-remove-scroll: ^2.5.5
       remix: ^1.12.0
       remix-esbuild-override: ^3.0.4
       remix-params-helper: ^0.4.10
@@ -123,6 +124,7 @@ importers:
       react-dom: 18.2.0_react@18.2.0
       react-icons: 4.7.1_react@18.2.0
       react-map-gl: 7.0.21_tvf76fwem6vj2vuoalsgs6sdlu
+      react-remove-scroll: 2.5.5_3stiutgnnbnfnf3uowm5cip22i
       remix-params-helper: 0.4.10_zod@3.20.6
       remix-routes: 1.3.1
       remix-typedjson: 0.1.7_m2efs5qzuhjccgewzfdv7bjmim
