@@ -9,6 +9,8 @@ withEsbuildOverride((option, { isServer }) => {
       require.resolve("@esbuild-plugins/node-globals-polyfill/process.js"),
     ];
 
+  option.legalComments = "inline";
+
   return option;
 });
 
