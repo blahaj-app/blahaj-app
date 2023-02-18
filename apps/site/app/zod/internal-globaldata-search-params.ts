@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-const InternalGlobalDataSearchParamsSchema = z.object({
+export const InternalGlobalDataSearchParamsSchema = z.object({
   item: z.string(),
 });
 

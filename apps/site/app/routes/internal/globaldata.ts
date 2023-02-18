@@ -7,7 +7,7 @@ import { promiseHash } from "remix-utils";
 import deserializeLoader from "../../utils/deserialize-loader";
 import getDatabase from "../../utils/get-database";
 import type { AwaitedReturn, LoaderArgs } from "../../utils/types";
-import { InternalStockHistorySearchParamsSchema } from "../../zod/internal-stockhistory-search-params";
+import { InternalGlobalDataSearchParamsSchema } from "../../zod/internal-globaldata-search-params";
 
 export type { InternalGlobalDataSearchParams } from "../../zod/internal-globaldata-search-params";
 
@@ -47,7 +47,7 @@ export const getGlobalDataClient = moize.promise(
 export const loader = async ({ context, request }: LoaderArgs) => {
   const db = getDatabase(context.DATABASE_URL);
 
-  const result = getSearchParams(request, InternalStockHistorySearchParamsSchema);
+  const result = getSearchParams(request, InternalGlobalDataSearchParamsSchema);
 
   if (!result.success) {
     throw new Response("Bad Request", { status: 400 });

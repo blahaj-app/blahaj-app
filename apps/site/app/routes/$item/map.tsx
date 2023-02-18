@@ -95,9 +95,18 @@ const transition: Transition = {
   ease: eases.cubicOut,
 };
 
+const OpenSideMenuButton: FC<PropsWithChildren> = ({ children }) => {
+  const { setSidebarOpen } = useLayoutContext();
+
+  return (
+    <Link as="button" color="blue.400" onClick={() => setSidebarOpen(true)}>
+      {children}
+    </Link>
+  );
+};
+
 const Sidebar: FC = () => {
   const { currentItem, loaderHistory, focusedStoreData, storeBasicsHeight, setStoreBasicsHeight } = useMapContext();
-  const { setSidebarOpen } = useLayoutContext();
 
   const [focusedStoreHistory, setFocusedStoreHistory] = useState(loaderHistory ?? []);
   useEffect(() => {
@@ -274,21 +283,15 @@ const Sidebar: FC = () => {
             </Heading>
             <p>
               blahaj.app is now open source! You can find the GitHub repository in{" "}
-              <Link color="blue.400" onClick={() => setSidebarOpen(true)}>
-                the side menu
-              </Link>{" "}
-              if you'd like to view the source code or contribute.
+              <OpenSideMenuButton>the side menu</OpenSideMenuButton> if you'd like to view the source code or
+              contribute.
             </p>
             <Heading size="sm" marginTop="6">
               Feedback
             </Heading>
             <p>
               As always, if you have any feedback, suggestions, or just would like to say hi, feel free to reach out to
-              me. Details can also be found in{" "}
-              <Link color="blue.400" onClick={() => setSidebarOpen(true)}>
-                the side menu
-              </Link>
-              .
+              me. Details can also be found in <OpenSideMenuButton>the side menu</OpenSideMenuButton>.
             </p>
           </Box>
         </Box>
