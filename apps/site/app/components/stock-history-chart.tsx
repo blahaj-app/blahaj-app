@@ -9,7 +9,7 @@ import { bisector, extent, max } from "d3-array";
 import type { Transition } from "framer-motion";
 import { motion } from "framer-motion";
 import React, { useCallback, useEffect, useMemo } from "react";
-import type { SetStateType } from "../util";
+import type { SetStateType } from "../utils/types";
 
 export interface StockChartDatum {
   reported_at: Date;

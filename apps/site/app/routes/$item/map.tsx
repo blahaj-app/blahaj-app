@@ -26,8 +26,10 @@ import type { StockChartDatum } from "../../components/stock-history-chart";
 import Test from "../../components/stock-history-chart";
 import { useLayoutContext } from "../../layout";
 import { getStockStatus, StockStatus, stockStyles } from "../../stock-status";
-import type { LoaderArgs, SetStateType } from "../../util";
-import { formatTz, getDatabase, noop } from "../../util";
+import formatTz from "../../utils/format-tz";
+import getDatabase from "../../utils/get-database";
+import noop from "../../utils/noop";
+import type { LoaderArgs, SetStateType } from "../../utils/types";
 import { getGlobalDataClient, getGlobalDataServer } from "../internal/globaldata";
 import { getStockHistoryClient, getStockHistoryServer } from "../internal/stockhistory";
 

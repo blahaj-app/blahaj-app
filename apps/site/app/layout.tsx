@@ -9,8 +9,8 @@ import { TbBrandGithub, TbMap2 } from "react-icons/tb";
 import Hamburger from "./components/hamburger";
 import { MotionBox } from "./components/motion-box";
 import blahajIcon from "./media/blahaj.png";
-import type { SetStateType } from "./util";
-import { noop } from "./util";
+import noop from "./utils/noop";
+import type { SetStateType } from "./utils/types";
 
 interface LayoutContextType {
   sidebarOpen: boolean;
