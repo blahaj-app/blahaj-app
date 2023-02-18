@@ -116,10 +116,10 @@ export default withTooltip<AreaProps, StockChartDatum>(
       };
 
       if (parent) {
-        parent.addEventListener("touchstart", handleTooltip);
-        parent.addEventListener("touchmove", handleTooltip);
-        parent.addEventListener("mousemove", handleTooltip);
-        parent.addEventListener("mouseleave", pointerLeave);
+        parent.addEventListener("touchstart", handleTooltip, { passive: true });
+        parent.addEventListener("touchmove", handleTooltip, { passive: true });
+        parent.addEventListener("mousemove", handleTooltip, { passive: true });
+        parent.addEventListener("mouseleave", pointerLeave, { passive: true });
       }
 
       return () => {
