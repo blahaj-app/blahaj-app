@@ -1,6 +1,7 @@
 import type { DB } from "@blahaj-app/database";
 import { Pool } from "@neondatabase/serverless";
 import type { DataFunctionArgs } from "@remix-run/cloudflare";
+import { format, utcToZonedTime } from "date-fns-tz";
 import { Kysely, PostgresDialect } from "kysely";
 import type { Dispatch, SetStateAction } from "react";
 import type { RemixSerializedType, UseDataFunctionReturn } from "remix-typedjson";
@@ -29,3 +30,6 @@ export const deserializeLoader = <T extends (...args: any) => any>(data: Awaited
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 export const noop = () => {};
+
+export const formatTz = (date: Date, fmt: string, tz: string) =>
+  format(utcToZonedTime(date, tz), fmt, { timeZone: tz });

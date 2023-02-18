@@ -17,6 +17,7 @@ import type { LayerProps, MapRef, SourceProps } from "react-map-gl";
 import MapGL, { GeolocateControl, Layer, NavigationControl, Source } from "react-map-gl";
 import { $params, $path } from "remix-routes";
 import { typedjson, useTypedLoaderData } from "remix-typedjson";
+import { ClientOnly, promiseHash } from "remix-utils";
 import SimpleBar from "simplebar-react";
 import { throttle } from "throttle-debounce";
 import { useUpdateEffect } from "usehooks-ts";
@@ -24,9 +25,9 @@ import { MotionFlex } from "../../components/motion-flex";
 import type { StockChartDatum } from "../../components/stock-history-chart";
 import Test from "../../components/stock-history-chart";
 import { useLayoutContext } from "../../layout";
-import { StockStatus, getStockStatus, stockStyles } from "../../stock-status";
+import { getStockStatus, StockStatus, stockStyles } from "../../stock-status";
 import type { LoaderArgs, SetStateType } from "../../util";
-import { definedOrEmptyArray, getDatabase, noop } from "../../util";
+import { formatTz, getDatabase, noop } from "../../util";
 import { getGlobalDataClient, getGlobalDataServer } from "../internal/globaldata";
 import { getStockHistoryClient, getStockHistoryServer } from "../internal/stockhistory";
 
@@ -47,17 +48,19 @@ export const loader = async ({ context, params: rawParams, request }: LoaderArgs
     throw json(null, { status: 404 });
   }
 
-  const [globalData, history] = await Promise.all([
-    getGlobalDataServer(params.item, db),
-    ...definedOrEmptyArray(params.storeId ? getStockHistoryServer(params.item, params.storeId, db) : undefined),
-  ]);
+  const location =
+    request.cf?.country && request.cf.country !== "T1" && request.cf.longitude && request.cf.latitude
+      ? { location: { latitude: parseFloat(request.cf.latitude), longitude: parseFloat(request.cf.longitude) } }
+      : {};
+
+  const resolved = await promiseHash({
+    globalData: getGlobalDataServer(params.item, db),
+    history: params.storeId ? getStockHistoryServer(params.item, params.storeId, db) : Promise.resolve(undefined),
+  });
 
   return typedjson({
-    globalData,
-    history,
-    ...(request.cf?.country && request.cf.country !== "T1" && request.cf.longitude && request.cf.latitude
-      ? { location: { latitude: parseFloat(request.cf.latitude), longitude: parseFloat(request.cf.longitude) } }
-      : {}),
+    ...resolved,
+    location,
   });
 };
 
@@ -67,7 +70,6 @@ type FocusedStoreData = {
   stock: { store_id: string; quantity: number; reported_at: Date } | undefined;
   restocks: { store_id: string; quantity: number; reported_at: Date; earliest: Date; latest: Date }[];
   status: StockStatus;
-  formatted: { stockReportedAt: string | null; nextRestockRange: string | null };
 } | null;
 
 interface MapContextType {
@@ -134,9 +136,19 @@ const Sidebar: FC = () => {
       stockDataType: tooltipData ? "Historical Stock" : "Current Stock",
       stockDataValue: (tooltipData ? tooltipData : focusedStoreData?.stock)?.quantity ?? "--",
       stockDataReportedAt: reportedAt ? "Reported at " + format(reportedAt, "h:mm a 'on' LLL d") : "No Data",
+      stockDataReportedAtUTC: reportedAt
+        ? "Reported at " + formatTz(reportedAt, "h:mm a 'on' LLL d", "UTC") + " UTC"
+        : "No Data",
       nextRestockValue: nextRestock ? nextRestock.quantity : "--",
       nextRestockRange: nextRestock
         ? `Expected ${format(nextRestock.earliest, "LLL d")} – ${format(nextRestock.latest, "LLL d")}`
+        : "No restock expected",
+      nextRestockRangeUTC: nextRestock
+        ? `Expected ${formatTz(nextRestock.earliest, "LLL d", "UTC")} – ${formatTz(
+            nextRestock.latest,
+            "LLL d",
+            "UTC",
+          )} UTC`
         : "No restock expected",
       color: stockStyles[focusedStoreData?.status ?? StockStatus.UNKNOWN].color,
     };
@@ -215,7 +227,7 @@ const Sidebar: FC = () => {
                 {strings.stockDataType}
               </Box>
               <Box fontSize={14} lineHeight="1.1">
-                {strings.stockDataReportedAt}
+                <ClientOnly fallback={strings.stockDataReportedAtUTC}>{() => strings.stockDataReportedAt}</ClientOnly>
               </Box>
             </Flex>
             <Box fontSize={32} lineHeight="1.1" marginY="1" marginStart="4" fontWeight="700">
@@ -228,7 +240,7 @@ const Sidebar: FC = () => {
                 Next Restock
               </Box>
               <Box fontSize={14} lineHeight="1.1">
-                {strings.nextRestockRange}
+                <ClientOnly fallback={strings.nextRestockRangeUTC}>{() => strings.nextRestockRange}</ClientOnly>
               </Box>
             </Flex>
             <Box fontSize={32} lineHeight="1.1" marginY="1" marginStart="4" fontWeight="700">
@@ -461,14 +473,7 @@ const Map: FC = () => {
     const restocks = globalData.allRestocks.filter((restock) => restock.store_id === id);
     const status = getStockStatus(stock, restocks);
 
-    const formatted = {
-      stockReportedAt: stock ? format(stock.reported_at, "h:mm a 'on' LLL d") : null,
-      nextRestockRange: restocks[0]
-        ? `${format(restocks[0].earliest, "LLL d")} – ${format(restocks[0].latest, "LLL d")}`
-        : null,
-    };
-
-    return { id, store, stock, restocks, status, formatted };
+    return { id, store, stock, restocks, status };
   }, [globalData.stocks, globalData.allRestocks, params.storeId]);
 
   useUpdateEffect(() => {
