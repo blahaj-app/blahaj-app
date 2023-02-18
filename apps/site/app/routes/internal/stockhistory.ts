@@ -3,17 +3,12 @@ import moize from "moize";
 import { getSearchParams } from "remix-params-helper";
 import { $path } from "remix-routes";
 import { typedjson } from "remix-typedjson";
-import { z } from "zod";
 import deserializeLoader from "../../utils/deserialize-loader";
 import getDatabase from "../../utils/get-database";
 import type { AwaitedReturn, LoaderArgs } from "../../utils/types";
+import { InternalStockHistorySearchParamsSchema } from "../../zod/internal-stockhistory-search-params";
 
-const SearchParamsSchema = z.object({
-  storeId: z.string(),
-  item: z.string(),
-});
-
-export type SearchParams = z.infer<typeof SearchParamsSchema>;
+export type { InternalStockHistorySearchParams as SearchParams } from "../../zod/internal-stockhistory-search-params";
 
 export const getStockHistoryServer = async (item: string, storeId: string, db: ReturnType<typeof getDatabase>) =>
   db
@@ -40,7 +35,7 @@ export const getStockHistoryClient = moize.promise(
 export const loader = async ({ context, request }: LoaderArgs) => {
   const db = getDatabase(context.DATABASE_URL);
 
-  const result = getSearchParams(request, SearchParamsSchema);
+  const result = getSearchParams(request, InternalStockHistorySearchParamsSchema);
 
   if (!result.success) {
     throw new Response("Bad Request", { status: 400 });
