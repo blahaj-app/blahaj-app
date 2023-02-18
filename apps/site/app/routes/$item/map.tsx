@@ -50,18 +50,15 @@ export const loader = async ({ context, params: rawParams, request }: LoaderArgs
 
   const location =
     request.cf?.country && request.cf.country !== "T1" && request.cf.longitude && request.cf.latitude
-      ? { location: { latitude: parseFloat(request.cf.latitude), longitude: parseFloat(request.cf.longitude) } }
-      : {};
+      ? { latitude: parseFloat(request.cf.latitude), longitude: parseFloat(request.cf.longitude) }
+      : undefined;
 
   const resolved = await promiseHash({
     globalData: getGlobalDataServer(params.item, db),
     history: params.storeId ? getStockHistoryServer(params.item, params.storeId, db) : Promise.resolve(undefined),
   });
 
-  return typedjson({
-    ...resolved,
-    location,
-  });
+  return typedjson({ ...resolved, location });
 };
 
 type FocusedStoreData = {

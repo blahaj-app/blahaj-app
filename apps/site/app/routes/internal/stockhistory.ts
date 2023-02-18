@@ -14,8 +14,8 @@ const SearchParamsSchema = z.object({
 
 export type SearchParams = z.infer<typeof SearchParamsSchema>;
 
-export const getStockHistoryServer = async (item: string, storeId: string, db: ReturnType<typeof getDatabase>) => {
-  return db
+export const getStockHistoryServer = async (item: string, storeId: string, db: ReturnType<typeof getDatabase>) =>
+  db
     .selectFrom("stock")
     .select(["quantity", "reported_at"])
     .where("store_id", "=", storeId)
@@ -24,7 +24,6 @@ export const getStockHistoryServer = async (item: string, storeId: string, db: R
     .orderBy("created_at", "asc")
     .$assertType<{ quantity: number; reported_at: Date }>()
     .execute();
-};
 
 export const getStockHistoryClient = moize.promise(
   async (item: string, storeId: string) => {

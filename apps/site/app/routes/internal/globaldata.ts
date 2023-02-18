@@ -5,6 +5,7 @@ import moize from "moize";
 import { getSearchParams } from "remix-params-helper";
 import { $path } from "remix-routes";
 import { typedjson } from "remix-typedjson";
+import { promiseHash } from "remix-utils";
 import { z } from "zod";
 
 const SearchParamsSchema = z.object({
@@ -13,9 +14,9 @@ const SearchParamsSchema = z.object({
 
 export type SearchParams = z.infer<typeof SearchParamsSchema>;
 
-export const getGlobalDataServer = async (item: string, db: ReturnType<typeof getDatabase>) => {
-  const [stocks, allRestocks] = await Promise.all([
-    db
+export const getGlobalDataServer = async (item: string, db: ReturnType<typeof getDatabase>) =>
+  promiseHash({
+    stocks: db
       .selectFrom("stock")
       .select(["store_id", "quantity", "reported_at"])
       .distinctOn(["store_id", "type"])
@@ -26,17 +27,14 @@ export const getGlobalDataServer = async (item: string, db: ReturnType<typeof ge
       .orderBy("created_at", "desc")
       .$assertType<{ store_id: string; quantity: number; reported_at: Date }>()
       .execute(),
-    db
+    allRestocks: db
       .selectFrom("restock")
       .select(["store_id", "quantity", "reported_at", "earliest", "latest"])
       .where("type", "=", item)
       .orderBy("earliest", "desc")
       .$assertType<{ store_id: string; quantity: number; reported_at: Date; earliest: Date; latest: Date }>()
       .execute(),
-  ]);
-
-  return { stocks, allRestocks };
-};
+  });
 
 export const getGlobalDataClient = moize.promise(
   async (item: string) => {
