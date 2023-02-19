@@ -1,5 +1,5 @@
 import type { CacheStorage, Response as CFResponse } from "@cloudflare/workers-types";
-import { stringify, parse } from "superjson";
+import { stringify, parse } from "remix-typedjson";
 
 const getOrCache = async <T>(key: string, fn: () => Promise<T> | T, ttl: number): Promise<T> => {
   const url = new URL("https://example.com");
@@ -10,21 +10,27 @@ const getOrCache = async <T>(key: string, fn: () => Promise<T> | T, ttl: number)
   const match = await cache.match(url);
 
   if (match) {
-    return parse<T>(await match.text());
-  } else {
-    const value = await fn();
+    const deserialized = parse<T>(await match.text());
 
-    const response = new Response(stringify(value), {
-      headers: {
-        "Content-Type": "application/json",
-        "Cache-Control": `public, max-age=${ttl}`,
-      },
-    }) as unknown as CFResponse;
-
-    await cache.put(url, response);
-
-    return value;
+    if (deserialized) {
+      return deserialized;
+    } else {
+      await cache.delete(url);
+    }
   }
+
+  const value = await fn();
+
+  const response = new Response(stringify(value), {
+    headers: {
+      "Content-Type": "application/json",
+      "Cache-Control": `public, max-age=${ttl}`,
+    },
+  }) as unknown as CFResponse;
+
+  await cache.put(url, response);
+
+  return value;
 };
 
 export default getOrCache;
