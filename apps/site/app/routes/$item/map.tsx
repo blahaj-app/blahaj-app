@@ -43,7 +43,6 @@ import {
   mapStoreMetaDescription,
   mapStoreMetaTitle,
 } from "../../utils/templates";
-import toRegionalIndicators from "../../utils/to-regional-indicators";
 import type { LoaderArgs, SetStateType } from "../../utils/types";
 import { getGlobalDataClient, getGlobalDataServer } from "../internal/globaldata";
 import { getStockHistoryClient, getStockHistoryServer } from "../internal/stockhistory";
@@ -86,13 +85,13 @@ export const meta: TypedMetaFunction<typeof loader> = ({ data, params: rawParams
   const store = findStore(params.storeId);
 
   const country = store ? getStoreCountryDatum(store) : undefined;
-  const flag = country ? toRegionalIndicators(country.code) : undefined;
+  // const flag = country ? toRegionalIndicators(country.code) : undefined;
 
   return generateMeta({
-    title: store && flag ? mapStoreMetaTitle(itemName, store.name, flag) : mapGlobalMetaTitle(itemName),
+    title: store ? mapStoreMetaTitle(itemName, store.name) : mapGlobalMetaTitle(itemName),
     description:
-      store && country?.name && flag
-        ? mapStoreMetaDescription(itemName, store.name, country.name, flag)
+      store && country?.name
+        ? mapStoreMetaDescription(itemName, store.name, country.name)
         : mapGlobalMetaDescription(itemName),
     url: new URL($path("/:item/map/:storeId", params), BASE_URL).href,
   });
