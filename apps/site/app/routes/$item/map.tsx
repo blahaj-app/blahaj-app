@@ -16,6 +16,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useRef, use
 import type { LayerProps, MapRef, SourceProps } from "react-map-gl";
 import MapGL, { GeolocateControl, Layer, NavigationControl, Source } from "react-map-gl";
 import { $params, $path } from "remix-routes";
+import type { TypedMetaFunction } from "remix-typedjson";
 import { typedjson, useTypedLoaderData } from "remix-typedjson";
 import { ClientOnly, promiseHash } from "remix-utils";
 import SimpleBar from "simplebar-react";
@@ -27,7 +28,9 @@ import Test from "../../components/stock-history-chart";
 import { useLayoutContext } from "../../layout";
 import { getStockStatus, StockStatus, stockStyles } from "../../stock-status";
 import formatTz from "../../utils/format-tz";
+import { generateMeta } from "../../utils/generate-meta";
 import getDatabase from "../../utils/get-database";
+import { ITEM_NAME } from "../../utils/item-names";
 import noop from "../../utils/noop";
 import type { LoaderArgs, SetStateType } from "../../utils/types";
 import { getGlobalDataClient, getGlobalDataServer } from "../internal/globaldata";
@@ -61,6 +64,21 @@ export const loader = async ({ context, params: rawParams, request }: LoaderArgs
   });
 
   return typedjson({ ...resolved, location });
+};
+
+export const meta: TypedMetaFunction<typeof loader> = ({ data, params: rawParams }) => {
+  const params = $params("/:item/map/:storeId", rawParams);
+
+  const itemName = ITEM_NAME[params.item as Item];
+  const store = ALL_STORES.find((store) => store.id === params.storeId);
+
+  return generateMeta({
+    title: store ? `${itemName} @ ${store.name}` : `${itemName} Stock Map`,
+    description: store
+      ? `Stock and restocks of ${itemName} at ${store.name}`
+      : `Map of ${itemName} stock and restocks around the world.`,
+    url: new URL($path("/:item/map/:storeId", params), "https://blahaj.app").href,
+  });
 };
 
 type FocusedStoreData = {
@@ -361,10 +379,10 @@ const ItemSelector: FC<ItemSelectorProps> = ({ item, setItem, loading = false })
         zIndex="20"
       >
         <ItemSelectorButton active={item === Item.BLAHAJ} rounded="start" onClick={() => updateItem(Item.BLAHAJ)}>
-          Blåhaj
+          {ITEM_NAME[Item.BLAHAJ]}
         </ItemSelectorButton>
         <ItemSelectorButton active={item === Item.SMOLHAJ} rounded="end" onClick={() => updateItem(Item.SMOLHAJ)}>
-          Smolhaj
+          {ITEM_NAME[Item.SMOLHAJ]}
         </ItemSelectorButton>
       </ButtonGroup>
       <AnimatePresence>

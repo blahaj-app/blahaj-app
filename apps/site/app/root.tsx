@@ -9,11 +9,18 @@ import { useEffectOnce } from "usehooks-ts";
 import { ClientStyleContext } from "./context";
 import Layout from "./layout";
 import simpleBarStyles from "./styles/simplebar.css";
+import { generateMeta } from "./utils/generate-meta";
 
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
-  title: "blahaj.app",
   viewport: "width=device-width,initial-scale=1",
+  "twitter:card": "summary_large_image",
+  "twitter:domain": "blahaj.app",
+  "theme-color": "#5A9AAA",
+  ...generateMeta({
+    title: "blahaj.app – Blåhaj Invetory Tracker",
+    description: "Tracking stocks & restocks of Blåhaj (and Smolhaj) at IKEAs around the world.",
+  }),
 });
 
 export const links: LinksFunction = () => {
