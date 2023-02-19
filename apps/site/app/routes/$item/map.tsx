@@ -1,5 +1,5 @@
 import type { Store } from "@blahaj-app/static";
-import { ALL_STORES, COUNTRY_NAMES, Item } from "@blahaj-app/static";
+import { ALL_STORES, Item } from "@blahaj-app/static";
 import { Box, Button, ButtonGroup, Flex, Heading, Link, ListItem, Spinner, UnorderedList } from "@chakra-ui/react";
 import useResizeObserver from "@react-hook/resize-observer";
 import { json } from "@remix-run/cloudflare";
@@ -34,6 +34,7 @@ import formatTz from "../../utils/format-tz";
 import { generateLinks } from "../../utils/generate-links";
 import { generateMeta } from "../../utils/generate-meta";
 import getDatabase from "../../utils/get-database";
+import getStoreCountryDatum from "../../utils/get-store-country-datum";
 import { ITEM_NAME } from "../../utils/item-names";
 import noop from "../../utils/noop";
 import {
@@ -42,6 +43,7 @@ import {
   mapStoreMetaDescription,
   mapStoreMetaTitle,
 } from "../../utils/templates";
+import toRegionalIndicators from "../../utils/to-regional-indicators";
 import type { LoaderArgs, SetStateType } from "../../utils/types";
 import { getGlobalDataClient, getGlobalDataServer } from "../internal/globaldata";
 import { getStockHistoryClient, getStockHistoryServer } from "../internal/stockhistory";
@@ -83,9 +85,15 @@ export const meta: TypedMetaFunction<typeof loader> = ({ data, params: rawParams
   const itemName = ITEM_NAME[item];
   const store = findStore(params.storeId);
 
+  const country = store ? getStoreCountryDatum(store) : undefined;
+  const flag = country ? toRegionalIndicators(country.code) : undefined;
+
   return generateMeta({
-    title: store ? mapStoreMetaTitle(itemName, store.name) : mapGlobalMetaTitle(itemName),
-    description: store ? mapStoreMetaDescription(itemName, store.name) : mapGlobalMetaDescription(itemName),
+    title: store && flag ? mapStoreMetaTitle(itemName, store.name, flag) : mapGlobalMetaTitle(itemName),
+    description:
+      store && country?.name && flag
+        ? mapStoreMetaDescription(itemName, store.name, country.name, flag)
+        : mapGlobalMetaDescription(itemName),
     url: new URL($path("/:item/map/:storeId", params), BASE_URL).href,
   });
 };
@@ -176,8 +184,7 @@ const Sidebar: FC = () => {
 
     return {
       focusedStoreCountry: focusedStoreData
-        ? (focusedStoreData.id === "538" ? "Macau" : COUNTRY_NAMES[focusedStoreData.store.country]) ??
-          focusedStoreData.store.country
+        ? getStoreCountryDatum(focusedStoreData.store)?.name ?? focusedStoreData.store.country
         : "Unknown",
       focusedStoreName: focusedStoreData?.store?.name ?? "Click a store to get started",
       stockDataType: tooltipData ? "Historical Stock" : "Current Stock",
