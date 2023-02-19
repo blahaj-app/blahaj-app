@@ -5,6 +5,7 @@ import { Links, LiveReload, Meta, Scripts, ScrollRestoration } from "@remix-run/
 import mapboxStyles from "mapbox-gl/dist/mapbox-gl.css";
 import type { FC } from "react";
 import { useContext } from "react";
+import { DynamicLinks } from "remix-utils";
 import { useEffectOnce } from "usehooks-ts";
 import { ClientStyleContext } from "./context";
 import Layout from "./layout";
@@ -84,6 +85,7 @@ const App: FC = withEmotionCache((_, emotionCache) => {
       <head>
         <Meta />
         <Links />
+        <DynamicLinks />
       </head>
       <body>
         <ChakraProvider theme={theme}>

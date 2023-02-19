@@ -18,6 +18,7 @@ import MapGL, { GeolocateControl, Layer, NavigationControl, Source } from "react
 import { $params, $path } from "remix-routes";
 import type { TypedMetaFunction } from "remix-typedjson";
 import { typedjson, useTypedLoaderData } from "remix-typedjson";
+import type { DynamicLinksFunction } from "remix-utils";
 import { ClientOnly, promiseHash } from "remix-utils";
 import SimpleBar from "simplebar-react";
 import { throttle } from "throttle-debounce";
@@ -30,6 +31,7 @@ import { getStockStatus, StockStatus, stockStyles } from "../../stock-status";
 import { BASE_URL, MAPBOX_KEY } from "../../utils/constants";
 import findStore from "../../utils/find-store";
 import formatTz from "../../utils/format-tz";
+import { generateLinks } from "../../utils/generate-links";
 import { generateMeta } from "../../utils/generate-meta";
 import getDatabase from "../../utils/get-database";
 import { ITEM_NAME } from "../../utils/item-names";
@@ -85,9 +87,20 @@ export const meta: TypedMetaFunction<typeof loader> = ({ data, params: rawParams
     title: store ? mapStoreMetaTitle(itemName, store.name) : mapGlobalMetaTitle(itemName),
     description: store ? mapStoreMetaDescription(itemName, store.name) : mapGlobalMetaDescription(itemName),
     url: new URL($path("/:item/map/:storeId", params), BASE_URL).href,
+  });
+};
+
+const dynamicLinks: DynamicLinksFunction = ({ params: rawParams }) => {
+  const params = $params("/:item/map/:storeId", rawParams);
+
+  const item = params.item as Item;
+  const store = findStore(params.storeId);
+
+  return generateLinks({
     oembed: store ? { type: "map_store", item: item, storeId: store.id } : { type: "map_global", item },
   });
 };
+export const handle = { dynamicLinks };
 
 type FocusedStoreData = {
   id: string;

@@ -1,16 +1,13 @@
-import { $path } from "remix-routes";
-import type { InternalOembedSearchParams } from "../zod/internal-oembed-search-params";
-import { BASE_URL } from "./constants";
+import type { HtmlMetaDescriptor } from "@remix-run/cloudflare";
 
 interface GenerateMetaParams {
   title?: string;
   description?: string;
   url?: string;
   image?: string;
-  oembed?: InternalOembedSearchParams;
 }
 
-export const generateMeta = ({ title, description, url, image, oembed }: GenerateMetaParams) => ({
+export const generateMeta = ({ title, description, url, image }: GenerateMetaParams): HtmlMetaDescriptor => ({
   ...(title && {
     title,
     metaTitle: { name: "title", content: title },
@@ -30,8 +27,4 @@ export const generateMeta = ({ title, description, url, image, oembed }: Generat
     "og:image": image,
     "twitter:image": image,
   }),
-  oembed: {
-    type: "application/json+oembed",
-    href: new URL($path("/internal/oembed", oembed ?? {}), BASE_URL).href,
-  },
 });
