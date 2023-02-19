@@ -96,6 +96,7 @@ const Sidebar: FC<PropsWithChildren> = ({ children }) => {
               width={{ base: "64", sm: "72" }}
               background="white"
               shadow="lg"
+              onClick={(e) => e.stopPropagation()}
               onTouchMove={(e) => e.stopPropagation()}
             >
               <Flex as="ul" padding="2" flexDirection="column" height="100%" justifyContent="space-between">
