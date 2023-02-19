@@ -23,7 +23,6 @@ export const meta: MetaFunction = () => ({
   ...generateMeta({
     title: "Blåhaj Invetory Tracker",
     description: "Tracking stocks & restocks of Blåhaj (and Smolhaj) at IKEAs around the world.",
-    oembed: {},
   }),
 });
 
