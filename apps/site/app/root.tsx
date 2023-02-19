@@ -14,12 +14,16 @@ import { generateMeta } from "./utils/generate-meta";
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
   viewport: "width=device-width,initial-scale=1",
+  "og:type": "website",
+  "og:site": "blahaj.app",
+  "og:site_name": "blahaj.app",
   "twitter:card": "summary_large_image",
   "twitter:domain": "blahaj.app",
   "theme-color": "#5A9AAA",
   ...generateMeta({
-    title: "blahaj.app – Blåhaj Invetory Tracker",
+    title: "Blåhaj Invetory Tracker",
     description: "Tracking stocks & restocks of Blåhaj (and Smolhaj) at IKEAs around the world.",
+    oembed: {},
   }),
 });
 

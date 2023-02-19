@@ -3,6 +3,7 @@ import moize from "moize";
 import { getSearchParams } from "remix-params-helper";
 import { $path } from "remix-routes";
 import { typedjson } from "remix-typedjson";
+import { badRequest } from "remix-utils";
 import deserializeLoader from "../../utils/deserialize-loader";
 import getDatabase from "../../utils/get-database";
 import type { AwaitedReturn, LoaderArgs } from "../../utils/types";
@@ -38,7 +39,7 @@ export const loader = async ({ context, request }: LoaderArgs) => {
   const result = getSearchParams(request, InternalStockHistorySearchParamsSchema);
 
   if (!result.success) {
-    throw new Response("Bad Request", { status: 400 });
+    throw badRequest("Bad Request");
   }
 
   const { item, storeId } = result.data;

@@ -27,11 +27,19 @@ import type { StockChartDatum } from "../../components/stock-history-chart";
 import Test from "../../components/stock-history-chart";
 import { useLayoutContext } from "../../layout";
 import { getStockStatus, StockStatus, stockStyles } from "../../stock-status";
+import { BASE_URL, MAPBOX_KEY } from "../../utils/constants";
+import findStore from "../../utils/find-store";
 import formatTz from "../../utils/format-tz";
 import { generateMeta } from "../../utils/generate-meta";
 import getDatabase from "../../utils/get-database";
 import { ITEM_NAME } from "../../utils/item-names";
 import noop from "../../utils/noop";
+import {
+  mapGlobalMetaDescription,
+  mapGlobalMetaTitle,
+  mapStoreMetaDescription,
+  mapStoreMetaTitle,
+} from "../../utils/templates";
 import type { LoaderArgs, SetStateType } from "../../utils/types";
 import { getGlobalDataClient, getGlobalDataServer } from "../internal/globaldata";
 import { getStockHistoryClient, getStockHistoryServer } from "../internal/stockhistory";
@@ -69,15 +77,15 @@ export const loader = async ({ context, params: rawParams, request }: LoaderArgs
 export const meta: TypedMetaFunction<typeof loader> = ({ data, params: rawParams }) => {
   const params = $params("/:item/map/:storeId", rawParams);
 
-  const itemName = ITEM_NAME[params.item as Item];
-  const store = ALL_STORES.find((store) => store.id === params.storeId);
+  const item = params.item as Item;
+  const itemName = ITEM_NAME[item];
+  const store = findStore(params.storeId);
 
   return generateMeta({
-    title: store ? `${itemName} @ ${store.name}` : `${itemName} Stock Map`,
-    description: store
-      ? `Stock and restocks of ${itemName} at ${store.name}`
-      : `Map of ${itemName} stock and restocks around the world.`,
-    url: new URL($path("/:item/map/:storeId", params), "https://blahaj.app").href,
+    title: store ? mapStoreMetaTitle(itemName, store.name) : mapGlobalMetaTitle(itemName),
+    description: store ? mapStoreMetaDescription(itemName, store.name) : mapGlobalMetaDescription(itemName),
+    url: new URL($path("/:item/map/:storeId", params), BASE_URL).href,
+    oembed: store ? { type: "map_store", item: item, storeId: store.id } : { type: "map_global", item },
   });
 };
 
@@ -472,7 +480,7 @@ const Map: FC = () => {
 
     if (!map) return;
 
-    const store = ALL_STORES.find((store) => store.id === storeId);
+    const store = findStore(storeId);
 
     if (!store) return;
 
@@ -486,7 +494,7 @@ const Map: FC = () => {
   const focusedStoreData = useMemo((): FocusedStoreData => {
     const id = params.storeId;
 
-    const store = ALL_STORES.find((store) => store.id === id);
+    const store = findStore(id);
     if (!store) return null;
 
     const stock = globalData.stocks.find((stock) => stock.store_id === id);
@@ -597,7 +605,7 @@ const Map: FC = () => {
             }}
             minZoom={1.75}
             mapStyle="mapbox://styles/mapbox/streets-v12"
-            mapboxAccessToken="pk.eyJ1IjoieGN2cjQ4IiwiYSI6ImNsNGZ5MGZ4NDA3eTIzam1iM2p2dzByajQifQ.1GtWcbTzMu63t09MwnZAVQ"
+            mapboxAccessToken={MAPBOX_KEY}
           >
             <NavigationControl />
             <GeolocateControl />
