@@ -499,7 +499,7 @@ const Map: FC = () => {
 
     map.flyTo({
       center: [store.longitude, store.latitude],
-      zoom: Math.max(7.5, map.getZoom()),
+      zoom: Math.max(10, map.getZoom()),
       screenSpeed: 1,
     });
   };
@@ -610,12 +610,11 @@ const Map: FC = () => {
             reuseMaps
             ref={mapRef}
             onLoad={onMapLoad}
-            initialViewState={{
-              ...(focusedStoreData?.store
-                ? { longitude: focusedStoreData.store.longitude, latitude: focusedStoreData.store.latitude }
-                : location ?? { longitude: -122.4, latitude: 37.8 }),
-              zoom: 7.5,
-            }}
+            initialViewState={
+              focusedStoreData?.store
+                ? { longitude: focusedStoreData.store.longitude, latitude: focusedStoreData.store.latitude, zoom: 10 }
+                : { ...location, zoom: 7.5 } ?? { latitude: 37.5, longitude: 6, zoom: 2 }
+            }
             minZoom={1.75}
             mapStyle="mapbox://styles/mapbox/streets-v12"
             mapboxAccessToken={MAPBOX_KEY}
