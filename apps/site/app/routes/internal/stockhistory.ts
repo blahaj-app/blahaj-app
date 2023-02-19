@@ -6,21 +6,27 @@ import { typedjson } from "remix-typedjson";
 import { badRequest } from "remix-utils";
 import deserializeLoader from "../../utils/deserialize-loader";
 import getDatabase from "../../utils/get-database";
+import getOrCache from "../../utils/get-or-cache";
 import type { AwaitedReturn, LoaderArgs } from "../../utils/types";
 import { InternalStockHistorySearchParamsSchema } from "../../zod/internal-stockhistory-search-params";
 
 export type { InternalStockHistorySearchParams as SearchParams } from "../../zod/internal-stockhistory-search-params";
 
 export const getStockHistoryServer = async (item: string, storeId: string, db: ReturnType<typeof getDatabase>) =>
-  db
-    .selectFrom("stock")
-    .select(["quantity", "reported_at"])
-    .where("store_id", "=", storeId)
-    .where("type", "=", item)
-    .where("created_at", ">", subDays(new Date(), 90))
-    .orderBy("created_at", "asc")
-    .$assertType<{ quantity: number; reported_at: Date }>()
-    .execute();
+  getOrCache(
+    "stockhistory-" + item + "-" + storeId,
+    () =>
+      db
+        .selectFrom("stock")
+        .select(["quantity", "reported_at"])
+        .where("store_id", "=", storeId)
+        .where("type", "=", item)
+        .where("created_at", ">", subDays(new Date(), 90))
+        .orderBy("created_at", "asc")
+        .$assertType<{ quantity: number; reported_at: Date }>()
+        .execute(),
+    5 * 60,
+  );
 
 export const getStockHistoryClient = moize.promise(
   async (item: string, storeId: string) => {
@@ -30,7 +36,7 @@ export const getStockHistoryClient = moize.promise(
 
     return deserializeLoader<typeof loader>(data).history;
   },
-  { maxSize: 1000 },
+  { maxSize: 1000, maxAge: 5 * 60 * 1000 },
 );
 
 export const loader = async ({ context, request }: LoaderArgs) => {
