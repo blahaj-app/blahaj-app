@@ -549,7 +549,7 @@ const Map: FC = () => {
       if (params.storeId === storeId) {
         flyToStore(storeId);
       } else {
-        navigate($path("/:item/map/:storeId", { item: params.item, storeId }), { preventScrollReset: true });
+        navigate($path("/:item/map/:storeId", { item: params.item, storeId }, {}), { preventScrollReset: true });
       }
     };
   }, [navigate, params.item, params.storeId]);

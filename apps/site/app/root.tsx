@@ -1,5 +1,9 @@
 import { ChakraProvider, extendTheme } from "@chakra-ui/react";
 import { withEmotionCache } from "@emotion/react";
+import poppins400 from "@fontsource/poppins/400.css";
+import poppins500 from "@fontsource/poppins/500.css";
+import poppins600 from "@fontsource/poppins/600.css";
+import poppins700 from "@fontsource/poppins/700.css";
 import type { LinksFunction, MetaFunction } from "@remix-run/cloudflare";
 import { Links, LiveReload, Meta, Scripts, ScrollRestoration } from "@remix-run/react";
 import mapboxStyles from "mapbox-gl/dist/mapbox-gl.css";
@@ -31,12 +35,10 @@ export const links: LinksFunction = () => {
   return [
     { rel: "stylesheet", href: mapboxStyles },
     { rel: "stylesheet", href: simpleBarStyles },
-    { rel: "preconnect", href: "https://fonts.googleapis.com" },
-    { rel: "preconnect", href: "https://fonts.gstatic.com" },
-    {
-      rel: "stylesheet",
-      href: "https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap",
-    },
+    { rel: "stylesheet", href: poppins400 },
+    { rel: "stylesheet", href: poppins500 },
+    { rel: "stylesheet", href: poppins600 },
+    { rel: "stylesheet", href: poppins700 },
   ];
 };
 

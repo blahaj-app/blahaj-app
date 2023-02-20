@@ -23,7 +23,7 @@ declare module "@remix-run/cloudflare" {
   interface AppLoadContext {
     env: Context["env"];
     waitUntil: Context["waitUntil"];
-    cf?: IncomingRequestCfProperties;
+    cf?: Request["cf"];
   }
 }
 

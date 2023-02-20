@@ -25,8 +25,8 @@
   "pnpm": {
     "patchedDependencies": {
       "@eslint/eslintrc@1.4.1": "patches/@eslint__eslintrc@1.4.1.patch",
-      "@cloudflare/workers-types@4.20230115.0": "patches/@cloudflare__workers-types@4.20230115.0.patch",
-      "wrangler@2.10.0": "patches/wrangler@2.10.0.patch"
+      "wrangler@2.10.0": "patches/wrangler@2.10.0.patch",
+      "@cloudflare/workers-types@4.20230215.0": "patches/@cloudflare__workers-types@4.20230215.0.patch"
     }
   }
 }
