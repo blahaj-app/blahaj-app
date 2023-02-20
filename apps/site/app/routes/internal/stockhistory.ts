@@ -1,3 +1,4 @@
+import type { LoaderArgs } from "@remix-run/cloudflare";
 import { subDays } from "date-fns";
 import moize from "moize";
 import { getSearchParams } from "remix-params-helper";
@@ -7,7 +8,7 @@ import { badRequest } from "remix-utils";
 import deserializeLoader from "../../utils/deserialize-loader";
 import getDatabase from "../../utils/get-database";
 import getOrCache from "../../utils/get-or-cache";
-import type { AwaitedReturn, LoaderArgs } from "../../utils/types";
+import type { AwaitedReturn } from "../../utils/types";
 import { InternalStockHistorySearchParamsSchema } from "../../zod/internal-stockhistory-search-params";
 
 export type { InternalStockHistorySearchParams as SearchParams } from "../../zod/internal-stockhistory-search-params";
@@ -40,7 +41,7 @@ export const getStockHistoryClient = moize.promise(
 );
 
 export const loader = async ({ context, request }: LoaderArgs) => {
-  const db = getDatabase(context.DATABASE_URL);
+  const db = getDatabase(context.env.DATABASE_URL);
 
   const result = getSearchParams(request, InternalStockHistorySearchParamsSchema);
 
@@ -50,7 +51,9 @@ export const loader = async ({ context, request }: LoaderArgs) => {
 
   const { item, storeId } = result.data;
 
-  const history = await getStockHistoryServer(item, storeId, db);
+  const [history, promise] = await getStockHistoryServer(item, storeId, db);
+
+  context.waitUntil(promise);
 
   return typedjson({ history });
 };

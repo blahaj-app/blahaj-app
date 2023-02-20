@@ -2,6 +2,7 @@ import type { Store } from "@blahaj-app/static";
 import { ALL_STORES, Item } from "@blahaj-app/static";
 import { Box, Button, ButtonGroup, Flex, Heading, Link, ListItem, Spinner, UnorderedList } from "@chakra-ui/react";
 import useResizeObserver from "@react-hook/resize-observer";
+import type { LoaderArgs } from "@remix-run/cloudflare";
 import { json } from "@remix-run/cloudflare";
 import type { ShouldRevalidateFunction } from "@remix-run/react";
 import { useNavigate, useParams } from "@remix-run/react";
@@ -43,7 +44,7 @@ import {
   mapStoreMetaDescription,
   mapStoreMetaTitle,
 } from "../../utils/templates";
-import type { LoaderArgs, SetStateType } from "../../utils/types";
+import type { SetStateType } from "../../utils/types";
 import { getGlobalDataClient, getGlobalDataServer } from "../internal/globaldata";
 import { getStockHistoryClient, getStockHistoryServer } from "../internal/stockhistory";
 
@@ -58,23 +59,30 @@ export const shouldRevalidate: ShouldRevalidateFunction = ({ currentParams, next
 
 export const loader = async ({ context, params: rawParams, request }: LoaderArgs) => {
   const params = $params("/:item/map/:storeId", rawParams);
-  const db = getDatabase(context.DATABASE_URL);
+  const db = getDatabase(context.env.DATABASE_URL);
 
   if (!Object.values(Item).includes(rawParams.item as Item)) {
     throw json(null, { status: 404 });
   }
 
   const location =
-    request.cf?.country && request.cf.country !== "T1" && request.cf.longitude && request.cf.latitude
-      ? { latitude: parseFloat(request.cf.latitude), longitude: parseFloat(request.cf.longitude) }
+    context.cf?.country && context.cf.country !== "T1" && context.cf.longitude && context.cf.latitude
+      ? { latitude: parseFloat(context.cf.latitude), longitude: parseFloat(context.cf.longitude) }
       : undefined;
 
   const resolved = await promiseHash({
-    globalData: getGlobalDataServer(params.item, db),
-    history: params.storeId ? getStockHistoryServer(params.item, params.storeId, db) : Promise.resolve(undefined),
+    globalDataResult: getGlobalDataServer(params.item, db),
+    stockHistoryResult: params.storeId
+      ? getStockHistoryServer(params.item, params.storeId, db)
+      : Promise.resolve([undefined]),
   });
 
-  return typedjson({ ...resolved, location });
+  const globalData = resolved.globalDataResult[0];
+  const stockHistory = resolved.stockHistoryResult?.[0];
+
+  context.waitUntil(Promise.all([resolved.globalDataResult[1], resolved.stockHistoryResult?.[1] ?? Promise.resolve()]));
+
+  return typedjson({ globalData, stockHistory, location });
 };
 
 export const meta: TypedMetaFunction<typeof loader> = ({ data, params: rawParams }) => {
@@ -436,7 +444,7 @@ const ItemSelector: FC<ItemSelectorProps> = ({ item, setItem, loading = false })
 const Map: FC = () => {
   const navigate = useNavigate();
 
-  const { globalData: loaderGlobalData, history: loaderHistory, location } = useTypedLoaderData<typeof loader>();
+  const { globalData: loaderGlobalData, stockHistory: loaderHistory, location } = useTypedLoaderData<typeof loader>();
 
   const rawParams = useParams();
   const params = useMemo(() => $params("/:item/map/:storeId", rawParams), [rawParams]);

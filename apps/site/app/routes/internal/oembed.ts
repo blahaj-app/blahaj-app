@@ -1,3 +1,4 @@
+import type { LoaderArgs } from "@remix-run/cloudflare";
 import { json } from "@remix-run/cloudflare";
 import { getSearchParams } from "remix-params-helper";
 import { badRequest, notFound } from "remix-utils";
@@ -6,7 +7,6 @@ import findStore from "../../utils/find-store";
 import getOrCache from "../../utils/get-or-cache";
 import { ITEM_NAME } from "../../utils/item-names";
 import { mapGlobalMetaTitle, mapStoreMetaTitle } from "../../utils/templates";
-import type { LoaderArgs } from "../../utils/types";
 import type { InternalOembedSearchParams } from "../../zod/internal-oembed-search-params";
 import { InternalOembedSearchParamsSchema } from "../../zod/internal-oembed-search-params";
 
@@ -59,7 +59,9 @@ export const loader = async ({ context, request }: LoaderArgs) => {
 
   const { data } = result;
 
-  const oembed = await getOembed(data);
+  const [oembed, promise] = await getOembed(data);
+
+  context.waitUntil(promise);
 
   return json(oembed);
 };

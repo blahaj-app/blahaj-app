@@ -1,3 +1,4 @@
+import type { LoaderArgs } from "@remix-run/cloudflare";
 import { subDays } from "date-fns";
 import moize from "moize";
 import { getSearchParams } from "remix-params-helper";
@@ -7,7 +8,7 @@ import { badRequest, promiseHash } from "remix-utils";
 import deserializeLoader from "../../utils/deserialize-loader";
 import getDatabase from "../../utils/get-database";
 import getOrCache from "../../utils/get-or-cache";
-import type { AwaitedReturn, LoaderArgs } from "../../utils/types";
+import type { AwaitedReturn } from "../../utils/types";
 import { InternalGlobalDataSearchParamsSchema } from "../../zod/internal-globaldata-search-params";
 
 export type { InternalGlobalDataSearchParams } from "../../zod/internal-globaldata-search-params";
@@ -51,7 +52,7 @@ export const getGlobalDataClient = moize.promise(
 );
 
 export const loader = async ({ context, request }: LoaderArgs) => {
-  const db = getDatabase(context.DATABASE_URL);
+  const db = getDatabase(context.env.DATABASE_URL);
 
   const result = getSearchParams(request, InternalGlobalDataSearchParamsSchema);
 
@@ -61,7 +62,9 @@ export const loader = async ({ context, request }: LoaderArgs) => {
 
   const { item } = result.data;
 
-  const globalData = await getGlobalDataServer(item, db);
+  const [globalData, promise] = await getGlobalDataServer(item, db);
+
+  context.waitUntil(promise);
 
   return typedjson({ globalData });
 };
