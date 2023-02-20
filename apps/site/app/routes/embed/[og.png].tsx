@@ -15,6 +15,8 @@ export const loader = async ({ params }: LoaderArgs) => {
     throw new Error("Failed to load font");
   }
 
+  console.log("Loaded font", font.url);
+
   const satori = _satori as typeof SatoriType;
 
   const svg = await satori(
