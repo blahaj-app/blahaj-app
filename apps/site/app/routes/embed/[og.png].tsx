@@ -3,13 +3,17 @@ import type SatoriType from "satori";
 // @ts-expect-error satori/wasm is not typed
 import _satori, { init } from "satori/wasm";
 import initYoga from "yoga-wasm-web";
-import notoSansBold from "../../bin/noto-sans-bold";
 import yogaWasm from "../../bin/yoga-wasm";
 
 export const loader = async ({ params }: LoaderArgs) => {
   const yoga = await initYoga(yogaWasm);
 
   await init(yoga);
+
+  const font = await fetch("https://t89.s3-us-west-1.amazonaws.com/2023/02/E8cSiKQU/Poppins-Bold.ttf");
+  if (!font.ok) {
+    throw new Error("Failed to load font");
+  }
 
   const satori = _satori as typeof SatoriType;
 
@@ -62,8 +66,8 @@ export const loader = async ({ params }: LoaderArgs) => {
       height: 630,
       fonts: [
         {
-          name: "Noto Sans",
-          data: notoSansBold,
+          name: "Poppins",
+          data: await font.arrayBuffer(),
           weight: 700,
           style: "normal",
         },
