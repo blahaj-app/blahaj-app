@@ -7,12 +7,12 @@ import findStore from "../../utils/find-store";
 import getOrCache from "../../utils/get-or-cache";
 import { ITEM_NAME } from "../../utils/item-names";
 import { mapGlobalMetaTitle, mapStoreMetaTitle } from "../../utils/templates";
-import type { InternalOembedSearchParams } from "../../zod/internal-oembed-search-params";
-import { InternalOembedSearchParamsSchema } from "../../zod/internal-oembed-search-params";
+import type { EmbedOembedSearchParams } from "../../zod/embed-oembed-search-params";
+import { EmbedOembedSearchParamsSchema } from "../../zod/embed-oembed-search-params";
 
-export type { InternalOembedSearchParams as SearchParams } from "../../zod/internal-oembed-search-params";
+export type { EmbedOembedSearchParams as SearchParams } from "../../zod/embed-oembed-search-params";
 
-const getOembed = (params: InternalOembedSearchParams) =>
+const getOembed = (params: EmbedOembedSearchParams) =>
   getOrCache(
     "oembed-" + JSON.stringify(params),
     () => {
@@ -51,7 +51,7 @@ const getOembed = (params: InternalOembedSearchParams) =>
   );
 
 export const loader = async ({ context, request }: LoaderArgs) => {
-  const result = getSearchParams(request, InternalOembedSearchParamsSchema);
+  const result = getSearchParams(request, EmbedOembedSearchParamsSchema);
 
   if (!result.success) {
     throw badRequest("Bad Request");
