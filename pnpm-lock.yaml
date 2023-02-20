@@ -7,6 +7,12 @@ patchedDependencies:
   '@cloudflare/workers-types@4.20230215.0':
     hash: ogodozebmuwvw2ufs7xg4uspae
     path: patches/@cloudflare__workers-types@4.20230215.0.patch
+  '@types/react@18.0.28':
+    hash: xcltg6wnkyjpegonccwe5yeglu
+    path: patches/@types__react@18.0.28.patch
+  '@remix-run/dev@1.13.0':
+    hash: q43tmsn4soyxuc3k773toxkabi
+    path: patches/@remix-run__dev@1.13.0.patch
   wrangler@2.10.0:
     hash: 3anlhe4272sy5q355233r6ewqy
     path: patches/wrangler@2.10.0.patch
@@ -163,12 +169,12 @@ importers:
     devDependencies:
       '@cloudflare/workers-types': 4.20230215.0_ogodozebmuwvw2ufs7xg4uspae
       '@esbuild-plugins/node-globals-polyfill': 0.2.3
-      '@remix-run/dev': 1.13.0
+      '@remix-run/dev': 1.13.0_q43tmsn4soyxuc3k773toxkabi
       '@remix-run/eslint-config': 1.13.0_km5ddj7uwb23cqeymeyvzjsfb4
       '@types/d3-array': 3.0.4
       '@types/eases': 1.0.2
       '@types/mapbox-gl': 2.7.10
-      '@types/react': 18.0.28
+      '@types/react': 18.0.28_xcltg6wnkyjpegonccwe5yeglu
       '@types/react-dom': 18.0.11
       '@types/throttle-debounce': 5.0.0
       eslint: 8.34.0
@@ -2743,7 +2749,7 @@ packages:
       '@emotion/use-insertion-effect-with-fallbacks': 1.0.0_react@18.2.0
       '@emotion/utils': 1.2.0
       '@emotion/weak-memoize': 0.3.0
-      '@types/react': 18.0.28
+      '@types/react': 18.0.28_xcltg6wnkyjpegonccwe5yeglu
       hoist-non-react-statics: 3.3.2
       react: 18.2.0
     dev: false
@@ -2793,7 +2799,7 @@ packages:
       '@emotion/serialize': 1.1.1
       '@emotion/use-insertion-effect-with-fallbacks': 1.0.0_react@18.2.0
       '@emotion/utils': 1.2.0
-      '@types/react': 18.0.28
+      '@types/react': 18.0.28_xcltg6wnkyjpegonccwe5yeglu
       react: 18.2.0
     dev: false
 
@@ -4103,7 +4109,7 @@ packages:
       '@remix-run/server-runtime': 1.13.0
     dev: false
 
-  /@remix-run/dev/1.13.0:
+  /@remix-run/dev/1.13.0_q43tmsn4soyxuc3k773toxkabi:
     resolution: {integrity: sha512-hPqUjM9RRcz3inBOWqP3GKhggVz0a0ikWaRZpdKrhpQNCNiF6Hunbx876mJERj2YrmIzJ05eoeQmmdF6xcr4qg==}
     engines: {node: '>=14'}
     hasBin: true
@@ -4172,6 +4178,7 @@ packages:
       - ts-node
       - utf-8-validate
     dev: true
+    patched: true
 
   /@remix-run/eslint-config/1.13.0_km5ddj7uwb23cqeymeyvzjsfb4:
     resolution: {integrity: sha512-qz/N99D/q1mQefZl2X+p11xVk03r6aFDMvk/4mG+8IrMRU4BqMJ/bF53/CUOveSzvzLua4Pfi2wmqF+deHw0GQ==}
@@ -4233,7 +4240,7 @@ packages:
     dependencies:
       '@remix-run/router': 1.3.2
       '@types/cookie': 0.4.1
-      '@types/react': 18.0.28
+      '@types/react': 18.0.28_xcltg6wnkyjpegonccwe5yeglu
       '@web3-storage/multipart-parser': 1.0.0
       cookie: 0.4.2
       set-cookie-parser: 2.5.1
@@ -4519,14 +4526,15 @@ packages:
   /@types/react-dom/18.0.11:
     resolution: {integrity: sha512-O38bPbI2CWtgw/OoQoY+BRelw7uysmXbWvw3nLWO21H1HSh+GOlqPuXshJfjmpNlKiiSDG9cc1JZAaMmVdcTlw==}
     dependencies:
-      '@types/react': 18.0.28
+      '@types/react': 18.0.28_xcltg6wnkyjpegonccwe5yeglu
 
-  /@types/react/18.0.28:
+  /@types/react/18.0.28_xcltg6wnkyjpegonccwe5yeglu:
     resolution: {integrity: sha512-RD0ivG1kEztNBdoAK7lekI9M+azSnitIn85h4iOiaLjaTrMjzslhaqCGaI4IyCJ1RljWiLCEu4jyrLLgqxBTew==}
     dependencies:
       '@types/prop-types': 15.7.5
       '@types/scheduler': 0.16.2
       csstype: 3.1.1
+    patched: true
 
   /@types/responselike/1.0.0:
     resolution: {integrity: sha512-85Y2BjiufFzaMIlvJDvTTB8Fxl2xfLo4HgmHzVBz08w4wDePCTjYw66PdrolO0kzli3yam/YCgRufyo1DdQVTA==}
@@ -4823,7 +4831,7 @@ packages:
       react: ^16.0.0-0 || ^17.0.0-0 || ^18.0.0-0
       react-dom: ^16.0.0-0 || ^17.0.0-0 || ^18.0.0-0
     dependencies:
-      '@types/react': 18.0.28
+      '@types/react': 18.0.28_xcltg6wnkyjpegonccwe5yeglu
       '@types/react-dom': 18.0.11
       prop-types: 15.8.1
       react: 18.2.0
@@ -4840,7 +4848,7 @@ packages:
   /@visx/event/3.0.1:
     resolution: {integrity: sha512-tK1EUYQLLStBuoCMbm8LJ3VbDyCVI8HjT0pMRQxm+C75FSIVWvrThgrfrC9sWOFnEMEYWspZO7hI5zjsPKjLQA==}
     dependencies:
-      '@types/react': 18.0.28
+      '@types/react': 18.0.28_xcltg6wnkyjpegonccwe5yeglu
       '@visx/point': 3.0.1
     dev: false
 
@@ -4849,7 +4857,7 @@ packages:
     peerDependencies:
       react: ^16.0.0-0 || ^17.0.0-0 || ^18.0.0-0
     dependencies:
-      '@types/react': 18.0.28
+      '@types/react': 18.0.28_xcltg6wnkyjpegonccwe5yeglu
       prop-types: 15.8.1
       react: 18.2.0
     dev: false
@@ -4859,7 +4867,7 @@ packages:
     peerDependencies:
       react: ^16.0.0-0 || ^17.0.0-0 || ^18.0.0-0
     dependencies:
-      '@types/react': 18.0.28
+      '@types/react': 18.0.28_xcltg6wnkyjpegonccwe5yeglu
       classnames: 2.3.2
       prop-types: 15.8.1
       react: 18.2.0
@@ -4875,7 +4883,7 @@ packages:
       react: ^16.0.0-0 || ^17.0.0-0 || ^18.0.0-0
     dependencies:
       '@types/lodash': 4.14.191
-      '@types/react': 18.0.28
+      '@types/react': 18.0.28_xcltg6wnkyjpegonccwe5yeglu
       lodash: 4.17.21
       prop-types: 15.8.1
       react: 18.2.0
@@ -4900,7 +4908,7 @@ packages:
       '@types/d3-path': 1.0.9
       '@types/d3-shape': 1.3.8
       '@types/lodash': 4.14.191
-      '@types/react': 18.0.28
+      '@types/react': 18.0.28_xcltg6wnkyjpegonccwe5yeglu
       '@visx/curve': 3.0.0
       '@visx/group': 3.0.0_react@18.2.0
       '@visx/scale': 3.0.0
@@ -4918,7 +4926,7 @@ packages:
       react: ^16.8.0-0 || ^17.0.0-0 || ^18.0.0-0
       react-dom: ^16.8.0-0 || ^17.0.0-0 || ^18.0.0-0
     dependencies:
-      '@types/react': 18.0.28
+      '@types/react': 18.0.28_xcltg6wnkyjpegonccwe5yeglu
       '@visx/bounds': 3.0.0_biqbaboplfbrettd7655fr4n2y
       classnames: 2.3.2
       prop-types: 15.8.1
@@ -5055,7 +5063,7 @@ packages:
       '@types/react':
         optional: true
     dependencies:
-      '@types/react': 18.0.28
+      '@types/react': 18.0.28_xcltg6wnkyjpegonccwe5yeglu
       react: 18.2.0
       tslib: 2.5.0
     dev: false
@@ -10129,7 +10137,7 @@ packages:
         optional: true
     dependencies:
       '@babel/runtime': 7.20.13
-      '@types/react': 18.0.28
+      '@types/react': 18.0.28_xcltg6wnkyjpegonccwe5yeglu
       focus-lock: 0.11.6
       prop-types: 15.8.1
       react: 18.2.0
@@ -10174,7 +10182,7 @@ packages:
       '@types/react':
         optional: true
     dependencies:
-      '@types/react': 18.0.28
+      '@types/react': 18.0.28_xcltg6wnkyjpegonccwe5yeglu
       react: 18.2.0
       react-style-singleton: 2.2.1_pmekkgnqduwlme35zpnqhenc34
       tslib: 2.5.0
@@ -10190,7 +10198,7 @@ packages:
       '@types/react':
         optional: true
     dependencies:
-      '@types/react': 18.0.28
+      '@types/react': 18.0.28_xcltg6wnkyjpegonccwe5yeglu
       react: 18.2.0
       react-remove-scroll-bar: 2.3.4_pmekkgnqduwlme35zpnqhenc34
       react-style-singleton: 2.2.1_pmekkgnqduwlme35zpnqhenc34
@@ -10232,7 +10240,7 @@ packages:
       '@types/react':
         optional: true
     dependencies:
-      '@types/react': 18.0.28
+      '@types/react': 18.0.28_xcltg6wnkyjpegonccwe5yeglu
       get-nonce: 1.0.1
       invariant: 2.2.4
       react: 18.2.0
@@ -10444,7 +10452,7 @@ packages:
     peerDependencies:
       '@remix-run/dev': '>=1.2.0'
     dependencies:
-      '@remix-run/dev': 1.13.0
+      '@remix-run/dev': 1.13.0_q43tmsn4soyxuc3k773toxkabi
     dev: true
 
   /remix-params-helper/0.4.10_zod@3.20.6:
@@ -11546,7 +11554,7 @@ packages:
       '@types/react':
         optional: true
     dependencies:
-      '@types/react': 18.0.28
+      '@types/react': 18.0.28_xcltg6wnkyjpegonccwe5yeglu
       react: 18.2.0
       tslib: 2.5.0
     dev: false
@@ -11561,7 +11569,7 @@ packages:
       '@types/react':
         optional: true
     dependencies:
-      '@types/react': 18.0.28
+      '@types/react': 18.0.28_xcltg6wnkyjpegonccwe5yeglu
       detect-node-es: 1.1.0
       react: 18.2.0
       tslib: 2.5.0

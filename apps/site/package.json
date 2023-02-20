@@ -12,7 +12,8 @@
     "start": "cross-env NODE_ENV=production npm run wrangler",
     "typecheck": "tsc -b",
     "wrangler": "wrangler pages dev ./public --compatibility-date 2022-11-30 --service=RESVG=blahaj-app-resvg-worker",
-    "postinstall": "remix-esbuild-override"
+    "postinstall": "remix-esbuild-override",
+    "funky": "pnpm rm remix-esbuild-override && pnpm add -D remix-esbuild-override && remix-esbuild-override"
   },
   "dependencies": {
     "@blahaj-app/static": "workspace:*",

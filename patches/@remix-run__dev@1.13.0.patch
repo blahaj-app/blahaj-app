@@ -1,0 +1,13 @@
+diff --git a/dist/modules.d.ts b/dist/modules.d.ts
+index 1f119a3fd61170cfb2c56b9ff8bb856d13032c7d..669d1baca5b92ab0e486d0719bd4c3989566a440 100644
+--- a/dist/modules.d.ts
++++ b/dist/modules.d.ts
+@@ -132,7 +132,7 @@ declare module "*.webp" {
+     export default asset;
+ }
+ declare module "*.woff" {
+-    let asset: string;
++    let asset: Uint8Array;
+     export default asset;
+ }
+ declare module "*.woff2" {

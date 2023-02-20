@@ -1,0 +1,16 @@
+diff --git a/index.d.ts b/index.d.ts
+index b18b5bbcaaa93209c81584ad5d5552a2a93c3f6d..11c86b6976621a27810ad819994583710424766d 100644
+--- a/index.d.ts
++++ b/index.d.ts
+@@ -1846,6 +1846,11 @@ declare namespace React {
+         | (string & {});
+ 
+     interface HTMLAttributes<T> extends AriaAttributes, DOMAttributes<T> {
++        /**
++         * ONLY FOR USE WITH SATORI!!
++         */
++        tw?: string | undefined;
++
+         // React-specific Attributes
+         defaultChecked?: boolean | undefined;
+         defaultValue?: string | number | ReadonlyArray<string> | undefined;

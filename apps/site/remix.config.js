@@ -2,12 +2,18 @@
 const { withEsbuildOverride } = require("remix-esbuild-override");
 
 withEsbuildOverride((option, { isServer }) => {
-  if (isServer)
+  if (isServer) {
     option.inject = [
       ...(option.inject ?? []),
       require.resolve("@esbuild-plugins/node-globals-polyfill/Buffer.js"),
       require.resolve("@esbuild-plugins/node-globals-polyfill/process.js"),
     ];
+
+    option.loader = {
+      ...option.loader,
+      ".woff": "binary",
+    };
+  }
 
   option.legalComments = "inline";
 
