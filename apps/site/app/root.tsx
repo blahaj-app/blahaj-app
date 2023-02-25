@@ -4,11 +4,13 @@ import poppins400 from "@fontsource/poppins/400.css";
 import poppins500 from "@fontsource/poppins/500.css";
 import poppins600 from "@fontsource/poppins/600.css";
 import poppins700 from "@fontsource/poppins/700.css";
-import type { LinksFunction, MetaFunction } from "@remix-run/cloudflare";
+import type { LinksFunction } from "@remix-run/cloudflare";
 import { Links, LiveReload, Meta, Scripts, ScrollRestoration } from "@remix-run/react";
 import mapboxStyles from "mapbox-gl/dist/mapbox-gl.css";
 import type { FC } from "react";
 import { useContext } from "react";
+import { $path } from "remix-routes";
+import type { TypedMetaFunction } from "remix-typedjson";
 import { DynamicLinks } from "remix-utils";
 import { useEffectOnce } from "usehooks-ts";
 import { ClientStyleContext } from "./context";
@@ -16,7 +18,7 @@ import Layout from "./layout";
 import simpleBarStyles from "./styles/simplebar.css";
 import { generateMeta } from "./utils/generate-meta";
 
-export const meta: MetaFunction = () => ({
+export const meta: TypedMetaFunction = () => ({
   charset: "utf-8",
   viewport: "width=device-width,initial-scale=1",
   "og:type": "website",
@@ -28,6 +30,7 @@ export const meta: MetaFunction = () => ({
   ...generateMeta({
     title: "Blåhaj Invetory Tracker",
     description: "Tracking stocks & restocks of Blåhaj (and Smolhaj) at IKEAs around the world.",
+    image: $path("/embed/og.png") + "?test=" + Math.random(),
   }),
 });
 

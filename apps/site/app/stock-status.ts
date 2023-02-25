@@ -1,10 +1,10 @@
 import type { Restock, Stock } from "@blahaj-app/database";
 import type { Selectable } from "kysely";
-import pinInStock from "./media/pins/pin-in-stock.svg";
-import pinLowStock from "./media/pins/pin-low-stock.svg";
-import pinOutOfStock from "./media/pins/pin-out-of-stock.svg";
-import pinRestockExpected from "./media/pins/pin-restock-expected.svg";
-import pinUnknown from "./media/pins/pin-unknown.svg";
+import pinInStock from "./media/pins/pin-in-stock.svg?dataurl";
+import pinLowStock from "./media/pins/pin-low-stock.svg?dataurl";
+import pinOutOfStock from "./media/pins/pin-out-of-stock.svg?dataurl";
+import pinRestockExpected from "./media/pins/pin-restock-expected.svg?dataurl";
+import pinUnknown from "./media/pins/pin-unknown.svg?dataurl";
 
 export enum StockStatus {
   IN_STOCK,

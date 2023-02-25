@@ -313,7 +313,7 @@ const Sidebar: FC = () => {
       <Box flexGrow="1" maxWidth="23rem" overflow="hidden">
         <Box as={SimpleBar} fontSize="14" maxHeight="100%" autoHide={false}>
           <Box paddingX="6" paddingY="4">
-            <Heading size="md">Redisgned & Rebuilt</Heading>
+            <Heading size="md">Redesigned & Rebuilt</Heading>
             <p>
               Hey there. Long time no see. I think.
               <br />
@@ -514,7 +514,8 @@ const Map: FC = () => {
     map.flyTo({
       center: [store.longitude, store.latitude],
       zoom: Math.max(10, map.getZoom()),
-      screenSpeed: 1,
+      screenSpeed: 1.75,
+      easing: eases.sineInOut,
     });
   };
 

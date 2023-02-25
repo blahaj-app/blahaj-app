@@ -15,6 +15,54 @@ withEsbuildOverride((option, { isServer }) => {
     };
   }
 
+  option.plugins = [
+    ...(option.plugins ?? []),
+    {
+      name: "specify-loader",
+      setup: ({ onResolve, onLoad }) => {
+        const path = require("path");
+        const fs = require("fs/promises");
+        const { transform: svgr } = require("@svgr/core");
+
+        const loaders = [
+          "dataurl",
+          "binary",
+          {
+            name: "svgr",
+            getContents: async (path) => {
+              const svg = await fs.readFile(path, "utf8");
+              const contents = await svgr(svg, {}, { filePath: path });
+
+              return { contents, loader: "jsx", resolveDir: __dirname };
+            },
+          },
+        ];
+
+        for (const loader of loaders) {
+          const name = typeof loader === "string" ? loader : loader.name;
+          const getContents =
+            typeof loader === "string"
+              ? async (path) => ({ contents: await fs.readFile(path), loader: loader })
+              : loader.getContents;
+
+          onResolve({ filter: new RegExp(`\\?${name}$`) }, (args) => {
+            const pathWithoutLoader = args.path.replace(new RegExp(`\\?${name}$`), "");
+
+            const filePath =
+              pathWithoutLoader.startsWith(".") || pathWithoutLoader.startsWith("/")
+                ? path.resolve(args.resolveDir, pathWithoutLoader)
+                : require.resolve(pathWithoutLoader);
+
+            return { path: filePath, namespace: name };
+          });
+
+          onLoad({ filter: /.*/, namespace: name }, (args) => {
+            return getContents(args.path);
+          });
+        }
+      },
+    },
+  ];
   option.legalComments = "inline";
 
   return option;
