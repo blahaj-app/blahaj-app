@@ -18,6 +18,7 @@ try {
     outExtension: { ".js": ".mjs" },
     loader: {
       ".wasm": "copy",
+      ".woff": "binary",
     },
   });
 } catch {

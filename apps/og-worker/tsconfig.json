@@ -9,6 +9,7 @@
     "strict": true,
     "noEmit": true,
     "esModuleInterop": true,
+    "resolveJsonModule": true
   },
-  "include": ["src/**/*", "bindings.d.ts", "wasm.d.ts"]
+  "include": ["src/**/*", "bindings.d.ts", "types.d.ts"]
 }

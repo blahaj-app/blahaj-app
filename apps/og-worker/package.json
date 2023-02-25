@@ -21,6 +21,9 @@
     "wrangler": "^2.10.0"
   },
   "dependencies": {
-    "@resvg/resvg-wasm": "^2.4.1"
+    "@fontsource/poppins": "^4.5.10",
+    "@resvg/resvg-wasm": "^2.4.1",
+    "satori": "^0.4.0",
+    "yoga-wasm-web": "^0.3.0"
   }
 }
