@@ -231,14 +231,14 @@ export const loader = async ({ params, request, context }: LoaderArgs) => {
     },
   );
 
-  return new Response(svg, {
-    headers: {
-      "Content-Type": "image/svg+xml",
-    },
-  });
+  // return new Response(svg, {
+  //   headers: {
+  //     "Content-Type": "image/svg+xml",
+  //   },
+  // });
 
-  // const png = await context.env.RESVG?.fetch("http://example.com", { method: "POST", body: svg });
-  // if (!png?.ok) throw serverError("Resvg Worker Unavailable");
+  const png = await context.env.RESVG?.fetch("http://example.com", { method: "POST", body: svg });
+  if (!png?.ok) throw serverError("Resvg Worker Unavailable");
 
-  // return new Response(png.body, png);
+  return new Response(png.body, png);
 };
