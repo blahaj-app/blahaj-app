@@ -1,4 +1,9 @@
 import { ALL_STORES, Item } from "@blahaj-app/static";
+import poppinsLight from "@fontsource/poppins/files/poppins-all-300-normal.woff?binary";
+import poppinsRegular from "@fontsource/poppins/files/poppins-all-400-normal.woff?binary";
+import poppinsMedium from "@fontsource/poppins/files/poppins-all-500-normal.woff?binary";
+import poppinsSemiBold from "@fontsource/poppins/files/poppins-all-600-normal.woff?binary";
+import poppinsBold from "@fontsource/poppins/files/poppins-all-700-normal.woff?binary";
 import type { LoaderArgs } from "@remix-run/cloudflare";
 import { curveCatmullRom } from "@visx/curve";
 import { scaleLinear, scaleTime } from "@visx/scale";
@@ -7,6 +12,7 @@ import setNumOrAccessor from "@visx/shape/lib/util/setNumberOrNumberAccessor";
 import { extent, max } from "d3-array";
 import { subDays } from "date-fns";
 import { notFound, serverError } from "remix-utils";
+import type SatoriType from "satori";
 import type { StockChartDatum } from "../../components/stock-history-chart";
 import blahaj from "../../media/blahaj.png?dataurl";
 import { getMapImageResolver } from "../../media/map-images";
@@ -17,6 +23,17 @@ import getDatabase from "../../utils/get-database";
 import getStoreCountryDatum from "../../utils/get-store-country-datum";
 
 /* eslint-disable jsx-a11y/alt-text */
+
+let initalized = false;
+const initalize = async () => {
+  if (initalized) return;
+
+  // @ts-expect-error - no types
+  const [{ init }, { default: yoga }] = await Promise.all([import("satori/wasm"), import("yoga-wasm-web/asm")]);
+  init(yoga());
+
+  initalized = true;
+};
 
 export const loader = async ({ params, request, context }: LoaderArgs) => {
   const db = getDatabase(context.env.DATABASE_URL);
@@ -33,7 +50,7 @@ export const loader = async ({ params, request, context }: LoaderArgs) => {
 
   const country = getStoreCountryDatum(store);
 
-  const [stocks, [nextRestock], imageUrl] = await Promise.all([
+  const [stocks, [nextRestock], imageUrl, satori] = await Promise.all([
     db
       .selectFrom("stock")
       .select(["quantity", "reported_at"])
@@ -53,6 +70,9 @@ export const loader = async ({ params, request, context }: LoaderArgs) => {
       .$assertType<{ quantity: number; reported_at: Date; earliest: Date; latest: Date }>()
       .execute(),
     getMapImage(storeId),
+    // @ts-expect-error - no types
+    import("satori/wasm").then((m) => m.default as typeof SatoriType),
+    initalize(),
   ]).catch((error) => {
     throw serverError(error);
   });
@@ -88,7 +108,7 @@ export const loader = async ({ params, request, context }: LoaderArgs) => {
   path.y0(stockValueScale.range()[0]);
   setNumOrAccessor(path.y1, (d) => stockValueScale(getStockQuantity(d) ?? 0));
 
-  const markup = JSON.stringify(
+  const svg = await satori(
     <div tw="flex h-full w-full bg-white">
       <div tw="flex flex-col flex-grow">
         <div tw="flex items-center mx-auto mt-4 mb-2.5">
@@ -172,6 +192,43 @@ export const loader = async ({ params, request, context }: LoaderArgs) => {
         </div>
       </div>
     </div>,
+    {
+      width: 1000,
+      height: 650,
+      fonts: [
+        {
+          name: "Poppins",
+          data: poppinsLight.buffer,
+          weight: 300,
+          style: "normal",
+        },
+        {
+          name: "Poppins",
+          data: poppinsRegular.buffer,
+          weight: 400,
+          style: "normal",
+        },
+        {
+          name: "Poppins",
+          data: poppinsMedium.buffer,
+          weight: 500,
+          style: "normal",
+        },
+        {
+          name: "Poppins",
+          data: poppinsSemiBold.buffer,
+          weight: 600,
+          style: "normal",
+        },
+        {
+          name: "Poppins",
+          data: poppinsBold.buffer,
+          weight: 700,
+          style: "normal",
+        },
+      ],
+      // debug: true,
+    },
   );
 
   // return new Response(svg, {
@@ -180,8 +237,8 @@ export const loader = async ({ params, request, context }: LoaderArgs) => {
   //   },
   // });
 
-  const png = await context.env.OG?.fetch("http://example.com", { method: "POST", body: markup });
-  if (!png?.ok) throw serverError("Failed to generate OG image");
+  const png = await context.env.RESVG?.fetch("http://example.com", { method: "POST", body: svg });
+  if (!png?.ok) throw serverError("Resvg Worker Unavailable");
 
   return new Response(png.body, png);
 };

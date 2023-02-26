@@ -38,25 +38,19 @@ importers:
       prettier: 2.8.4
       typescript: 4.9.5
 
-  apps/og-worker:
+  apps/resvg-worker:
     specifiers:
       '@cloudflare/workers-types': ^4.20230215.0
-      '@fontsource/poppins': ^4.5.10
       '@resvg/resvg-wasm': ^2.4.1
       esbuild: ^0.17.9
       esbuild-plugin-wasm: ^1.0.0
       rimraf: ^4.1.2
-      satori: ^0.4.0
       typescript: ^4.9.5
       wrangler: ^2.10.0
-      yoga-wasm-web: ^0.3.0
     dependencies:
-      '@fontsource/poppins': 4.5.10
       '@resvg/resvg-wasm': 2.4.1
-      satori: 0.4.0
-      yoga-wasm-web: 0.3.0
     devDependencies:
-      '@cloudflare/workers-types': 4.20230215.0_ogodozebmuwvw2ufs7xg4uspae
+      '@cloudflare/workers-types': 4.20230215.0_tlzhha5ly5banv53qrktm63hza
       esbuild: 0.17.9
       esbuild-plugin-wasm: 1.0.0
       rimraf: 4.1.2
@@ -119,6 +113,7 @@ importers:
       remix-routes: ^1.3.1
       remix-typedjson: ^0.1.7
       remix-utils: ^6.0.0
+      satori: ^0.3.2
       simplebar-react: ^3.2.1
       throttle-debounce: ^5.0.0
       ts-node: ^10.9.1
@@ -127,6 +122,7 @@ importers:
       typescript-remix-routes-plugin: ^1.0.0
       usehooks-ts: ^2.9.1
       wrangler: ^2.10.0
+      yoga-wasm-web: ^0.3.1
       zod: ^3.20.6
     dependencies:
       '@blahaj-app/static': link:../../packages/static
@@ -165,9 +161,11 @@ importers:
       remix-params-helper: 0.4.10_zod@3.20.6
       remix-typedjson: 0.1.7_o755mg7m5mm5y5qnw2cvlbvfhe
       remix-utils: 6.0.0_sjjksrdree2ozcwq43r4op46la
+      satori: 0.3.2
       simplebar-react: 3.2.1_react@18.2.0
       throttle-debounce: 5.0.0
       usehooks-ts: 2.9.1_biqbaboplfbrettd7655fr4n2y
+      yoga-wasm-web: 0.3.1
       zod: 3.20.6
     devDependencies:
       '@cloudflare/workers-types': 4.20230215.0_ogodozebmuwvw2ufs7xg4uspae
@@ -209,7 +207,7 @@ importers:
       '@neondatabase/serverless': 0.2.1
       kysely: 0.23.4
     devDependencies:
-      '@cloudflare/workers-types': 4.20230115.0
+      '@cloudflare/workers-types': 4.20230115.0_cg4flvvrl65hxphcxjyxmtfcwe
       esbuild: 0.17.4
       rimraf: 4.1.2
       typescript: 4.9.4
@@ -2667,12 +2665,18 @@ packages:
       mime: 3.0.0
     dev: true
 
-  /@cloudflare/workers-types/4.20230115.0:
+  /@cloudflare/workers-types/4.20230115.0_cg4flvvrl65hxphcxjyxmtfcwe:
     resolution: {integrity: sha512-GPJEiO8AFN+jUpA+DHJ1qdVmk4s/hq8JYKjOV/+U7avGquQbVnj905+Kg6uAEfrq16muwmRKl+XJGqsvlBlDNg==}
     dev: true
+    patched: true
 
   /@cloudflare/workers-types/4.20230215.0_ogodozebmuwvw2ufs7xg4uspae:
     resolution: {integrity: sha512-s71gaGwtEIxjSu6l0cekbXm9AwjrmrFVcHPNx9tHidG2dnqamYf5Nms/KgMYZf7gnjdKOp/ZChYFeJJkNv3QfA==}
+    patched: true
+
+  /@cloudflare/workers-types/4.20230215.0_tlzhha5ly5banv53qrktm63hza:
+    resolution: {integrity: sha512-s71gaGwtEIxjSu6l0cekbXm9AwjrmrFVcHPNx9tHidG2dnqamYf5Nms/KgMYZf7gnjdKOp/ZChYFeJJkNv3QfA==}
+    dev: true
     patched: true
 
   /@cspotcode/source-map-support/0.8.1:
@@ -10790,8 +10794,8 @@ packages:
     resolution: {integrity: sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==}
     dev: true
 
-  /satori/0.4.0:
-    resolution: {integrity: sha512-ROtZJkBErgJ2HVMk5jDUrJ8B+FuOTFlHYjcNCfSHjwgEavkaZsDvxPwl/1VCa4XpdkHrPcMuUDF+36w+lUECUg==}
+  /satori/0.3.2:
+    resolution: {integrity: sha512-/CLmLk5rzHudMWrMt50UwjG81WOkKnMyVeDzx49jOQzYxwfmImPvf+oWTU703Gq2lE5GkLZ3e7xtTubIQ3IzQQ==}
     engines: {node: '>=16'}
     dependencies:
       '@shuding/opentype.js': 1.4.0-beta.0
@@ -10801,7 +10805,7 @@ packages:
       emoji-regex: 10.2.1
       linebreak: 1.1.0
       postcss-value-parser: 4.2.0
-      yoga-wasm-web: 0.3.2
+      yoga-wasm-web: 0.3.1
     dev: false
 
   /scheduler/0.23.0:
@@ -12112,12 +12116,8 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
-  /yoga-wasm-web/0.3.0:
-    resolution: {integrity: sha512-rD3L4jyMlO1m+RWU60lNwZQK5zmzglCV5fI1gTRikmpv3YzmNIZQbjyfE6cMNb9Xaly/C1SwemYGbsiOekMvnQ==}
-    dev: false
-
-  /yoga-wasm-web/0.3.2:
-    resolution: {integrity: sha512-X//8P6RHzkO4E1ba/wXwKOybeArNDQJI2vwzFLJxz5bfT9K8fB798ZVYvq+Z+hjRA0Wy2iUlOUch4n2+ddqbDQ==}
+  /yoga-wasm-web/0.3.1:
+    resolution: {integrity: sha512-J74OxJtRb5GLW/GH+ibYpb0/0zixk9qp0EOIuKKkavk0w0cMHIQ76YPkca4cRBUW+d+r+GFSM9Q3a+HXQd4b8g==}
     dev: false
 
   /youch/2.2.2:

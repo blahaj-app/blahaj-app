@@ -14,7 +14,7 @@ const handleRequest = createPagesFunctionHandler({
 
 interface Env {
   DATABASE_URL: string;
-  OG: Fetcher;
+  RESVG: Fetcher;
 }
 
 type Context = EventContext<Env, any, unknown>;
