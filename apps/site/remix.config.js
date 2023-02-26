@@ -8,11 +8,6 @@ withEsbuildOverride((option, { isServer }) => {
       require.resolve("@esbuild-plugins/node-globals-polyfill/Buffer.js"),
       require.resolve("@esbuild-plugins/node-globals-polyfill/process.js"),
     ];
-
-    option.loader = {
-      ...option.loader,
-      ".woff": "binary",
-    };
   }
 
   option.plugins = [

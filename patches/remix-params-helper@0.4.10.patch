@@ -1,0 +1,34 @@
+diff --git a/dist/helper.js b/dist/helper.js
+index 178eee8b8d449c16ac2f23ba0e1b334f10f2f1cf..501afc14530a8b4f0afde3187e19b09e252b0cc6 100644
+--- a/dist/helper.js
++++ b/dist/helper.js
+@@ -6,7 +6,9 @@ function parseParams(o, schema, key, value) {
+     var _a;
+     // find actual shape definition for this key
+     let shape = schema;
++    console.log("shape", shape)
+     while (shape instanceof ZodObject || shape instanceof ZodEffects) {
++        console.log("wshape", shape)
+         shape =
+             shape instanceof ZodObject
+                 ? shape.shape
+@@ -43,13 +45,19 @@ function getParamsInternal(params, schema) {
+     else {
+         entries = Object.entries(params);
+     }
++
++    console.log(entries)
+     for (let [key, value] of entries) {
++        console.log("k", key, "v", value)
+         // infer an empty param as if it wasn't defined in the first place
+         if (value === '') {
+             continue;
+         }
+         parseParams(o, schema, key, value);
+     }
++
++    console.log("o", o)
++
+     const result = schema.safeParse(o);
+     if (result.success) {
+         return { success: true, data: result.data, errors: undefined };

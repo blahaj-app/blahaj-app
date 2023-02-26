@@ -1,11 +1,22 @@
 import type { HtmlMetaDescriptor } from "@remix-run/cloudflare";
+import { $path } from "remix-routes";
+import type { EmbedOgSearchParams } from "../zod/embed-og-search-params";
 
 interface GenerateMetaParams {
   title?: string;
   description?: string;
   url?: string;
-  image?: string;
+  image?: EmbedOgSearchParams;
 }
+
+const generateImages = (params: EmbedOgSearchParams) => {
+  const path = $path("/embed/og.png", params);
+
+  return {
+    "og:image": path,
+    "twitter:image": path,
+  };
+};
 
 export const generateMeta = ({ title, description, url, image }: GenerateMetaParams): HtmlMetaDescriptor => ({
   ...(title && {
@@ -23,8 +34,5 @@ export const generateMeta = ({ title, description, url, image }: GenerateMetaPar
     "og:url": url,
     "twitter:url": url,
   }),
-  ...(image && {
-    "og:image": image,
-    "twitter:image": image,
-  }),
+  ...(image && generateImages(image)),
 });

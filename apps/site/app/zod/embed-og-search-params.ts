@@ -1,7 +1,7 @@
 import { Item } from "@blahaj-app/static";
 import { z } from "zod";
 
-export const InternalOembedSearchParamsSchema = z.union([
+export const EmbedOgSearchParamsSchema = z.union([
   z.object({
     type: z.literal("map_global"),
     item: z.nativeEnum(Item),
@@ -11,7 +11,6 @@ export const InternalOembedSearchParamsSchema = z.union([
     storeId: z.string(),
     item: z.nativeEnum(Item),
   }),
-  z.object<Record<string, never>>({}),
 ]);
 
-export type InternalOembedSearchParams = z.infer<typeof InternalOembedSearchParamsSchema>;
+export type EmbedOgSearchParams = z.infer<typeof EmbedOgSearchParamsSchema>;

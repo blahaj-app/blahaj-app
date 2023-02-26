@@ -9,7 +9,6 @@ import { Links, LiveReload, Meta, Scripts, ScrollRestoration } from "@remix-run/
 import mapboxStyles from "mapbox-gl/dist/mapbox-gl.css";
 import type { FC } from "react";
 import { useContext } from "react";
-import { $path } from "remix-routes";
 import type { TypedMetaFunction } from "remix-typedjson";
 import { DynamicLinks } from "remix-utils";
 import { useEffectOnce } from "usehooks-ts";
@@ -30,7 +29,6 @@ export const meta: TypedMetaFunction = () => ({
   ...generateMeta({
     title: "Blåhaj Invetory Tracker",
     description: "Tracking stocks & restocks of Blåhaj (and Smolhaj) at IKEAs around the world.",
-    image: $path("/embed/og.png") + "?test=" + Math.random(),
   }),
 });
 

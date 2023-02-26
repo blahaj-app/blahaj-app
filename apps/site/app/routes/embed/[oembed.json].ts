@@ -1,11 +1,11 @@
 import type { LoaderArgs } from "@remix-run/cloudflare";
 import { json } from "@remix-run/cloudflare";
-import { getSearchParams } from "remix-params-helper";
 import { badRequest, notFound } from "remix-utils";
 import { BASE_URL } from "../../utils/constants";
 import findStore from "../../utils/find-store";
 import getOrCache from "../../utils/get-or-cache";
 import { ITEM_NAME } from "../../utils/item-names";
+import parseSearchParams from "../../utils/parse-search-params";
 import { mapGlobalMetaTitle, mapStoreMetaTitle } from "../../utils/templates";
 import type { EmbedOembedSearchParams } from "../../zod/embed-oembed-search-params";
 import { EmbedOembedSearchParamsSchema } from "../../zod/embed-oembed-search-params";
@@ -50,8 +50,8 @@ const getOembed = (params: EmbedOembedSearchParams) =>
     6 * 60 * 12,
   );
 
-export const loader = async ({ context, request }: LoaderArgs) => {
-  const result = getSearchParams(request, EmbedOembedSearchParamsSchema);
+export const loader = async ({ context, request, params }: LoaderArgs) => {
+  const result = parseSearchParams(request, EmbedOembedSearchParamsSchema);
 
   if (!result.success) {
     throw badRequest("Bad Request");

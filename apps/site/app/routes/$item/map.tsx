@@ -102,6 +102,7 @@ export const meta: TypedMetaFunction<typeof loader> = ({ data, params: rawParams
         ? mapStoreMetaDescription(itemName, store.name, country.name)
         : mapGlobalMetaDescription(itemName),
     url: new URL($path("/:item/map/:storeId", params), BASE_URL).href,
+    image: store ? { type: "map_store", item: item, storeId: store.id } : { type: "map_global", item: item },
   });
 };
 
