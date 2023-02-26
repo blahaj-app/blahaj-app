@@ -1,26 +1,45 @@
-import type { ButtonProps, ComponentWithAs } from "@chakra-ui/react";
+import { Item } from "@blahaj-app/static";
+import type { ButtonProps, ComponentWithAs, UseDisclosureReturn } from "@chakra-ui/react";
+import { Heading } from "@chakra-ui/react";
+import { useDisclosure } from "@chakra-ui/react";
+import {
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+} from "@chakra-ui/react";
 import { Box, Button, Flex, VStack } from "@chakra-ui/react";
+import { Link as ChakraLink } from "@chakra-ui/react";
 import { Link, Outlet, useLocation } from "@remix-run/react";
 import eases from "eases";
 import { AnimatePresence, motion } from "framer-motion";
 import type { FC, PropsWithChildren, ReactNode } from "react";
+import { useMemo } from "react";
 import { createContext, useContext, useEffect, useState } from "react";
-import { TbBrandGithub, TbMap2 } from "react-icons/tb";
+import { TbBrandGithub, TbMail, TbMap2 } from "react-icons/tb";
 import { RemoveScroll } from "react-remove-scroll";
+import { $path } from "remix-routes";
 import Hamburger from "./components/hamburger";
 import { MotionBox } from "./components/motion-box";
 import blahajIcon from "./media/blahaj.png";
+import matchesPaths from "./utils/matches-paths";
 import noop from "./utils/noop";
+import noopDisclosure from "./utils/noop-disclosure";
 import type { SetStateType } from "./utils/types";
 
 interface LayoutContextType {
   sidebarOpen: boolean;
   setSidebarOpen: SetStateType<boolean>;
+  contactModal: UseDisclosureReturn;
 }
 
 export const LayoutContext = createContext<LayoutContextType>({
   sidebarOpen: false,
   setSidebarOpen: noop,
+  contactModal: noopDisclosure,
 });
 
 export const useLayoutContext = () => useContext(LayoutContext);
@@ -50,7 +69,7 @@ const Navbar: FC = () => {
           width="3rem"
           marginRight="0.5rem"
         />
-        <Box fontSize={32} fontWeight="bold" display={{ base: "none", sm: "inherit" }}>
+        <Box as="h1" fontSize={32} fontWeight="bold" display={{ base: "none", sm: "inherit" }}>
           blahaj.app
         </Box>
       </Flex>
@@ -140,6 +159,52 @@ const SidebarItem: ComponentWithAs<"button", SidebarItemProps> = ({ icon, active
   );
 };
 
+const ContactModal: FC = () => {
+  const { contactModal } = useLayoutContext();
+
+  return (
+    <Modal isOpen={contactModal.isOpen} onClose={contactModal.onClose} size="lg">
+      <ModalOverlay />
+      <ModalContent>
+        <ModalHeader>Contact</ModalHeader>
+        <ModalCloseButton />
+        <ModalBody>
+          <Heading size="sm">Suggestions, bug reports, and errors</Heading>
+          <Box as="p" lineHeight="1.25" marginTop="1">
+            To avoid duplicates, and to allow others to comment and contribute, please submit all suggestions and bug
+            reports to the{" "}
+            <ChakraLink color="blue.400" href="https://github.com/repository/blahaj-app" target="_blank">
+              issue tracker on GitHub
+            </ChakraLink>
+          </Box>
+          <Heading size="sm" marginTop="6">
+            Everything else
+          </Heading>
+          <Box as="p" lineHeight="1.25" marginTop="1">
+            For everything else, feel free to email me at{" "}
+            <ChakraLink color="blue.400" href="mailto:contact@blahaj.app">
+              contact@blahaj.app
+            </ChakraLink>
+          </Box>
+        </ModalBody>
+
+        <ModalFooter>
+          <Button
+            color="white"
+            background="blahaj.600"
+            _hover={{ background: "blahaj.500" }}
+            _active={{ background: "blahaj.400" }}
+            mr={3}
+            onClick={contactModal.onClose}
+          >
+            Close
+          </Button>
+        </ModalFooter>
+      </ModalContent>
+    </Modal>
+  );
+};
+
 const Layout: FC = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const location = useLocation();
@@ -148,17 +213,46 @@ const Layout: FC = () => {
     setSidebarOpen(false);
   }, [location.pathname]);
 
+  const isMap = useMemo(
+    () => matchesPaths(["/:item/map", "/:item/map/:storeId"], location.pathname),
+    [location.pathname],
+  );
+
+  const contactModal = useDisclosure();
+
   return (
-    <LayoutContext.Provider value={{ sidebarOpen, setSidebarOpen }}>
+    <LayoutContext.Provider value={{ sidebarOpen, setSidebarOpen, contactModal }}>
+      <ContactModal />
       <Flex flexDirection="column" height="100vh" position="relative">
         <Navbar />
         <Sidebar>
           <VStack alignItems="stretch" spacing="1">
-            <SidebarItem as={Link} to="/blahaj/map" icon={<TbMap2 size="28" />} active>
+            <SidebarItem
+              as={Link}
+              to={$path("/:item/map", { item: Item.BLAHAJ })}
+              icon={<TbMap2 size="28" />}
+              active={isMap}
+              onClick={(e) => {
+                if (isMap) {
+                  e.preventDefault();
+                  setSidebarOpen(false);
+                }
+              }}
+            >
               Store Map
             </SidebarItem>
           </VStack>
           <VStack alignItems="stretch" spacing="1">
+            <SidebarItem
+              as="button"
+              icon={<TbMail size="28" />}
+              onClick={() => {
+                setSidebarOpen(false);
+                contactModal.onOpen();
+              }}
+            >
+              Contact
+            </SidebarItem>
             <SidebarItem
               as="a"
               href="https://github.com/repository/blahaj-app"

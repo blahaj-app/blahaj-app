@@ -1,4 +1,3 @@
-import { ALL_STORES, Item } from "@blahaj-app/static";
 import type { CacheStorage, Response as CFResponse } from "@cloudflare/workers-types";
 import poppinsLight from "@fontsource/poppins/files/poppins-all-300-normal.woff?binary";
 import poppinsRegular from "@fontsource/poppins/files/poppins-all-400-normal.woff?binary";
@@ -20,9 +19,11 @@ import blahaj from "../../media/blahaj.png?dataurl";
 import { getMapImageResolver } from "../../media/map-images";
 import mapboxLogo from "../../media/mapbox.svg?dataurl";
 import { getStockStatus, stockStyles } from "../../stock-status";
+import findStore from "../../utils/find-store";
 import formatTz from "../../utils/format-tz";
 import getDatabase from "../../utils/get-database";
 import getStoreCountryDatum from "../../utils/get-store-country-datum";
+import { ITEM_NAME } from "../../utils/item-names";
 import parseSearchParams from "../../utils/parse-search-params";
 import { EmbedOgSearchParamsSchema } from "../../zod/embed-og-search-params";
 
@@ -73,7 +74,7 @@ export const loader = async ({ params, request, context }: LoaderArgs) => {
     const storeId = options.storeId;
     const item = options.item;
 
-    const store = ALL_STORES.find((s) => s.id === storeId);
+    const store = findStore(options.storeId);
 
     if (!store) {
       throw notFound("Store not found");
@@ -147,9 +148,7 @@ export const loader = async ({ params, request, context }: LoaderArgs) => {
               <div tw="text-[32px] font-bold leading-[0.8]">{store.name}</div>
             </div>
             <div tw="flex py-3 bg-black/15">
-              <div tw="flex mx-auto text-[20px] font-bold -mb-[8px]">
-                {item === Item.BLAHAJ ? "Blåhaj" : "Smolhaj"} Inventory
-              </div>
+              <div tw="flex mx-auto text-[20px] font-bold -mb-[8px]">{ITEM_NAME[item]} Inventory</div>
             </div>
             <div tw="flex h-32 bg-black/10">
               <svg width="365" height="128">

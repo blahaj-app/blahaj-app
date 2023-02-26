@@ -172,7 +172,9 @@ const Sidebar: FC = () => {
   const [historyLoading, setHistoryLoading] = useState(false);
 
   useUpdateEffect(() => {
-    if (!focusedStoreData?.id) return;
+    if (!focusedStoreData?.id) {
+      return setFocusedStoreHistory([]);
+    }
 
     setHistoryLoading(true);
     getStockHistoryClient(currentItem, focusedStoreData?.id).then((history) => {

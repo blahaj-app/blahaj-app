@@ -1,7 +1,8 @@
-import { Box } from "@chakra-ui/react";
-import type { FC } from "react";
+import { Item } from "@blahaj-app/static";
+import type { LoaderArgs } from "@remix-run/cloudflare";
+import { redirect } from "@remix-run/cloudflare";
+import { $path } from "remix-routes";
 
-const Index: FC = () => {
-  return <Box background="red.100">index</Box>;
+export const loader = async ({ params, request, context }: LoaderArgs) => {
+  return redirect($path("/:item/map", { item: Item.BLAHAJ }));
 };
-export default Index;

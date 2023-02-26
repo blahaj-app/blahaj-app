@@ -110,6 +110,7 @@ importers:
       react-icons: ^4.7.1
       react-map-gl: ^7.0.21
       react-remove-scroll: ^2.5.5
+      react-router-dom: ^6.8.1
       remix: ^1.13.0
       remix-esbuild-override: ^3.0.4
       remix-routes: ^1.4.1
@@ -160,6 +161,7 @@ importers:
       react-icons: 4.7.1_react@18.2.0
       react-map-gl: 7.0.21_boipu4w7clhllxbftb5pofkimy
       react-remove-scroll: 2.5.5_pmekkgnqduwlme35zpnqhenc34
+      react-router-dom: 6.8.1_biqbaboplfbrettd7655fr4n2y
       remix-typedjson: 0.1.7_o755mg7m5mm5y5qnw2cvlbvfhe
       remix-utils: 6.0.0_sjjksrdree2ozcwq43r4op46la
       satori: 0.4.0
