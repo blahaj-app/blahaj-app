@@ -46,7 +46,7 @@ jobs:
 
       - name: Build site
         env:
-          BASE_URL: ${{ vars.REPLACE_BASE_URL }}}
+          BASE_URL: ${{ vars.REPLACE_BASE_URL }}
           MAPBOX_TOKEN: ${{ secrets.REPLACE_MAPBOX_TOKEN }}
         run: |
           cd apps/site &&
