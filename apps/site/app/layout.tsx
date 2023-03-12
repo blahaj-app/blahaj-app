@@ -19,6 +19,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import type { FC, PropsWithChildren, ReactNode } from "react";
 import { useMemo } from "react";
 import { createContext, useContext, useEffect, useState } from "react";
+import { FaDiscord } from "react-icons/fa";
 import { TbBrandGithub, TbMail, TbMap2 } from "react-icons/tb";
 import { RemoveScroll } from "react-remove-scroll";
 import { $path } from "remix-routes";
@@ -181,8 +182,12 @@ const ContactModal: FC = () => {
             Everything else
           </Heading>
           <Box as="p" lineHeight="1.25" marginTop="1">
-            For everything else, feel free to email me at{" "}
-            <ChakraLink color="blue.400" href="mailto:contact@blahaj.app">
+            For everything else, you can contact me on{" "}
+            <ChakraLink color="blue.400" href="https://discord.gg/TPmbJcMkeX" target="_blank">
+              Discord
+            </ChakraLink>{" "}
+            or email me at{" "}
+            <ChakraLink color="blue.400" href="mailto:contact@blahaj.app" target="_blank">
               contact@blahaj.app
             </ChakraLink>
           </Box>
@@ -243,6 +248,9 @@ const Layout: FC = () => {
             </SidebarItem>
           </VStack>
           <VStack alignItems="stretch" spacing="1">
+            <SidebarItem as="a" href="https://discord.gg/TPmbJcMkeX" target="_blank" icon={<FaDiscord size="28" />}>
+              Discord
+            </SidebarItem>
             <SidebarItem
               as="button"
               icon={<TbMail size="28" />}

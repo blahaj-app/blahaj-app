@@ -76,6 +76,7 @@ withEsbuildOverride((option, { isServer }) => {
         __baseUrl__: JSON.stringify(replaceValues.baseUrl),
         __mapboxToken__: JSON.stringify(replaceValues.mapboxToken),
       },
+      include: /(\.jsx?|\.tsx?)$/,
     }),
   ];
   option.legalComments = "inline";
