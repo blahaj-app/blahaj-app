@@ -74,7 +74,7 @@ withEsbuildOverride((option, { isServer }) => {
     replace({
       values: {
         __baseUrl__: JSON.stringify(replaceValues.baseUrl),
-        __databaseUrl__: JSON.stringify(replaceValues.databaseUrl),
+        __mapboxToken__: JSON.stringify(replaceValues.mapboxToken),
       },
     }),
   ];
