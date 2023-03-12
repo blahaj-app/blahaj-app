@@ -1,7 +1,21 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const { withEsbuildOverride } = require("remix-esbuild-override");
+const { replace } = require("esbuild-plugin-replace");
+const { config } = require("dotenv");
 
 withEsbuildOverride((option, { isServer }) => {
+  config();
+
+  const replaceValues = {
+    baseUrl: process.env.BASE_URL,
+    mapboxToken: process.env.MAPBOX_TOKEN,
+  };
+
+  const missingValues = Object.entries(replaceValues).filter(([, value]) => !value);
+  if (missingValues.length > 0) {
+    throw new Error(`Missing values: ${missingValues.map(([key]) => key).join(", ")}`);
+  }
+
   if (isServer) {
     option.inject = [
       ...(option.inject ?? []),
@@ -57,6 +71,12 @@ withEsbuildOverride((option, { isServer }) => {
         }
       },
     },
+    replace({
+      values: {
+        __baseUrl__: JSON.stringify(replaceValues.baseUrl),
+        __databaseUrl__: JSON.stringify(replaceValues.databaseUrl),
+      },
+    }),
   ];
   option.legalComments = "inline";
 

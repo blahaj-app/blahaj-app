@@ -29,7 +29,6 @@ import type { StockChartDatum } from "../../components/stock-history-chart";
 import Test from "../../components/stock-history-chart";
 import { useLayoutContext } from "../../layout";
 import { getStockStatus, StockStatus, stockStyles } from "../../stock-status";
-import { BASE_URL, MAPBOX_KEY } from "../../utils/constants";
 import findStore from "../../utils/find-store";
 import formatTz from "../../utils/format-tz";
 import { generateLinks } from "../../utils/generate-links";
@@ -101,7 +100,7 @@ export const meta: TypedMetaFunction<typeof loader> = ({ data, params: rawParams
       store && country?.name
         ? mapStoreMetaDescription(itemName, store.name, country.name)
         : mapGlobalMetaDescription(itemName),
-    url: new URL($path("/:item/map/:storeId", params), BASE_URL).href,
+    url: new URL($path("/:item/map/:storeId", params), __baseUrl__).href,
     image: store ? { type: "map_store", item: item, storeId: store.id } : { type: "map_global", item: item },
   });
 };
@@ -635,7 +634,7 @@ const Map: FC = () => {
             }
             minZoom={1.75}
             mapStyle="mapbox://styles/mapbox/streets-v12"
-            mapboxAccessToken={MAPBOX_KEY}
+            mapboxAccessToken={__mapboxToken__}
           >
             <NavigationControl />
             <GeolocateControl />

@@ -1,7 +1,6 @@
 import type { LoaderArgs } from "@remix-run/cloudflare";
 import { json } from "@remix-run/cloudflare";
 import { badRequest, notFound } from "remix-utils";
-import { BASE_URL } from "../../utils/constants";
 import findStore from "../../utils/find-store";
 import getOrCache from "../../utils/get-or-cache";
 import { ITEM_NAME } from "../../utils/item-names";
@@ -21,7 +20,7 @@ const getOembed = (params: EmbedOembedSearchParams) =>
         type: "rich",
         title: "Blåhaj Invetory Tracker",
         provider_name: "blahaj.app",
-        provider_url: BASE_URL,
+        provider_url: __baseUrl__,
       };
 
       if (params?.type === "map_global") {
