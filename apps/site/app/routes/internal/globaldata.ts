@@ -1,4 +1,4 @@
-import type { LoaderArgs } from "@remix-run/cloudflare";
+import type { AppLoadContext, LoaderArgs } from "@remix-run/cloudflare";
 import { subDays } from "date-fns";
 import moize from "moize";
 import { $path } from "remix-routes";
@@ -13,11 +13,14 @@ import { InternalGlobalDataSearchParamsSchema } from "../../zod/internal-globald
 
 export type { InternalGlobalDataSearchParams } from "../../zod/internal-globaldata-search-params";
 
-export const getGlobalDataServer = async (item: string, db: ReturnType<typeof getDatabase>) =>
+export const getGlobalDataServer = async (context: AppLoadContext, item: string) =>
   getOrCache(
     "globaldata-" + item,
-    () =>
-      promiseHash({
+    context.waitUntil,
+    () => {
+      const db = getDatabase(context.env.DATABASE_URL);
+
+      return promiseHash({
         stocks: db
           .selectFrom("stock")
           .select(["store_id", "quantity", "reported_at"])
@@ -36,7 +39,8 @@ export const getGlobalDataServer = async (item: string, db: ReturnType<typeof ge
           .orderBy("earliest", "desc")
           .$assertType<{ store_id: string; quantity: number; reported_at: Date; earliest: Date; latest: Date }>()
           .execute(),
-      }),
+      });
+    },
     5 * 60,
   );
 
@@ -52,8 +56,6 @@ export const getGlobalDataClient = moize.promise(
 );
 
 export const loader = async ({ context, request }: LoaderArgs) => {
-  const db = getDatabase(context.env.DATABASE_URL);
-
   const result = parseSearchParams(request, InternalGlobalDataSearchParamsSchema);
 
   if (!result.success) {
@@ -62,9 +64,7 @@ export const loader = async ({ context, request }: LoaderArgs) => {
 
   const { item } = result.data;
 
-  const [globalData, promise] = await getGlobalDataServer(item, db);
-
-  context.waitUntil(promise);
+  const globalData = await getGlobalDataServer(context, item);
 
   return typedjson({ globalData });
 };

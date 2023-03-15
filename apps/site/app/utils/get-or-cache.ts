@@ -1,7 +1,12 @@
 import type { CacheStorage, Response as CFResponse } from "@cloudflare/workers-types";
 import { stringify, parse } from "remix-typedjson";
 
-const getOrCache = async <T>(key: string, fn: () => Promise<T> | T, ttl: number): Promise<[T, Promise<unknown>]> => {
+const getOrCache = async <T>(
+  key: string,
+  waitUntil: (promise: Promise<any>) => void,
+  fn: () => Promise<T> | T,
+  ttl: number,
+): Promise<T> => {
   const url = new URL("https://example.com");
   url.searchParams.set("key", key);
 
@@ -14,7 +19,7 @@ const getOrCache = async <T>(key: string, fn: () => Promise<T> | T, ttl: number)
     const deserialized = parse<T>(await match.text());
 
     if (deserialized) {
-      return [deserialized, Promise.resolve(null)];
+      return deserialized;
     } else {
       promises.push(cache.delete(url));
     }
@@ -31,7 +36,8 @@ const getOrCache = async <T>(key: string, fn: () => Promise<T> | T, ttl: number)
 
   promises.push(cache.put(url, response));
 
-  return [value, Promise.allSettled(promises)];
+  waitUntil(Promise.all(promises));
+  return value;
 };
 
 export default getOrCache;

@@ -1,4 +1,4 @@
-import type { LoaderArgs } from "@remix-run/cloudflare";
+import type { AppLoadContext, LoaderArgs } from "@remix-run/cloudflare";
 import { subDays } from "date-fns";
 import moize from "moize";
 import { $path } from "remix-routes";
@@ -13,11 +13,14 @@ import { InternalStockHistorySearchParamsSchema } from "../../zod/internal-stock
 
 export type { InternalStockHistorySearchParams as SearchParams } from "../../zod/internal-stockhistory-search-params";
 
-export const getStockHistoryServer = async (item: string, storeId: string, db: ReturnType<typeof getDatabase>) =>
+export const getStockHistoryServer = async (context: AppLoadContext, item: string, storeId: string) =>
   getOrCache(
     "stockhistory-" + item + "-" + storeId,
-    () =>
-      db
+    context.waitUntil,
+    () => {
+      const db = getDatabase(context.env.DATABASE_URL);
+
+      return db
         .selectFrom("stock")
         .select(["quantity", "reported_at"])
         .where("store_id", "=", storeId)
@@ -25,7 +28,8 @@ export const getStockHistoryServer = async (item: string, storeId: string, db: R
         .where("created_at", ">", subDays(new Date(), 90))
         .orderBy("created_at", "asc")
         .$assertType<{ quantity: number; reported_at: Date }>()
-        .execute(),
+        .execute();
+    },
     5 * 60,
   );
 
@@ -41,8 +45,6 @@ export const getStockHistoryClient = moize.promise(
 );
 
 export const loader = async ({ context, request }: LoaderArgs) => {
-  const db = getDatabase(context.env.DATABASE_URL);
-
   const result = parseSearchParams(request, InternalStockHistorySearchParamsSchema);
 
   if (!result.success) {
@@ -51,9 +53,7 @@ export const loader = async ({ context, request }: LoaderArgs) => {
 
   const { item, storeId } = result.data;
 
-  const [history, promise] = await getStockHistoryServer(item, storeId, db);
-
-  context.waitUntil(promise);
+  const history = await getStockHistoryServer(context, item, storeId);
 
   return typedjson({ history });
 };

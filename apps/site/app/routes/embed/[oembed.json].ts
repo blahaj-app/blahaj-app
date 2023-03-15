@@ -1,4 +1,4 @@
-import type { LoaderArgs } from "@remix-run/cloudflare";
+import type { AppLoadContext, LoaderArgs } from "@remix-run/cloudflare";
 import { json } from "@remix-run/cloudflare";
 import { badRequest, notFound } from "remix-utils";
 import findStore from "../../utils/find-store";
@@ -11,9 +11,10 @@ import { EmbedOembedSearchParamsSchema } from "../../zod/embed-oembed-search-par
 
 export type { EmbedOembedSearchParams as SearchParams } from "../../zod/embed-oembed-search-params";
 
-const getOembed = (params: EmbedOembedSearchParams) =>
+const getOembed = (context: AppLoadContext, params: EmbedOembedSearchParams) =>
   getOrCache(
     "oembed-" + JSON.stringify(params),
+    context.waitUntil,
     () => {
       let oembed: Record<string, string> = {
         version: "1.0",
@@ -58,9 +59,5 @@ export const loader = async ({ context, request, params }: LoaderArgs) => {
 
   const { data } = result;
 
-  const [oembed, promise] = await getOembed(data);
-
-  context.waitUntil(promise);
-
-  return json(oembed);
+  return json(getOembed(context, data));
 };

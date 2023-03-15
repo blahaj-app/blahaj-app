@@ -33,7 +33,6 @@ import findStore from "../../utils/find-store";
 import formatTz from "../../utils/format-tz";
 import { generateLinks } from "../../utils/generate-links";
 import { generateMeta } from "../../utils/generate-meta";
-import getDatabase from "../../utils/get-database";
 import getStoreCountryDatum from "../../utils/get-store-country-datum";
 import { ITEM_NAME } from "../../utils/item-names";
 import noop from "../../utils/noop";
@@ -58,7 +57,6 @@ export const shouldRevalidate: ShouldRevalidateFunction = ({ currentParams, next
 
 export const loader = async ({ context, params: rawParams, request }: LoaderArgs) => {
   const params = $params("/:item/map/:storeId", rawParams);
-  const db = getDatabase(context.env.DATABASE_URL);
 
   if (!Object.values(Item).includes(rawParams.item as Item)) {
     throw json(null, { status: 404 });
@@ -70,18 +68,13 @@ export const loader = async ({ context, params: rawParams, request }: LoaderArgs
       : undefined;
 
   const resolved = await promiseHash({
-    globalDataResult: getGlobalDataServer(params.item, db),
-    stockHistoryResult: params.storeId
-      ? getStockHistoryServer(params.item, params.storeId, db)
-      : Promise.resolve([undefined]),
+    globalData: getGlobalDataServer(context, params.item),
+    stockHistory: params.storeId
+      ? getStockHistoryServer(context, params.item, params.storeId)
+      : Promise.resolve(undefined),
   });
 
-  const globalData = resolved.globalDataResult[0];
-  const stockHistory = resolved.stockHistoryResult?.[0];
-
-  context.waitUntil(Promise.all([resolved.globalDataResult[1], resolved.stockHistoryResult?.[1] ?? Promise.resolve()]));
-
-  return typedjson({ globalData, stockHistory, location });
+  return typedjson({ ...resolved, location });
 };
 
 export const meta: TypedMetaFunction<typeof loader> = ({ data, params: rawParams }) => {
