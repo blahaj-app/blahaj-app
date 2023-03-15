@@ -2,14 +2,16 @@ import type { HtmlMetaDescriptor } from "@remix-run/cloudflare";
 import { $path } from "remix-routes";
 import type { EmbedOgSearchParams } from "../zod/embed-og-search-params";
 
+type GenerateImagesParams = EmbedOgSearchParams & { cacheBust?: string };
+
 interface GenerateMetaParams {
   title?: string;
   description?: string;
   url?: string;
-  image?: EmbedOgSearchParams;
+  image?: GenerateImagesParams;
 }
 
-const generateImages = (params: EmbedOgSearchParams) => {
+const generateImages = (params: GenerateImagesParams) => {
   const url = new URL($path("/embed/og.png", params), __baseUrl__).href;
 
   return {

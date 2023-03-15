@@ -74,7 +74,11 @@ export const loader = async ({ context, params: rawParams, request }: LoaderArgs
       : Promise.resolve(undefined),
   });
 
-  return typedjson({ ...resolved, location });
+  const cacheBust = Math.floor(Date.now() / 1000 / 60 / 12)
+    .toString(16)
+    .padStart(8, "0");
+
+  return typedjson({ ...resolved, location, cacheBust });
 };
 
 export const meta: TypedMetaFunction<typeof loader> = ({ data, params: rawParams }) => {
@@ -94,7 +98,9 @@ export const meta: TypedMetaFunction<typeof loader> = ({ data, params: rawParams
         ? mapStoreMetaDescription(itemName, store.name, country.name)
         : mapGlobalMetaDescription(itemName),
     url: new URL($path("/:item/map/:storeId", params), __baseUrl__).href,
-    image: store ? { type: "map_store", item: item, storeId: store.id } : { type: "map_global", item: item },
+    image: store
+      ? { type: "map_store", item: item, storeId: store.id, cacheBust: data.cacheBust }
+      : { type: "map_global", item: item, cacheBust: data.cacheBust },
   });
 };
 

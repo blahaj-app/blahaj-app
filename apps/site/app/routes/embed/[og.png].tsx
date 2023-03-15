@@ -35,7 +35,6 @@ let initalized = false;
 const initalize = async () => {
   if (initalized) return;
 
-  // @ts-expect-error - no types
   const [{ init }, { default: yoga }] = await Promise.all([import("satori/wasm"), import("yoga-wasm-web/asm")]);
   init(yoga());
 
@@ -62,7 +61,6 @@ export const loader = async ({ params, request, context }: LoaderArgs) => {
 
   const db = getDatabase(context.env.DATABASE_URL);
   const satoriPromise = Promise.all([
-    // @ts-expect-error - no types
     import("satori/wasm").then((m) => m.default as typeof SatoriType),
     initalize(),
   ]).then(([satori]) => satori);
