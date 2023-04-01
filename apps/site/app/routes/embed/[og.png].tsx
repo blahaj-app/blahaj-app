@@ -14,7 +14,7 @@ import { subDays } from "date-fns";
 import type { ReactNode } from "react";
 import { badRequest, notFound, serverError } from "remix-utils";
 import type SatoriType from "satori";
-import type { StockChartDatum } from "../../components/stock-history-chart";
+import type { StockChartDatum } from "../../components/map/stock-history-chart";
 import blahaj from "../../media/blahaj.png?dataurl";
 import { getMapImageResolver } from "../../media/map-images";
 import mapboxLogo from "../../media/mapbox.svg?dataurl";

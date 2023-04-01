@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import type { ChakraProps, ComponentWithAs } from "@chakra-ui/react";
-import { Flex, forwardRef } from "@chakra-ui/react";
+import { Flex } from "@chakra-ui/react";
 import type { MotionProps } from "framer-motion";
 import { isValidMotionProp, motion } from "framer-motion";
+import { forwardRef } from "react";
 
 export type MotionFlexProps = Omit<ChakraProps, keyof MotionProps> &
   MotionProps & {
@@ -12,7 +13,7 @@ export type MotionFlexProps = Omit<ChakraProps, keyof MotionProps> &
 // @ts-ignore type too complex
 export const MotionFlex = motion(
   // @ts-ignore type too complex
-  forwardRef<MotionFlexProps, "div">((props, ref) => {
+  forwardRef<MotionFlexProps, "div">(function MotionFlex(props, ref) {
     const chakraProps = Object.fromEntries(
       // do not pass framer props to DOM element
       Object.entries(props).filter(([key]) => !isValidMotionProp(key)),

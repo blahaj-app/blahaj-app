@@ -1,9 +1,9 @@
 lockfileVersion: 5.4
 
 patchedDependencies:
-  '@eslint/eslintrc@2.0.1':
-    hash: ovkrmbm65tsbbnuni7o6kwy5da
-    path: patches/@eslint__eslintrc@2.0.1.patch
+  '@eslint/eslintrc@2.0.2':
+    hash: nretnkgknszv2lvskjgfjfic7i
+    path: patches/@eslint__eslintrc@2.0.2.patch
   '@remix-run/dev@1.15.0':
     hash: 6v4beqchdh54wxejqvxtb6okjq
     path: patches/@remix-run__dev@1.15.0.patch
@@ -76,6 +76,8 @@ importers:
       '@remix-run/eslint-config': ^1.15.0
       '@remix-run/react': ^1.15.0
       '@svgr/core': ^7.0.0
+      '@tanstack/query-core': ^4.27.0
+      '@tanstack/react-query': ^4.28.0
       '@types/d3-array': ^3.0.4
       '@types/eases': ^1.0.2
       '@types/mapbox-gl': ^2.7.10
@@ -98,7 +100,6 @@ importers:
       eases: ^1.0.8
       esbuild-plugin-replace: ^1.3.0
       eslint: ^8.37.0
-      eslint-plugin-prefer-arrow-functions: ^3.1.4
       framer-motion: ^10.10.0
       kysely: ^0.24.2
       mapbox-gl: ^2.13.0
@@ -137,6 +138,8 @@ importers:
       '@remix-run/cloudflare': 1.15.0_fsfby5xfuioqzxmd433qdx3w6m
       '@remix-run/cloudflare-pages': 1.15.0_fsfby5xfuioqzxmd433qdx3w6m
       '@remix-run/react': 1.15.0_biqbaboplfbrettd7655fr4n2y
+      '@tanstack/query-core': 4.27.0
+      '@tanstack/react-query': 4.28.0_biqbaboplfbrettd7655fr4n2y
       '@visx/curve': 3.0.0
       '@visx/event': 3.0.1
       '@visx/gradient': 3.0.0_react@18.2.0
@@ -183,7 +186,6 @@ importers:
       dotenv: 16.0.3
       esbuild-plugin-replace: 1.3.0
       eslint: 8.37.0
-      eslint-plugin-prefer-arrow-functions: 3.1.4_eslint@8.37.0
       npm-run-all: 4.1.5
       remix: 1.15.0
       remix-routes: 1.4.1
@@ -3741,7 +3743,7 @@ packages:
     engines: {node: ^12.0.0 || ^14.0.0 || >=16.0.0}
     dev: true
 
-  /@eslint/eslintrc/2.0.2:
+  /@eslint/eslintrc/2.0.2_nretnkgknszv2lvskjgfjfic7i:
     resolution: {integrity: sha512-3W4f5tDUra+pA+FzgugqL2pRimUTDJWKr7BINqOpkZrC0uYI0NIc0/JFgBROCU07HR6GieA5m3/rsPIhDmCXTQ==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     dependencies:
@@ -3757,6 +3759,7 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: true
+    patched: true
 
   /@eslint/js/8.37.0:
     resolution: {integrity: sha512-x5vzdtOOGgFVDCUs81QRB2+liax8rFg3+7hqM+QhBG0/G3F1ZsoYl97UrqgHgQ9KKT7G6c4V+aTUCgu/n22v1A==}
@@ -4630,6 +4633,28 @@ packages:
     dependencies:
       defer-to-connect: 2.0.1
     dev: true
+
+  /@tanstack/query-core/4.27.0:
+    resolution: {integrity: sha512-sm+QncWaPmM73IPwFlmWSKPqjdTXZeFf/7aEmWh00z7yl2FjqophPt0dE1EHW9P1giMC5rMviv7OUbSDmWzXXA==}
+    dev: false
+
+  /@tanstack/react-query/4.28.0_biqbaboplfbrettd7655fr4n2y:
+    resolution: {integrity: sha512-8cGBV5300RHlvYdS4ea+G1JcZIt5CIuprXYFnsWggkmGoC0b5JaqG0fIX3qwDL9PTNkKvG76NGThIWbpXivMrQ==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0
+      react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
+      react-native: '*'
+    peerDependenciesMeta:
+      react-dom:
+        optional: true
+      react-native:
+        optional: true
+    dependencies:
+      '@tanstack/query-core': 4.27.0
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+      use-sync-external-store: 1.2.0_react@18.2.0
+    dev: false
 
   /@testing-library/dom/8.20.0:
     resolution: {integrity: sha512-d9ULIT+a4EXLX3UU8FBjauG9NnsZHkHztXoIcTsOKoOw030fyjheN9svkTULjJxtYag9DZz5Jz5qkWZDPxTFwA==}
@@ -5555,7 +5580,7 @@ packages:
     resolution: {integrity: sha512-Cg7TFGpIr01vOQNODXOOaGz2NpCU5gl8x1qJFbb6hbZxR7XrcE2vtbAsTAbJ7/xwJtUuJEw8K8Zr/AE0LHlesg==}
     engines: {node: '>=10', npm: '>=6'}
     dependencies:
-      '@babel/runtime': 7.20.13
+      '@babel/runtime': 7.21.0
       cosmiconfig: 7.1.0
       resolve: 1.22.1
     dev: false
@@ -7215,14 +7240,6 @@ packages:
       semver: 6.3.0
     dev: true
 
-  /eslint-plugin-prefer-arrow-functions/3.1.4_eslint@8.37.0:
-    resolution: {integrity: sha512-LSO8VibqBKqzelr+L21mEIfachavCon+1SEumCJ6U8Ze2q0pntyojmomcVwd9RZBjrP+HV6k1Osz0B3Xwdq8WA==}
-    peerDependencies:
-      eslint: '>=5.0.0'
-    dependencies:
-      eslint: 8.37.0
-    dev: true
-
   /eslint-plugin-prettier/4.2.1_ybb3aapb7235womryl2tm5ze2u:
     resolution: {integrity: sha512-f/0rXLXUt0oFYs8ra4w49wYZBG5GKZpAYsJSm6rnYL5uVDjd+zowwMwVZHnAjf4edNrKpCDYfXDgmRE/Ak7QyQ==}
     engines: {node: '>=12.0.0'}
@@ -7331,7 +7348,7 @@ packages:
     dependencies:
       '@eslint-community/eslint-utils': 4.4.0_eslint@8.37.0
       '@eslint-community/regexpp': 4.5.0
-      '@eslint/eslintrc': 2.0.2
+      '@eslint/eslintrc': 2.0.2_nretnkgknszv2lvskjgfjfic7i
       '@eslint/js': 8.37.0
       '@humanwhocodes/config-array': 0.11.8
       '@humanwhocodes/module-importer': 1.0.1

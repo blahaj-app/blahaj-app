@@ -1,6 +1,5 @@
 import type { AppLoadContext, LoaderArgs } from "@remix-run/cloudflare";
 import { subDays } from "date-fns";
-import moize from "moize";
 import { $path } from "remix-routes";
 import { typedjson } from "remix-typedjson";
 import { badRequest } from "remix-utils";
@@ -32,16 +31,13 @@ export const getStockHistoryServer = async (context: AppLoadContext, item: strin
     5 * 60,
   );
 
-export const getStockHistoryClient = moize.promise(
-  async (item: string, storeId: string) => {
-    const res = await fetch($path("/internal/stockhistory", { item, storeId }));
-    if (!res.ok) return null;
-    const data = await res.json<AwaitedReturn<typeof loader>>();
+export const getStockHistoryClient = async (item: string, storeId: string) => {
+  const res = await fetch($path("/internal/stockhistory", { item, storeId }));
+  if (!res.ok) return null;
+  const data = await res.json<AwaitedReturn<typeof loader>>();
 
-    return deserializeLoader<typeof loader>(data).history;
-  },
-  { maxSize: 1000, maxAge: 5 * 60 * 1000 },
-);
+  return deserializeLoader<typeof loader>(data).history;
+};
 
 export const loader = async ({ context, request }: LoaderArgs) => {
   const result = parseSearchParams(request, InternalStockHistorySearchParamsSchema);

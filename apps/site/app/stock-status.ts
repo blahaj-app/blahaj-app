@@ -39,7 +39,7 @@ export const stockStyles: Record<StockStatus, { pin: string; color: string }> = 
 
 export const getStockStatus = (
   stocks: Pick<Selectable<Stock>, "quantity"> | undefined,
-  restocks: Pick<Selectable<Restock>, "quantity">[],
+  restocks: Pick<Selectable<Restock>, "quantity">[] | undefined,
 ): StockStatus => {
   const quantity = stocks?.quantity;
 
@@ -52,11 +52,11 @@ export const getStockStatus = (
     } else if (quantity === 0) {
       status = StockStatus.OUT_OF_STOCK;
 
-      if (restocks.length > 0) {
+      if (restocks && restocks.length > 0) {
         status = StockStatus.RESTOCK_EXPECTED;
       }
     }
-  } else if (restocks.length > 0) {
+  } else if (restocks && restocks.length > 0) {
     status = StockStatus.RESTOCK_EXPECTED;
   }
 

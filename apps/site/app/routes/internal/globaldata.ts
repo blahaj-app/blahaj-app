@@ -1,6 +1,5 @@
 import type { AppLoadContext, LoaderArgs } from "@remix-run/cloudflare";
 import { subDays } from "date-fns";
-import moize from "moize";
 import { $path } from "remix-routes";
 import { typedjson } from "remix-typedjson";
 import { badRequest, promiseHash } from "remix-utils";
@@ -42,16 +41,13 @@ export const getGlobalDataServer = async (context: AppLoadContext, item: string)
     5 * 60,
   );
 
-export const getGlobalDataClient = moize.promise(
-  async (item: string) => {
-    const res = await fetch($path("/internal/globaldata", { item }));
-    if (!res.ok) return null;
-    const data = await res.json<AwaitedReturn<typeof loader>>();
+export const getGlobalDataClient = async (item: string) => {
+  const res = await fetch($path("/internal/globaldata", { item }));
+  if (!res.ok) return null;
+  const data = await res.json<AwaitedReturn<typeof loader>>();
 
-    return deserializeLoader<typeof loader>(data).globalData;
-  },
-  { maxSize: 5, maxAge: 5 * 60 * 1000 },
-);
+  return deserializeLoader<typeof loader>(data).globalData;
+};
 
 export const loader = async ({ context, request }: LoaderArgs) => {
   const result = parseSearchParams(request, InternalGlobalDataSearchParamsSchema);

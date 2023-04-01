@@ -6,6 +6,7 @@ import poppins600 from "@fontsource/poppins/600.css";
 import poppins700 from "@fontsource/poppins/700.css";
 import type { LinksFunction } from "@remix-run/cloudflare";
 import { Links, LiveReload, Meta, Scripts, ScrollRestoration } from "@remix-run/react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import mapboxStyles from "mapbox-gl/dist/mapbox-gl.css";
 import type { FC } from "react";
 import { useContext } from "react";
@@ -67,6 +68,8 @@ const theme = extendTheme({
   },
 });
 
+const queryClient = new QueryClient();
+
 const App: FC = withEmotionCache((_, emotionCache) => {
   const clientStyleData = useContext(ClientStyleContext);
 
@@ -84,21 +87,23 @@ const App: FC = withEmotionCache((_, emotionCache) => {
   });
 
   return (
-    <html lang="en">
-      <head>
-        <Meta />
-        <Links />
-        <DynamicLinks />
-      </head>
-      <body>
-        <ChakraProvider theme={theme}>
-          <Layout />
-        </ChakraProvider>
-        <ScrollRestoration />
-        <Scripts />
-        <LiveReload />
-      </body>
-    </html>
+    <QueryClientProvider client={queryClient}>
+      <html lang="en">
+        <head>
+          <Meta />
+          <Links />
+          <DynamicLinks />
+        </head>
+        <body>
+          <ChakraProvider theme={theme}>
+            <Layout />
+          </ChakraProvider>
+          <ScrollRestoration />
+          <Scripts />
+          <LiveReload />
+        </body>
+      </html>
+    </QueryClientProvider>
   );
 });
 export default App;
