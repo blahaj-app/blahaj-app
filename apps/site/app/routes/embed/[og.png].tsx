@@ -1,4 +1,4 @@
-import type { CacheStorage, Response as CFResponse } from "@cloudflare/workers-types";
+import type { CacheStorage, Response as CFResponse, Request as CFRequest } from "@cloudflare/workers-types";
 import poppinsLight from "@fontsource/poppins/files/poppins-all-300-normal.woff?binary";
 import poppinsRegular from "@fontsource/poppins/files/poppins-all-400-normal.woff?binary";
 import poppinsMedium from "@fontsource/poppins/files/poppins-all-500-normal.woff?binary";
@@ -36,6 +36,7 @@ const initalize = async () => {
   if (initalized) return;
 
   const [{ init }, { default: yoga }] = await Promise.all([import("satori/wasm"), import("yoga-wasm-web/asm")]);
+  // @ts-expect-error missing types
   init(yoga());
 
   initalized = true;
@@ -53,8 +54,9 @@ export const loader = async ({ params, request, context }: LoaderArgs) => {
   const cache = (caches as unknown as CacheStorage).default;
   const cacheUrl = new URL("https://example.com");
   cacheUrl.searchParams.set("key", "og-" + JSON.stringify(options));
+  const cacheRequest = new Request(cacheUrl.toString()) as unknown as CFRequest;
 
-  const match = await cache.match(cacheUrl);
+  const match = await cache.match(cacheRequest);
   if (match) {
     return match;
   }
@@ -275,7 +277,7 @@ export const loader = async ({ params, request, context }: LoaderArgs) => {
 
   response.headers.set("Cache-Control", "public, max-age=" + 60 * 60 * 12);
 
-  context.waitUntil(cache.put(cacheUrl, response.clone() as unknown as CFResponse));
+  context.waitUntil(cache.put(cacheRequest, response.clone() as unknown as CFResponse));
 
   return response;
 };

@@ -1,8 +1,11 @@
 import { Item } from "@blahaj-app/static";
 import type { ButtonProps, ComponentWithAs, UseDisclosureReturn } from "@chakra-ui/react";
-import { Heading } from "@chakra-ui/react";
-import { useDisclosure } from "@chakra-ui/react";
 import {
+  Box,
+  Button,
+  Flex,
+  Heading,
+  Link as ChakraLink,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -10,15 +13,14 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  useDisclosure,
+  VStack,
 } from "@chakra-ui/react";
-import { Box, Button, Flex, VStack } from "@chakra-ui/react";
-import { Link as ChakraLink } from "@chakra-ui/react";
 import { Link, Outlet, useLocation } from "@remix-run/react";
 import eases from "eases";
 import { AnimatePresence, motion } from "framer-motion";
 import type { FC, PropsWithChildren, ReactNode } from "react";
-import { useMemo } from "react";
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useMemo } from "react";
 import { FaDiscord } from "react-icons/fa";
 import { TbBrandGithub, TbMail, TbMap2 } from "react-icons/tb";
 import { RemoveScroll } from "react-remove-scroll";
@@ -27,26 +29,22 @@ import Hamburger from "./components/hamburger";
 import { MotionBox } from "./components/motion-box";
 import blahajIcon from "./media/blahaj.png";
 import matchesPaths from "./utils/matches-paths";
-import noop from "./utils/noop";
 import noopDisclosure from "./utils/noop-disclosure";
-import type { SetStateType } from "./utils/types";
 
 interface LayoutContextType {
-  sidebarOpen: boolean;
-  setSidebarOpen: SetStateType<boolean>;
+  sidebar: UseDisclosureReturn;
   contactModal: UseDisclosureReturn;
 }
 
 export const LayoutContext = createContext<LayoutContextType>({
-  sidebarOpen: false,
-  setSidebarOpen: noop,
+  sidebar: noopDisclosure,
   contactModal: noopDisclosure,
 });
 
 export const useLayoutContext = () => useContext(LayoutContext);
 
 const Navbar: FC = () => {
-  const { sidebarOpen, setSidebarOpen } = useLayoutContext();
+  const { sidebar } = useLayoutContext();
 
   return (
     <Flex
@@ -75,19 +73,19 @@ const Navbar: FC = () => {
         </Box>
       </Flex>
       <Flex>
-        <Hamburger open={sidebarOpen} setOpen={setSidebarOpen} />
+        <Hamburger open={sidebar.isOpen} setOpen={sidebar.onOpen} />
       </Flex>
     </Flex>
   );
 };
 
 const Sidebar: FC<PropsWithChildren> = ({ children }) => {
-  const { sidebarOpen, setSidebarOpen } = useLayoutContext();
+  const { sidebar } = useLayoutContext();
 
   return (
-    <RemoveScroll enabled={sidebarOpen}>
+    <RemoveScroll enabled={sidebar.isOpen}>
       <AnimatePresence>
-        {sidebarOpen && (
+        {sidebar.isOpen && (
           <MotionBox
             exit={{ backgroundColor: "#00000000" }}
             animate={{ backgroundColor: "#00000029" }}
@@ -100,8 +98,8 @@ const Sidebar: FC<PropsWithChildren> = ({ children }) => {
             right="0"
             zIndex="1000"
             overflow="hidden"
-            onClick={() => setSidebarOpen(false)}
-            onTouchMove={() => setSidebarOpen(false)}
+            onClick={sidebar.onClose}
+            onTouchMove={sidebar.onClose}
           >
             <MotionBox
               as={motion.div}
@@ -211,11 +209,14 @@ const ContactModal: FC = () => {
 };
 
 const Layout: FC = () => {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
   const location = useLocation();
 
+  const contactModal = useDisclosure();
+  const sidebar = useDisclosure();
+
   useEffect(() => {
-    setSidebarOpen(false);
+    sidebar.onClose();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.pathname]);
 
   const isMap = useMemo(
@@ -223,10 +224,8 @@ const Layout: FC = () => {
     [location.pathname],
   );
 
-  const contactModal = useDisclosure();
-
   return (
-    <LayoutContext.Provider value={{ sidebarOpen, setSidebarOpen, contactModal }}>
+    <LayoutContext.Provider value={{ sidebar, contactModal }}>
       <ContactModal />
       <Flex flexDirection="column" height="100vh" position="relative">
         <Navbar />
@@ -240,7 +239,7 @@ const Layout: FC = () => {
               onClick={(e) => {
                 if (isMap) {
                   e.preventDefault();
-                  setSidebarOpen(false);
+                  sidebar.onClose();
                 }
               }}
             >
@@ -255,7 +254,7 @@ const Layout: FC = () => {
               as="button"
               icon={<TbMail size="28" />}
               onClick={() => {
-                setSidebarOpen(false);
+                sidebar.onClose();
                 contactModal.onOpen();
               }}
             >

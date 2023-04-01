@@ -1,0 +1,95 @@
+diff --git a/dist/compiler/compileBrowser.js b/dist/compiler/compileBrowser.js
+index 97d71b6ecc8b641e9408301eedf372e5e2e62e1d..623ddb4da9693c6dd1664cded8653c184bf0a01a 100644
+--- a/dist/compiler/compileBrowser.js
++++ b/dist/compiler/compileBrowser.js
+@@ -194,11 +194,15 @@ const createBrowserCompiler = (remixConfig, options) => {
+   let compile = async manifestChannel => {
+     hmrRoutes = {};
+     let appBuildTask = async () => {
+-      appCompiler = await (!appCompiler ? esbuild__namespace.build({
++      let esbuildConfig = {
+         ...createEsbuildConfig("app", remixConfig, options, onLoader),
+         metafile: true,
+         incremental: true
+-      }) : appCompiler.rebuild());
++      };
++
++      esbuildConfig = remixConfig.esbuildOverride(esbuildConfig);
++
++      appCompiler = await (!appCompiler ? esbuild__namespace.build(esbuildConfig) : appCompiler.rebuild());
+       invariant["default"](appCompiler.metafile, "Expected app compiler metafile to be defined. This is likely a bug in Remix. Please open an issue at https://github.com/remix-run/remix/issues/new");
+       return appCompiler.metafile;
+     };
+diff --git a/dist/compiler/compilerServer.js b/dist/compiler/compilerServer.js
+index e478a879768cd6d54b9f42676715db034996f4bc..b47a711d1d67cb6c62d9e56276c3d24fbcd9e526 100644
+--- a/dist/compiler/compilerServer.js
++++ b/dist/compiler/compilerServer.js
+@@ -167,15 +167,18 @@ async function writeServerBuildResult(config, outputFiles) {
+ }
+ const createServerCompiler = (remixConfig, options) => {
+   let compile = async manifestChannel => {
+-    let esbuildConfig = createEsbuildConfig(remixConfig, manifestChannel, options);
++    let esbuildConfig = {
++      ...createEsbuildConfig(remixConfig, manifestChannel, options),
++      write: false,
++      metafile: true
++    };
++
++    esbuildConfig = remixConfig.esbuildOverride(esbuildConfig);
++
+     let {
+       metafile,
+       outputFiles
+-    } = await esbuild__namespace.build({
+-      ...esbuildConfig,
+-      write: false,
+-      metafile: true
+-    });
++    } = await esbuild__namespace.build(esbuildConfig);
+     invariant["default"](metafile, "Expected metafile to be defined.");
+     await writeServerBuildResult(remixConfig, outputFiles);
+     return metafile;
+diff --git a/dist/config.d.ts b/dist/config.d.ts
+index 223edbbbcb73b3f9057e0c4a3d4f157a32fb86b8..cb090635d097e03069f344c23df2ed2bccb86901 100644
+--- a/dist/config.d.ts
++++ b/dist/config.d.ts
+@@ -1,5 +1,6 @@
+ import type { RouteManifest, DefineRoutesFunction } from "./config/routes";
+ import { ServerMode } from "./config/serverModes";
++import type { BuildOptions } from "esbuild";
+ export interface RemixMdxConfig {
+     rehypePlugins?: any[];
+     remarkPlugins?: any[];
+@@ -148,6 +149,10 @@ export interface AppConfig {
+      */
+     watchPaths?: string | string[] | (() => Promise<string | string[]> | string | string[]);
+     future?: Partial<FutureConfig>;
++    /**
++     * A function for overriding the default esbuild configuration.
++     */
++    esbuildOverride: (config: BuildOptions) => BuildOptions;
+ }
+ /**
+  * Fully resolved configuration object we use throughout Remix.
+diff --git a/dist/config.js b/dist/config.js
+index 4127eef2a81df8ea28f6c71f3f98d614dd31ef46..00424647eecb678bd5c4931cd9ccfef287b9af78 100644
+--- a/dist/config.js
++++ b/dist/config.js
+@@ -257,6 +257,7 @@ async function readConfig(remixRoot, serverMode = serverModes.ServerMode.Product
+     v2_normalizeFormMethod: ((_appConfig$future13 = appConfig.future) === null || _appConfig$future13 === void 0 ? void 0 : _appConfig$future13.v2_normalizeFormMethod) === true,
+     v2_routeConvention: ((_appConfig$future14 = appConfig.future) === null || _appConfig$future14 === void 0 ? void 0 : _appConfig$future14.v2_routeConvention) === true
+   };
++  let esbuildOverride = appConfig.esbuildOverride || (config => config);
+   return {
+     appDirectory,
+     cacheDirectory,
+@@ -285,7 +286,8 @@ async function readConfig(remixRoot, serverMode = serverModes.ServerMode.Product
+     mdx,
+     watchPaths,
+     tsconfigPath,
+-    future
++    future,
++    esbuildOverride
+   };
+ }
+ function addTrailingSlash(path) {

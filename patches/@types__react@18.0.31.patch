@@ -1,5 +1,5 @@
 diff --git a/index.d.ts b/index.d.ts
-index b18b5bbcaaa93209c81584ad5d5552a2a93c3f6d..11c86b6976621a27810ad819994583710424766d 100644
+index 907f8848a2ed71d8efb65f51f4111977ef6dbb1d..d9991a37dcb0f24f235fd2c1ab1831a9d09b9783 100644
 --- a/index.d.ts
 +++ b/index.d.ts
 @@ -1846,6 +1846,11 @@ declare namespace React {

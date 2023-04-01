@@ -1,5 +1,5 @@
 diff --git a/dist/eslintrc.cjs b/dist/eslintrc.cjs
-index b3bc1151dc8c057499b2dcaf1374e2fa76a99bb5..94d0a4e16c33353f54da7ebad401a57c59e1c39b 100644
+index 753117b3244df70d4305a599b9d97c346ddfac44..b55676ef008ec5ecc6c34fccd46fed2fc0f08c80 100644
 --- a/dist/eslintrc.cjs
 +++ b/dist/eslintrc.cjs
 @@ -563,12 +563,24 @@ class PluginConflictError extends Error {
@@ -14,16 +14,16 @@ index b3bc1151dc8c057499b2dcaf1374e2fa76a99bb5..94d0a4e16c33353f54da7ebad401a57c
  }
  
 +function isSameFile(pathA, pathB) {
-+  try {
-+    const statA = fs.statSync(pathA)
-+    const statB = fs.statSync(pathB)
-+    if(typeof statA?.ino !== 'number' || typeof statB?.ino !== 'number') return false
-+    else return statA.ino === statB.ino
-+  } catch(error) {
-+    console.error(error)
-+    return false
++    try {
++      const statA = fs.statSync(pathA)
++      const statB = fs.statSync(pathB)
++      if(typeof statA?.ino !== 'number' || typeof statB?.ino !== 'number') return false
++      else return statA.ino === statB.ino
++    } catch(error) {
++      console.error(error)
++      return false
++    }
 +  }
-+}
 +
  /**
   * Merge plugins.

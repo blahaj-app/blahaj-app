@@ -63,7 +63,7 @@ export const loader = async ({ context, params: rawParams, request }: LoaderArgs
   }
 
   const location =
-    context.cf?.country && context.cf.country !== "T1" && context.cf.longitude && context.cf.latitude
+    typeof context?.cf?.latitude === "string" && typeof context?.cf?.longitude === "string"
       ? { latitude: parseFloat(context.cf.latitude), longitude: parseFloat(context.cf.longitude) }
       : undefined;
 
@@ -149,10 +149,10 @@ const transition: Transition = {
 };
 
 const OpenSideMenuButton: FC<PropsWithChildren> = ({ children }) => {
-  const { setSidebarOpen } = useLayoutContext();
+  const { sidebar } = useLayoutContext();
 
   return (
-    <Link as="button" color="blue.400" onClick={() => setSidebarOpen(true)}>
+    <Link as="button" color="blue.400" onClick={sidebar.onOpen}>
       {children}
     </Link>
   );
@@ -319,8 +319,8 @@ const Sidebar: FC = () => {
               Hey there. Long time no see. I think.
               <br />
               <br />
-              Anyways, as of Feburary 12th, 2023, the new version of blahaj.app (the one you're looking at right now!)
-              is live. This has been a long time coming, so I'm glad to finally be able to push this update out.
+              Anyways, as of March 26th, 2023, the new version of blahaj.app (the one you're looking at right now!) is
+              live. This has been a long time coming, so I'm glad to finally be able to push this update out.
             </p>
             <Heading size="sm" marginTop="6">
               What's New?
@@ -330,7 +330,7 @@ const Sidebar: FC = () => {
               <ListItem>Shareable links</ListItem>
               <ListItem>Smolhaj (55cm size) tracking</ListItem>
               <ListItem>Stock history (up to 90 days)</ListItem>
-              <ListItem>Various bug fixes</ListItem>
+              <ListItem>Various fixes</ListItem>
             </UnorderedList>
             <Heading size="sm" marginTop="6">
               Open Source

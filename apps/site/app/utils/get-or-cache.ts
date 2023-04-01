@@ -1,4 +1,4 @@
-import type { CacheStorage, Response as CFResponse } from "@cloudflare/workers-types";
+import type { CacheStorage, Response as CFResponse, Request as CFRequest } from "@cloudflare/workers-types";
 import { stringify, parse } from "remix-typedjson";
 
 const getOrCache = async <T>(
@@ -9,10 +9,11 @@ const getOrCache = async <T>(
 ): Promise<T> => {
   const url = new URL("https://example.com");
   url.searchParams.set("key", key);
+  const dummyRequest = new Request(url.toString()) as unknown as CFRequest;
 
   const cache = (caches as unknown as CacheStorage).default;
 
-  const match = await cache.match(url);
+  const match = await cache.match(dummyRequest);
   const promises: Promise<unknown>[] = [];
 
   if (match) {
@@ -21,7 +22,7 @@ const getOrCache = async <T>(
     if (deserialized) {
       return deserialized;
     } else {
-      promises.push(cache.delete(url));
+      promises.push(cache.delete(dummyRequest));
     }
   }
 
@@ -34,7 +35,7 @@ const getOrCache = async <T>(
     },
   }) as unknown as CFResponse;
 
-  promises.push(cache.put(url, response));
+  promises.push(cache.put(dummyRequest, response));
 
   waitUntil(Promise.all(promises));
   return value;
