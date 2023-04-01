@@ -15,7 +15,7 @@
     "plugins": [
       { "name": "typescript-remix-routes-plugin" }
     ],
-
+    "preserveSymlinks": true,
 
     // Remix takes care of building everything in `remix build`.
     "noEmit": true

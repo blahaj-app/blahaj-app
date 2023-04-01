@@ -27,7 +27,6 @@ export const getStockHistoryServer = async (context: AppLoadContext, item: strin
         .where("type", "=", item)
         .where("created_at", ">", subDays(new Date(), 90))
         .orderBy("created_at", "asc")
-        .$assertType<{ quantity: number; reported_at: Date }>()
         .execute();
     },
     5 * 60,

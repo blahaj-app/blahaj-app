@@ -90,7 +90,6 @@ export const loader = async ({ params, request, context }: LoaderArgs) => {
         .where("type", "=", item)
         .where("created_at", ">", subDays(new Date(), 90))
         .orderBy("created_at", "asc")
-        .$assertType<{ quantity: number; reported_at: Date }>()
         .execute(),
       db
         .selectFrom("restock")
@@ -99,7 +98,6 @@ export const loader = async ({ params, request, context }: LoaderArgs) => {
         .where("store_id", "=", storeId)
         .orderBy("earliest", "desc")
         .limit(1)
-        .$assertType<{ quantity: number; reported_at: Date; earliest: Date; latest: Date }>()
         .execute(),
       getMapImage(storeId),
     ]).catch((error) => {

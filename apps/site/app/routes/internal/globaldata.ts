@@ -30,14 +30,12 @@ export const getGlobalDataServer = async (context: AppLoadContext, item: string)
           .orderBy("store_id")
           .orderBy("type")
           .orderBy("created_at", "desc")
-          .$assertType<{ store_id: string; quantity: number; reported_at: Date }>()
           .execute(),
         allRestocks: db
           .selectFrom("restock")
           .select(["store_id", "quantity", "reported_at", "earliest", "latest"])
           .where("type", "=", item)
           .orderBy("earliest", "desc")
-          .$assertType<{ store_id: string; quantity: number; reported_at: Date; earliest: Date; latest: Date }>()
           .execute(),
       });
     },
