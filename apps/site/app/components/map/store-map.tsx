@@ -5,8 +5,8 @@ import useResizeObserver from "@react-hook/resize-observer";
 import { useNavigate } from "@remix-run/react";
 import eases from "eases";
 import type { MapLayerEventType } from "mapbox-gl";
-import { useEffect, useMemo, useRef } from "react";
 import type { FC } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import type { LayerProps, MapRef, SourceProps } from "react-map-gl";
 import { GeolocateControl, Layer, Map as MapboxGL, NavigationControl, Source } from "react-map-gl";
 import { $path } from "remix-routes";
@@ -25,7 +25,7 @@ const StoreMap: FC = () => {
     storeBasicsHeightState: [storeBasicsHeight],
   } = useMapContext();
 
-  const { data: globalData } = useGlobalDataQuery(params.item as Item, loaderData?.globalData);
+  const { data: globalData } = useGlobalDataQuery(params.item as Item, loaderData ?? undefined);
 
   const navigate = useNavigate();
 

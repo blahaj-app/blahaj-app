@@ -24,11 +24,11 @@ export const Sidebar: FC = () => {
     storeBasicsHeightState: [storeBasicsHeight, setStoreBasicsHeight],
   } = useMapContext();
 
-  const { data: globalData } = useGlobalDataQuery(params.item as Item, loaderData?.globalData);
+  const { data: globalData } = useGlobalDataQuery(params.item as Item, loaderData ?? undefined);
   const { data: focusedStoreHistory, isLoading: focusedStoreHistoryLoading } = useStockHistoryQuery(
     params.item as Item,
     params.storeId ?? null,
-    loaderData?.stockHistory,
+    loaderData ?? undefined,
   );
 
   const focusedStoreData = useMemo(() => {

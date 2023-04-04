@@ -14,14 +14,14 @@ import ItemSelectorButton from "./item-selector-button";
 const ItemSelector: FC = () => {
   const { params, loaderData } = useMapContext();
 
-  const { isLoading } = useGlobalDataQuery(params.item as Item, loaderData?.globalData);
+  const { isLoading } = useGlobalDataQuery(params.item as Item, loaderData ?? undefined);
 
   const navigate = useNavigate();
 
   const updateItem = useCallback(
     (newItem: string) => {
-      if (newItem === params.item || !params?.storeId) return;
-      navigate($path("/:item/map/:storeId", { storeId: params.storeId, item: newItem }));
+      if (newItem === params.item) return;
+      navigate($path("/:item/map/:storeId", { storeId: params.storeId ?? "", item: newItem }));
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [params, navigate],

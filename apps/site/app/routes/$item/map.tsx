@@ -4,6 +4,7 @@ import { json } from "@remix-run/cloudflare";
 import type { ShouldRevalidateFunction } from "@remix-run/react";
 import { useParams } from "@remix-run/react";
 import { useQuery } from "@tanstack/react-query";
+import equal from "fast-deep-equal";
 import type { FC } from "react";
 import { createContext, useContext, useMemo, useState } from "react";
 import { $params, $path } from "remix-routes";
@@ -12,7 +13,6 @@ import { typedjson, useTypedLoaderData } from "remix-typedjson";
 import type { DynamicLinksFunction } from "remix-utils";
 import { promiseHash } from "remix-utils";
 import { Sidebar } from "../../components/map/sidebar";
-import type { StockChartDatum } from "../../components/map/stock-history-chart";
 import StoreMap from "../../components/map/store-map";
 import { MotionFlex } from "../../components/motion-flex";
 import defaultTransition from "../../utils/default-transition";
@@ -28,7 +28,9 @@ import {
   mapStoreMetaDescription,
   mapStoreMetaTitle,
 } from "../../utils/templates";
-import type { AwaitedReturn, UseStateType } from "../../utils/types";
+import type { UseStateType } from "../../utils/types";
+import useInitial from "../../utils/use-initial";
+import usePreviousNotUndefined from "../../utils/use-previous-not-undefined";
 import { getGlobalDataClient, getGlobalDataServer } from "../internal/globaldata";
 import { getStockHistoryClient, getStockHistoryServer } from "../internal/stockhistory";
 
@@ -64,7 +66,7 @@ export const loader = async ({ context, params: rawParams, request }: LoaderArgs
     .toString(16)
     .padStart(8, "0");
 
-  return typedjson({ ...resolved, location, cacheBust });
+  return typedjson({ ...resolved, location, cacheBust, time: Date.now() });
 };
 
 export const meta: TypedMetaFunction<typeof loader> = ({ data, params: rawParams }) => {
@@ -114,26 +116,45 @@ export const MapContext = createContext<MapContextType>({
   storeBasicsHeightState: dummyUseState(undefined),
 });
 
-export const useGlobalDataQuery = (item: Item, initialData?: AwaitedReturn<typeof getGlobalDataClient>) =>
-  useQuery(["map-global-data", item], ({ queryKey }) => getGlobalDataClient(queryKey[1]), {
+export const useGlobalDataQuery = (item: Item, loaderData?: UseDataFunctionReturn<typeof loader>) => {
+  const queryKey = ["map-global-data", item];
+  const initialQueryKey = useInitial(queryKey);
+
+  const query = useQuery(queryKey, () => getGlobalDataClient(item), {
     staleTime: 1000 * 90 * 15,
-    initialDataUpdatedAt: () => Date.now(),
-    initialData,
+    initialDataUpdatedAt: loaderData?.time,
+    initialData: equal(queryKey, initialQueryKey) ? loaderData?.globalData : undefined,
   });
 
-export const useStockHistoryQuery = (item: Item, storeId: string | null, initialData?: StockChartDatum[]) =>
-  useQuery(
-    ["map-stock-history", item, storeId],
-    ({ queryKey }) =>
-      typeof queryKey[1] === "string" && typeof queryKey[2] === "string"
-        ? getStockHistoryClient(queryKey[1], queryKey[2])
-        : null,
-    {
-      staleTime: 1000 * 90 * 15,
-      initialDataUpdatedAt: () => Date.now(),
-      initialData,
-    },
-  );
+  const previousData = usePreviousNotUndefined(query.data);
+
+  return {
+    ...query,
+    data: query.isLoading && previousData ? previousData : query.data,
+  };
+};
+
+export const useStockHistoryQuery = (
+  item: Item,
+  storeId: string | null,
+  loaderData?: UseDataFunctionReturn<typeof loader>,
+) => {
+  const queryKey = ["map-stock-history", { item, storeId }];
+  const initialQueryKey = useInitial(queryKey);
+
+  const query = useQuery(queryKey, () => (typeof storeId === "string" ? getStockHistoryClient(item, storeId) : null), {
+    staleTime: 1000 * 90 * 15,
+    initialDataUpdatedAt: loaderData?.time,
+    initialData: equal(queryKey, initialQueryKey) ? loaderData?.stockHistory : undefined,
+  });
+
+  const previousData = usePreviousNotUndefined(query.data);
+
+  return {
+    ...query,
+    data: query.isLoading && previousData ? previousData : query.data,
+  };
+};
 
 export const useMapContext = () => useContext(MapContext);
 
