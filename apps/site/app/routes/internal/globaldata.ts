@@ -38,7 +38,7 @@ export const getGlobalDataServer = async (context: AppLoadContext, item: string)
           .execute(),
       });
     },
-    5 * 60,
+    32.5 * 60,
   );
 
 export const getGlobalDataClient = async (item: string) => {

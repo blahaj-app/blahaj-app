@@ -28,7 +28,7 @@ export const getStockHistoryServer = async (context: AppLoadContext, item: strin
         .orderBy("created_at", "asc")
         .execute();
     },
-    5 * 60,
+    32.5 * 60,
   );
 
 export const getStockHistoryClient = async (item: string, storeId: string) => {

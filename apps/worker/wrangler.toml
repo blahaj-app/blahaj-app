@@ -6,7 +6,7 @@ compatibility_flags = []
 workers_dev=false
 
 [triggers]
-crons = ["*/5 * * * *"]
+crons = ["*/30 * * * *"]
 
 [build]
 command = "node build.js"

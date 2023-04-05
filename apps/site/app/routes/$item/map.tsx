@@ -121,9 +121,11 @@ export const useGlobalDataQuery = (item: Item, loaderData?: UseDataFunctionRetur
   const initialQueryKey = useInitial(queryKey);
 
   const query = useQuery(queryKey, () => getGlobalDataClient(item), {
-    staleTime: 1000 * 90 * 15,
+    cacheTime: 1000 * 60 * 30,
+    staleTime: 1000 * 60 * 35,
     initialDataUpdatedAt: loaderData?.time,
     initialData: equal(queryKey, initialQueryKey) ? loaderData?.globalData : undefined,
+    refetchOnWindowFocus: false,
   });
 
   const previousData = usePreviousNotUndefined(query.data);
@@ -143,9 +145,11 @@ export const useStockHistoryQuery = (
   const initialQueryKey = useInitial(queryKey);
 
   const query = useQuery(queryKey, () => (typeof storeId === "string" ? getStockHistoryClient(item, storeId) : null), {
-    staleTime: 1000 * 90 * 15,
+    cacheTime: 1000 * 60 * 30,
+    staleTime: 1000 * 60 * 35,
     initialDataUpdatedAt: loaderData?.time,
     initialData: equal(queryKey, initialQueryKey) ? loaderData?.stockHistory : undefined,
+    refetchOnWindowFocus: false,
   });
 
   const previousData = usePreviousNotUndefined(query.data);

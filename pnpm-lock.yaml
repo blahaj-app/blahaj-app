@@ -76,7 +76,6 @@ importers:
       '@remix-run/eslint-config': ^1.15.0
       '@remix-run/react': ^1.15.0
       '@svgr/core': ^7.0.0
-      '@tanstack/query-core': ^4.27.0
       '@tanstack/react-query': ^4.28.0
       '@types/d3-array': ^3.0.4
       '@types/eases': ^1.0.2
@@ -119,8 +118,6 @@ importers:
       satori: ^0.4.4
       simplebar-react: ^3.2.3
       throttle-debounce: ^5.0.0
-      ts-node: ^10.9.1
-      tsconfig-paths: ^4.2.0
       typescript-remix-routes-plugin: ^1.0.0
       usehooks-ts: ^2.9.1
       wrangler: ^2.10.0
@@ -139,7 +136,6 @@ importers:
       '@remix-run/cloudflare': 1.15.0_fsfby5xfuioqzxmd433qdx3w6m
       '@remix-run/cloudflare-pages': 1.15.0_fsfby5xfuioqzxmd433qdx3w6m
       '@remix-run/react': 1.15.0_biqbaboplfbrettd7655fr4n2y
-      '@tanstack/query-core': 4.27.0
       '@tanstack/react-query': 4.28.0_biqbaboplfbrettd7655fr4n2y
       '@visx/curve': 3.0.0
       '@visx/event': 3.0.1
@@ -175,7 +171,7 @@ importers:
     devDependencies:
       '@cloudflare/workers-types': 4.20230321.0
       '@esbuild-plugins/node-globals-polyfill': 0.2.3
-      '@remix-run/dev': 1.15.0_6v4beqchdh54wxejqvxtb6okjq_rrli7kzx2akox3oq6aahu3rvje
+      '@remix-run/dev': 1.15.0_6v4beqchdh54wxejqvxtb6okjq_@types+node@18.15.11
       '@remix-run/eslint-config': 1.15.0_eslint@8.37.0+react@18.2.0
       '@svgr/core': 7.0.0
       '@types/d3-array': 3.0.4
@@ -191,8 +187,6 @@ importers:
       npm-run-all: 4.1.5
       remix: 1.15.0
       remix-routes: 1.4.1
-      ts-node: 10.9.1_@types+node@18.15.11
-      tsconfig-paths: 4.2.0
       typescript-remix-routes-plugin: 1.0.0
       wrangler: 2.10.0_3anlhe4272sy5q355233r6ewqy
 
@@ -4353,7 +4347,7 @@ packages:
       '@remix-run/server-runtime': 1.15.0
     dev: false
 
-  /@remix-run/dev/1.15.0_6v4beqchdh54wxejqvxtb6okjq_rrli7kzx2akox3oq6aahu3rvje:
+  /@remix-run/dev/1.15.0_6v4beqchdh54wxejqvxtb6okjq_@types+node@18.15.11:
     resolution: {integrity: sha512-BsE1GN6WM9PhN+agZi4TqUIuYzoHYZrufEdXLg3ZEYxWXqvtRKUNfhsYSDlEhrW+D5fyVQhJrs61wQ83sEXHLQ==}
     engines: {node: '>=14'}
     hasBin: true
@@ -4401,7 +4395,7 @@ packages:
       ora: 5.4.1
       postcss: 8.4.21
       postcss-discard-duplicates: 5.1.0_postcss@8.4.21
-      postcss-load-config: 4.0.1_aesdjsunmf4wiehhujt67my7tu
+      postcss-load-config: 4.0.1_postcss@8.4.21
       postcss-modules: 6.0.0_postcss@8.4.21
       prettier: 2.7.1
       pretty-ms: 7.0.1
@@ -10274,7 +10268,7 @@ packages:
       postcss: 8.4.21
     dev: true
 
-  /postcss-load-config/4.0.1_aesdjsunmf4wiehhujt67my7tu:
+  /postcss-load-config/4.0.1_postcss@8.4.21:
     resolution: {integrity: sha512-vEJIc8RdiBRu3oRAI0ymerOn+7rPuMvRXslTvZUKZonDHFIczxztIyJ1urxM1x9JXEikvpWWTUUqal5j/8QgvA==}
     engines: {node: '>= 14'}
     peerDependencies:
@@ -10288,7 +10282,6 @@ packages:
     dependencies:
       lilconfig: 2.1.0
       postcss: 8.4.21
-      ts-node: 10.9.1_@types+node@18.15.11
       yaml: 2.2.1
     dev: true
 
@@ -11717,36 +11710,6 @@ packages:
 
   /trough/2.1.0:
     resolution: {integrity: sha512-AqTiAOLcj85xS7vQ8QkAV41hPDIJ71XJB4RCUrzo/1GM2CQwhkJGaf9Hgr7BOugMRpgGUrqRg/DrBDl4H40+8g==}
-    dev: true
-
-  /ts-node/10.9.1_@types+node@18.15.11:
-    resolution: {integrity: sha512-NtVysVPkxxrwFGUUxGYhfux8k78pQB3JqYBXlLRZgdGUqTO5wU/UyHop5p70iEbGhB7q5KmiZiU0Y3KlJrScEw==}
-    hasBin: true
-    peerDependencies:
-      '@swc/core': '>=1.2.50'
-      '@swc/wasm': '>=1.2.50'
-      '@types/node': '*'
-      typescript: '>=2.7'
-    peerDependenciesMeta:
-      '@swc/core':
-        optional: true
-      '@swc/wasm':
-        optional: true
-    dependencies:
-      '@cspotcode/source-map-support': 0.8.1
-      '@tsconfig/node10': 1.0.9
-      '@tsconfig/node12': 1.0.11
-      '@tsconfig/node14': 1.0.3
-      '@tsconfig/node16': 1.0.3
-      '@types/node': 18.15.11
-      acorn: 8.8.2
-      acorn-walk: 8.2.0
-      arg: 4.1.3
-      create-require: 1.1.1
-      diff: 4.0.2
-      make-error: 1.3.6
-      v8-compile-cache-lib: 3.0.1
-      yn: 3.1.1
     dev: true
 
   /ts-node/10.9.1_typescript@4.9.5:
