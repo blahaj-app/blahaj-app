@@ -2,10 +2,10 @@ import { Button } from "@chakra-ui/react";
 import eases from "eases";
 import type { Variant } from "framer-motion";
 import type { FC } from "react";
-import type { SetStateType } from "../utils/types";
-import type { MotionBoxProps } from "./motion-box";
-import { MotionBox } from "./motion-box";
-import { MotionFlex } from "./motion-flex";
+import type { SetStateType } from "../../utils/types";
+import type { MotionBoxProps } from "../motion-box";
+import { MotionBox } from "../motion-box";
+import { MotionFlex } from "../motion-flex";
 
 enum HamburgerState {
   Open = "open",
