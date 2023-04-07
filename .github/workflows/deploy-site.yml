@@ -44,11 +44,10 @@ jobs:
           echo "recursive-install=false" >> .npmrc &&
           pnpm install
 
-      # this checks w/ the earliest hash in the push event
       - name: Check if we should run the job
         id: check
         run: |
-          pnpm run changed ./apps/site/package.json ${{ github.event.before }}
+          echo "should_run=$(pnpm --silent run changed -p .github/workflows/deploy-site.yml ./apps/site/package.json ${{ github.event.before }})" >> $GITHUB_OUTPUT
 
   publish:
     runs-on: ubuntu-latest

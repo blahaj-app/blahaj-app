@@ -62,9 +62,6 @@ async function main(cli) {
   ]).then((files) => files.reduce((acc, cur) => acc.concat(cur), []));
 
   const git = simpleGit(cli.root);
-  // git log --pretty=format:'%h' -10
-  console.log((await git.log(["--pretty=format:'%h'", "-10"])).latest.hash);
-
   const diff = await git.diff([cli.hash, "--name-only"]).then((diff) => diff.split("\n").filter(Boolean));
 
   const cleanProjectPath = relative(cli.root, projectPath).replaceAll("\\", "/").replace(/^\.\//, "");
