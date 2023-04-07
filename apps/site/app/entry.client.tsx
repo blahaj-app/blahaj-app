@@ -1,10 +1,22 @@
 import { CacheProvider } from "@emotion/react";
-import { RemixBrowser } from "@remix-run/react";
+import { RemixBrowser, useLocation, useMatches } from "@remix-run/react";
+import * as Sentry from "@sentry/remix";
 import type { FC, PropsWithChildren } from "react";
-import { startTransition, useState } from "react";
+import { startTransition, useEffect, useState } from "react";
 import { hydrateRoot } from "react-dom/client";
 import { ClientStyleContext } from "./context";
 import { createEmotionCache, defaultCache } from "./create-emotion-cache";
+
+Sentry.init({
+  dsn: __sentryDsn__,
+  tracesSampleRate: 1,
+  integrations: [
+    new Sentry.BrowserTracing({
+      routingInstrumentation: Sentry.remixRouterInstrumentation(useEffect, useLocation, useMatches),
+    }),
+  ],
+  // ...
+});
 
 const ClientCacheProvider: FC<PropsWithChildren> = ({ children }) => {
   const [cache, setCache] = useState(defaultCache);

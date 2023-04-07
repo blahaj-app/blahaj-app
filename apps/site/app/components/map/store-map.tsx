@@ -169,7 +169,7 @@ const StoreMap: FC = () => {
             : { latitude: 37.5, longitude: 6, zoom: 2 }
         }
         minZoom={1.75}
-        mapStyle="mapbox://styles/mapbox/streets-v12"
+        mapStyle="mapbox://styles/mapbox/streets-v12?optimize=true"
         mapboxAccessToken={__mapboxToken__}
       >
         <NavigationControl />

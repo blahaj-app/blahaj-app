@@ -1,8 +1,8 @@
 import { Box, Flex } from "@chakra-ui/react";
 import type { FC } from "react";
 import { useLayoutContext } from "../../layout";
+import blahajIcon from "../../media/blahaj.png";
 import Hamburger from "./hamburger";
-import blahajIcon from "./media/blahaj.png";
 
 const Navbar: FC = () => {
   const { sidebar } = useLayoutContext();

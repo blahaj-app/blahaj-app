@@ -18,6 +18,7 @@ module.exports = {
     const replaceValues = {
       baseUrl: process.env.BASE_URL,
       mapboxToken: process.env.MAPBOX_TOKEN,
+      sentryDsn: process.env.SENTRY_DSN,
     };
 
     const missingValues = Object.entries(replaceValues).filter(([, value]) => !value);
@@ -84,6 +85,7 @@ module.exports = {
         values: {
           __baseUrl__: JSON.stringify(replaceValues.baseUrl),
           __mapboxToken__: JSON.stringify(replaceValues.mapboxToken),
+          __sentryDsn__: JSON.stringify(replaceValues.sentryDsn),
         },
         include: /(\.jsx?|\.tsx?)$/,
       }),

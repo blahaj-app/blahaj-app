@@ -6,6 +6,7 @@ import poppins600 from "@fontsource/poppins/600.css";
 import poppins700 from "@fontsource/poppins/700.css";
 import type { LinksFunction } from "@remix-run/cloudflare";
 import { Links, LiveReload, Meta, Scripts, ScrollRestoration } from "@remix-run/react";
+import { withSentry } from "@sentry/remix";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import mapboxStyles from "mapbox-gl/dist/mapbox-gl.css";
 import type { FC } from "react";
@@ -93,6 +94,7 @@ const App: FC = withEmotionCache((_, emotionCache) => {
           <Meta />
           <Links />
           <DynamicLinks />
+          <script defer data-domain="blahaj.app" src="https://plausible.blahaj.app/js/script.js" />
         </head>
         <body>
           <ChakraProvider theme={theme}>
@@ -106,4 +108,5 @@ const App: FC = withEmotionCache((_, emotionCache) => {
     </QueryClientProvider>
   );
 });
-export default App;
+
+export default withSentry(App);
