@@ -46,7 +46,7 @@ jobs:
       - name: Check if we should run the job
         id: check
         run: |
-          pnpm run ./apps/site/package.json ${{ github.event.before }}
+          pnpm run changed ./apps/site/package.json ${{ github.event.before }}
 
   publish:
     runs-on: ubuntu-latest
