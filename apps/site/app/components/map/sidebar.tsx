@@ -177,14 +177,6 @@ export const Sidebar: FC = () => {
         <Box as={SimpleBar} fontSize="14" maxHeight="100%" autoHide={false}>
           <Box paddingX="6" paddingY="4">
             <Heading size="md">Redesigned & Rebuilt</Heading>
-            <button
-              type="button"
-              onClick={() => {
-                throw new Error("Sentry Frontend Error");
-              }}
-            >
-              Throw error
-            </button>
             <p>
               Hey there. Long time no see. I think.
               <br />
