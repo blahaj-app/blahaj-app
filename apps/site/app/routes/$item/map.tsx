@@ -1,8 +1,9 @@
 import { Item } from "@blahaj-app/static";
+import { Box } from "@chakra-ui/react";
 import type { LoaderArgs } from "@remix-run/cloudflare";
 import { json } from "@remix-run/cloudflare";
 import type { ShouldRevalidateFunction } from "@remix-run/react";
-import { useParams } from "@remix-run/react";
+import { Link, useParams } from "@remix-run/react";
 import { useQuery } from "@tanstack/react-query";
 import equal from "fast-deep-equal";
 import type { FC } from "react";
@@ -188,6 +189,7 @@ const Map: FC = () => {
         <Sidebar />
         <StoreMap />
       </MotionFlex>
+      <Box as={Link} display="none" to={$path("/:item/map/:storeId", { ...params, storeId: "1" })} prefetch="render" />
     </MapContext.Provider>
   );
 };
