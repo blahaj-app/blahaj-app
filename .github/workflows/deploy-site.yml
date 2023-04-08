@@ -46,7 +46,7 @@ jobs:
       - name: Chceck if any files changed
         id: check
         run: |
-          echo "::set-output name=should_run::$(pnpm --silent run changed -p .github/workflows/deploy-site.yml ./apps/site/package.json ${{ github.event.before }})"
+          echo "should_run=$(pnpm --silent run changed -p .github/workflows/deploy-site.yml ./apps/site/package.json ${{ github.event.before }})" >> $GITHUB_OUTPUT
 
   publish:
     runs-on: ubuntu-latest
@@ -107,9 +107,10 @@ jobs:
       - name: Find sourcemaps
         id: sourcemaps
         run: |
-          echo "::set-output name=files::$(find apps/site/public apps/site/functions -name '*.map')"
+          echo "client=$(find apps/site/public -name '*.map' | tr '\n' ',' | sed 's/,$//')" >> $GITHUB_OUTPUT &&
+          echo "server=$(find apps/site/functions -name '*.map' | tr '\n' ',' | sed 's/,$//')" >> $GITHUB_OUTPUT
 
-      - name: Create Sentry release
+      - name: Create client Sentry release
         uses: getsentry/action-release@v1
         env:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
@@ -118,7 +119,18 @@ jobs:
           SENTRY_URL: ${{ vars.SENTRY_URL }}
         with:
           environment: production
-          sourcemaps: ${{ steps.sourcemaps.outputs.files }}
+          sourcemaps: ${{ steps.sourcemaps.outputs.client }}
+
+      - name: Create server Sentry release
+        uses: getsentry/action-release@v1
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: ${{ vars.SENTRY_ORG }}
+          SENTRY_PROJECT: ${{ vars.SENTRY_PROJECT_SERVER }}
+          SENTRY_URL: ${{ vars.SENTRY_URL }}
+        with:
+          environment: production
+          sourcemaps: ${{ steps.sourcemaps.outputs.server }}
 
       - name: Publish to Cloudflare Pages
         uses: cloudflare/pages-action@22d9e5e143c6f9400b438a489e8d434b416d235d
