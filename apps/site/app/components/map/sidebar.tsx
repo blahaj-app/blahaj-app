@@ -6,7 +6,7 @@ import type { FC } from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ClientOnly } from "remix-utils";
 import SimpleBar from "simplebar-react";
-import { useGlobalDataQuery, useMapContext, useStockHistoryQuery } from "../../routes/$item/map";
+import { useGlobalDataQuery, useMapContext, useStockHistoryQuery } from "../../routes/$item.map.($storeId)";
 import { StockStatus, getStockStatus, stockStyles } from "../../stock-status";
 import defaultTransition from "../../utils/default-transition";
 import findStore from "../../utils/find-store";

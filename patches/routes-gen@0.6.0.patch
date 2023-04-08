@@ -1,0 +1,23 @@
+diff --git a/dist/cli.js b/dist/cli.js
+index 7ee5f43db167b14e7ccd9fcec591d636a7075bf2..01b025714f7bf6f37b411ddb52b0d57ddb270ab4 100644
+--- a/dist/cli.js
++++ b/dist/cli.js
+@@ -66,6 +66,8 @@ ${routeGenericTemplate}
+ `;
+   fs__default["default"].outputFileSync(path__namespace.resolve(process.cwd(), outputPath), output);
+   logSuccess(`Exported ${routes.length} routes to "${chalk__default["default"].underline(outputPath)}".`);
++
++  return outputPath;
+ };
+ 
+ const helpText = `
+@@ -124,7 +126,8 @@ const processRoutes = (...args) => {
+   if (typeof cli.flags.postExport === "undefined") {
+     return;
+   }
+-  child_process.execSync(cli.flags.postExport, { stdio: "inherit" });
++
++  child_process.execSync(cli.flags.postExport.replace("%path", path.resolve(result)), { stdio: "inherit" });
+   return result;
+ };
+ const getRoutes = async (driver) => {

@@ -32,7 +32,8 @@
       "wrangler@2.10.0": "patches/wrangler@2.10.0.patch",
       "@types/react@18.0.31": "patches/@types__react@18.0.31.patch",
       "@remix-run/dev@1.15.0": "patches/@remix-run__dev@1.15.0.patch",
-      "@eslint/eslintrc@2.0.2": "patches/@eslint__eslintrc@2.0.2.patch"
+      "@eslint/eslintrc@2.0.2": "patches/@eslint__eslintrc@2.0.2.patch",
+      "routes-gen@0.6.0": "patches/routes-gen@0.6.0.patch"
     }
   }
 }

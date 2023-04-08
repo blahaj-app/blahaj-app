@@ -3,11 +3,11 @@
   "sideEffects": false,
   "scripts": {
     "build:remix": "remix build --sourcemap",
-    "build:routes": "remix-routes",
+    "build:routes": "routes-gen -d @routes-gen/remix --post-export \"prettier --write %path\"",
     "build": "run-s build:*",
     "dev:remix": "remix watch",
     "dev:wrangler": "cross-env NODE_ENV=development npm run wrangler",
-    "dev:routes": "remix-routes -w",
+    "dev:routes": "routes-gen -d @routes-gen/remix --post-export \"prettier --write %path\" -w",
     "dev": "remix build && run-p \"dev:*\"",
     "start": "cross-env NODE_ENV=production npm run wrangler",
     "typecheck": "tsc -b",
@@ -53,6 +53,7 @@
     "react-router-dom": "^6.10.0",
     "remix-typedjson": "^0.1.7",
     "remix-utils": "^6.1.0",
+    "routes-gen": "^0.6.0",
     "satori": "^0.4.7",
     "simplebar-react": "^3.2.3",
     "throttle-debounce": "^5.0.0",
@@ -65,6 +66,7 @@
     "@esbuild-plugins/node-globals-polyfill": "^0.2.3",
     "@remix-run/dev": "^1.15.0",
     "@remix-run/eslint-config": "^1.15.0",
+    "@routes-gen/remix": "^0.3.6",
     "@svgr/core": "^7.0.0",
     "@types/d3-array": "^3.0.4",
     "@types/eases": "^1.0.2",
@@ -78,8 +80,6 @@
     "eslint": "^8.37.0",
     "npm-run-all": "^4.1.5",
     "remix": "^1.15.0",
-    "remix-routes": "^1.4.1",
-    "typescript-remix-routes-plugin": "^1.0.0",
     "wrangler": "^2.10.0"
   },
   "engines": {

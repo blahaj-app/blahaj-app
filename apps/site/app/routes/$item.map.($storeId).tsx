@@ -1,51 +1,45 @@
 import { Item } from "@blahaj-app/static";
-import { Box } from "@chakra-ui/react";
 import type { LoaderArgs } from "@remix-run/cloudflare";
 import { json } from "@remix-run/cloudflare";
 import type { ShouldRevalidateFunction } from "@remix-run/react";
-import { Link, useParams } from "@remix-run/react";
+import { useParams } from "@remix-run/react";
 import { useQuery } from "@tanstack/react-query";
 import equal from "fast-deep-equal";
 import type { FC } from "react";
-import { createContext, useContext, useMemo, useState } from "react";
-import { $params, $path } from "remix-routes";
+import { createContext, useContext, useState } from "react";
 import type { TypedMetaFunction, UseDataFunctionReturn } from "remix-typedjson";
 import { typedjson, useTypedLoaderData } from "remix-typedjson";
 import type { DynamicLinksFunction } from "remix-utils";
 import { promiseHash } from "remix-utils";
-import { Sidebar } from "../../components/map/sidebar";
-import StoreMap from "../../components/map/store-map";
-import { MotionFlex } from "../../components/motion-flex";
-import defaultTransition from "../../utils/default-transition";
-import { dummyUseState } from "../../utils/dummy-use-state";
-import findStore from "../../utils/find-store";
-import { generateLinks } from "../../utils/generate-links";
-import { generateMeta } from "../../utils/generate-meta";
-import getStoreCountryDatum from "../../utils/get-store-country-datum";
-import { ITEM_NAME } from "../../utils/item-names";
+import { route, type RouteParams } from "routes-gen";
+import { Sidebar } from "../components/map/sidebar";
+import StoreMap from "../components/map/store-map";
+import { MotionFlex } from "../components/motion-flex";
+import defaultTransition from "../utils/default-transition";
+import { dummyUseState } from "../utils/dummy-use-state";
+import findStore from "../utils/find-store";
+import { generateLinks } from "../utils/generate-links";
+import { generateMeta } from "../utils/generate-meta";
+import getStoreCountryDatum from "../utils/get-store-country-datum";
+import { ITEM_NAME } from "../utils/item-names";
 import {
   mapGlobalMetaDescription,
   mapGlobalMetaTitle,
   mapStoreMetaDescription,
   mapStoreMetaTitle,
-} from "../../utils/templates";
-import type { UseStateType } from "../../utils/types";
-import useInitial from "../../utils/use-initial";
-import usePreviousNotUndefined from "../../utils/use-previous-not-undefined";
-import { getGlobalDataClient, getGlobalDataServer } from "../internal/globaldata";
-import { getStockHistoryClient, getStockHistoryServer } from "../internal/stockhistory";
+} from "../utils/templates";
+import type { UseStateType } from "../utils/types";
+import useInitial from "../utils/use-initial";
+import usePreviousNotUndefined from "../utils/use-previous-not-undefined";
+import { getGlobalDataClient, getGlobalDataServer } from "./internal.globaldata";
+import { getStockHistoryClient, getStockHistoryServer } from "./internal.stockhistory";
 
-export const shouldRevalidate: ShouldRevalidateFunction = ({ currentParams, nextParams }) => {
-  currentParams = $params("/:item/map/:storeId", currentParams);
-  nextParams = $params("/:item/map/:storeId", nextParams);
-
-  const revalidate = false;
-
-  return revalidate;
+export const shouldRevalidate: ShouldRevalidateFunction = () => {
+  return false;
 };
 
 export const loader = async ({ context, params: rawParams, request }: LoaderArgs) => {
-  const params = $params("/:item/map/:storeId", rawParams);
+  const params = rawParams as RouteParams["/:item/map/:storeId?"];
 
   if (!Object.values(Item).includes(rawParams.item as Item)) {
     throw json(null, { status: 404 });
@@ -71,11 +65,11 @@ export const loader = async ({ context, params: rawParams, request }: LoaderArgs
 };
 
 export const meta: TypedMetaFunction<typeof loader> = ({ data, params: rawParams }) => {
-  const params = $params("/:item/map/:storeId", rawParams);
+  const params = rawParams as RouteParams["/:item/map/:storeId?"];
 
   const item = params.item as Item;
   const itemName = ITEM_NAME[item];
-  const store = findStore(params.storeId);
+  const store = params.storeId ? findStore(params.storeId) : undefined;
 
   const country = store ? getStoreCountryDatum(store) : undefined;
   // const flag = country ? toRegionalIndicators(country.code) : undefined;
@@ -86,7 +80,7 @@ export const meta: TypedMetaFunction<typeof loader> = ({ data, params: rawParams
       store && country?.name
         ? mapStoreMetaDescription(itemName, store.name, country.name)
         : mapGlobalMetaDescription(itemName),
-    url: new URL($path("/:item/map/:storeId", params), __baseUrl__).href,
+    url: new URL(route("/:item/map/:storeId?", params), __baseUrl__).href,
     image: store
       ? { type: "map_store", item: item, storeId: store.id, cacheBust: data.cacheBust }
       : { type: "map_global", item: item, cacheBust: data.cacheBust },
@@ -94,10 +88,10 @@ export const meta: TypedMetaFunction<typeof loader> = ({ data, params: rawParams
 };
 
 const dynamicLinks: DynamicLinksFunction = ({ params: rawParams }) => {
-  const params = $params("/:item/map/:storeId", rawParams);
+  const params = rawParams as RouteParams["/:item/map/:storeId?"];
 
   const item = params.item as Item;
-  const store = findStore(params.storeId);
+  const store = params.storeId ? findStore(params.storeId) : undefined;
 
   return generateLinks({
     oembed: store ? { type: "map_store", item: item, storeId: store.id } : { type: "map_global", item },
@@ -106,7 +100,7 @@ const dynamicLinks: DynamicLinksFunction = ({ params: rawParams }) => {
 export const handle = { dynamicLinks };
 
 interface MapContextType {
-  params: { item: string; storeId?: string };
+  params: RouteParams["/:item/map/:storeId?"];
   loaderData: UseDataFunctionReturn<typeof loader> | null;
   storeBasicsHeightState: UseStateType<number | undefined>;
 }
@@ -166,8 +160,7 @@ export const useMapContext = () => useContext(MapContext);
 const Map: FC = () => {
   const loaderData = useTypedLoaderData<typeof loader>();
 
-  const rawParams = useParams();
-  const params = useMemo(() => $params("/:item/map/:storeId", rawParams), [rawParams]);
+  const params = useParams() as RouteParams["/:item/map/:storeId?"];
 
   const storeBasicsHeightState = useState<number | undefined>(undefined);
   const [storeBasicsHeight] = storeBasicsHeightState;
@@ -189,7 +182,6 @@ const Map: FC = () => {
         <Sidebar />
         <StoreMap />
       </MotionFlex>
-      <Box as={Link} display="none" to={$path("/:item/map/:storeId", { ...params, storeId: "1" })} prefetch="render" />
     </MapContext.Provider>
   );
 };

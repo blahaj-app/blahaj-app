@@ -1,8 +1,8 @@
 import { Item } from "@blahaj-app/static";
 import type { LoaderArgs } from "@remix-run/cloudflare";
 import { redirect } from "@remix-run/cloudflare";
-import { $path } from "remix-routes";
+import { route } from "routes-gen";
 
 export const loader = async ({ params, request, context }: LoaderArgs) => {
-  return redirect($path("/:item/map", { item: Item.BLAHAJ }), 301);
+  return redirect(route("/:item/map/:storeId?", { item: Item.BLAHAJ }), 301);
 };

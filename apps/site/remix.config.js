@@ -12,6 +12,9 @@ module.exports = {
   // assetsBuildDirectory: "public/build",
   // serverBuildPath: "functions/[[path]].js",
   // publicPath: "/build/",
+  future: {
+    v2_routeConvention: true,
+  },
   esbuildOverride: (option) => {
     config();
 

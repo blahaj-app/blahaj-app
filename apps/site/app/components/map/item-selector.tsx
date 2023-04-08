@@ -5,8 +5,8 @@ import eases from "eases";
 import { AnimatePresence } from "framer-motion";
 import type { FC } from "react";
 import { useCallback } from "react";
-import { $path } from "remix-routes";
-import { useGlobalDataQuery, useMapContext } from "../../routes/$item/map";
+import { route } from "routes-gen";
+import { useGlobalDataQuery, useMapContext } from "../../routes/$item.map.($storeId)";
 import { ITEM_NAME } from "../../utils/item-names";
 import { MotionFlex } from "../motion-flex";
 import ItemSelectorButton from "./item-selector-button";
@@ -21,7 +21,7 @@ const ItemSelector: FC = () => {
   const updateItem = useCallback(
     (newItem: string) => {
       if (newItem === params.item) return;
-      navigate($path("/:item/map/:storeId", { storeId: params.storeId ?? "", item: newItem }));
+      navigate(route("/:item/map/:storeId?", { storeId: params.storeId, item: newItem }));
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [params, navigate],

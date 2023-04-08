@@ -1,16 +1,18 @@
 import type { AppLoadContext, LoaderArgs } from "@remix-run/cloudflare";
 import { subDays } from "date-fns";
-import { $path } from "remix-routes";
 import { typedjson } from "remix-typedjson";
 import { badRequest } from "remix-utils";
-import deserializeLoader from "../../utils/deserialize-loader";
-import getDatabase from "../../utils/get-database";
-import getOrCache from "../../utils/get-or-cache";
-import parseSearchParams from "../../utils/parse-search-params";
-import type { AwaitedReturn } from "../../utils/types";
-import { InternalStockHistorySearchParamsSchema } from "../../zod/internal-stockhistory-search-params";
+import { route } from "routes-gen";
+import deserializeLoader from "../utils/deserialize-loader";
+import getDatabase from "../utils/get-database";
+import getOrCache from "../utils/get-or-cache";
+import parseSearchParams from "../utils/parse-search-params";
+import type { AwaitedReturn } from "../utils/types";
+import withQuery from "../utils/with-query";
+import type { InternalStockHistorySearchParams } from "../zod/internal-stockhistory-search-params";
+import { InternalStockHistorySearchParamsSchema } from "../zod/internal-stockhistory-search-params";
 
-export type { InternalStockHistorySearchParams as SearchParams } from "../../zod/internal-stockhistory-search-params";
+export type SearchParams = InternalStockHistorySearchParams;
 
 export const getStockHistoryServer = async (context: AppLoadContext, item: string, storeId: string) =>
   getOrCache(
@@ -32,7 +34,7 @@ export const getStockHistoryServer = async (context: AppLoadContext, item: strin
   );
 
 export const getStockHistoryClient = async (item: string, storeId: string) => {
-  const res = await fetch($path("/internal/stockhistory", { item, storeId }));
+  const res = await fetch(withQuery<SearchParams>(route("/internal/stockhistory"), { item, storeId }));
   if (!res.ok) return null;
   const data = await res.json<AwaitedReturn<typeof loader>>();
 

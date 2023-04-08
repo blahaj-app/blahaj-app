@@ -14,22 +14,22 @@ import { subDays } from "date-fns";
 import type { ReactNode } from "react";
 import { badRequest, notFound, serverError } from "remix-utils";
 import type SatoriType from "satori";
-import type { StockChartDatum } from "../../components/map/stock-history-chart";
-import blahaj from "../../media/blahaj.png?dataurl";
-import { getMapImageResolver } from "../../media/map-images";
-import mapboxLogo from "../../media/mapbox.svg?dataurl";
-import { getStockStatus, stockStyles } from "../../stock-status";
-import findStore from "../../utils/find-store";
-import formatTz from "../../utils/format-tz";
-import getDatabase from "../../utils/get-database";
-import getStoreCountryDatum from "../../utils/get-store-country-datum";
-import { ITEM_NAME } from "../../utils/item-names";
-import parseSearchParams from "../../utils/parse-search-params";
-import { EmbedOgSearchParamsSchema } from "../../zod/embed-og-search-params";
+import type { StockChartDatum } from "../components/map/stock-history-chart";
+import blahaj from "../media/blahaj.png?dataurl";
+import { getMapImageResolver } from "../media/map-images";
+import mapboxLogo from "../media/mapbox.svg?dataurl";
+import { getStockStatus, stockStyles } from "../stock-status";
+import findStore from "../utils/find-store";
+import formatTz from "../utils/format-tz";
+import getDatabase from "../utils/get-database";
+import getStoreCountryDatum from "../utils/get-store-country-datum";
+import { ITEM_NAME } from "../utils/item-names";
+import parseSearchParams from "../utils/parse-search-params";
+import { EmbedOgSearchParamsSchema } from "../zod/embed-og-search-params";
 
 /* eslint-disable jsx-a11y/alt-text */
 
-export type { EmbedOgSearchParams as SearchParams } from "../../zod/embed-og-search-params";
+export type { EmbedOgSearchParams as SearchParams } from "../zod/embed-og-search-params";
 
 let initalized = false;
 const initalize = async () => {

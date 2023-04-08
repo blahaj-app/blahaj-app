@@ -9,10 +9,10 @@ import type { FC } from "react";
 import { useEffect, useMemo, useRef } from "react";
 import type { LayerProps, MapRef, SourceProps } from "react-map-gl";
 import { GeolocateControl, Layer, Map as MapboxGL, NavigationControl, Source } from "react-map-gl";
-import { $path } from "remix-routes";
+import { route } from "routes-gen";
 import { throttle } from "throttle-debounce";
 import { useUpdateEffect } from "usehooks-ts";
-import { useGlobalDataQuery, useMapContext } from "../../routes/$item/map";
+import { useGlobalDataQuery, useMapContext } from "../../routes/$item.map.($storeId)";
 import { getStockStatus, stockStyles } from "../../stock-status";
 import findStore from "../../utils/find-store";
 import noop from "../../utils/noop";
@@ -106,7 +106,7 @@ const StoreMap: FC = () => {
       if (params.storeId === storeId) {
         flyToStore(storeId);
       } else {
-        navigate($path("/:item/map/:storeId", { item: params.item, storeId }, {}), { preventScrollReset: true });
+        navigate(route("/:item/map/:storeId?", { item: params.item, storeId }), { preventScrollReset: true });
       }
     };
   }, [navigate, params.item, params.storeId]);

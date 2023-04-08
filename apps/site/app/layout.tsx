@@ -6,7 +6,7 @@ import type { FC } from "react";
 import { createContext, useContext, useEffect, useMemo } from "react";
 import { FaDiscord } from "react-icons/fa";
 import { TbBrandGithub, TbMail, TbMap2 } from "react-icons/tb";
-import { $path } from "remix-routes";
+import { route } from "routes-gen";
 import ContactModal from "./components/layout/contact-modal";
 import Navbar from "./components/layout/navbar";
 import Sidebar from "./components/layout/sidebar";
@@ -37,10 +37,7 @@ const Layout: FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.pathname]);
 
-  const isMap = useMemo(
-    () => matchesPaths(["/:item/map", "/:item/map/:storeId"], location.pathname),
-    [location.pathname],
-  );
+  const isMap = useMemo(() => matchesPaths(["/:item/map/:storeId?"], location.pathname), [location.pathname]);
 
   return (
     <LayoutContext.Provider value={{ sidebar, contactModal }}>
@@ -51,7 +48,7 @@ const Layout: FC = () => {
           <VStack alignItems="stretch" spacing="1">
             <SidebarItem
               as={Link}
-              to={$path("/:item/map", { item: Item.BLAHAJ })}
+              to={route("/:item/map/:storeId?", { item: Item.BLAHAJ })}
               icon={<TbMap2 size="28" />}
               active={isMap}
               onClick={(e) => {
