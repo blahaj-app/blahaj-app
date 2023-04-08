@@ -90,7 +90,7 @@ jobs:
       - name: Install dependencies
         run: |
           npm install -g wrangler &&
-          pnpm install --no-recursive --filter apps/site
+          pnpm install --no-recursive --filter ./apps/site
 
       - name: Build site
         env:
