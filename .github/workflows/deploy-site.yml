@@ -109,7 +109,6 @@ jobs:
         run: |
           echo "::set-output name=files::$(find apps/site/public apps/site/functions -name '*.map')"
 
-      - uses: actions/checkout@v2
       - name: Create Sentry release
         uses: getsentry/action-release@v1
         env:
