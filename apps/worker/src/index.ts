@@ -1,6 +1,6 @@
 import { ALL_STORES, ARTICLE_IDS } from "@blahaj-app/static";
 import type { DB, Restock, Stock } from "@blahaj-app/static";
-import { Pool } from "@neondatabase/serverless";
+import { NeonConfig, Pool, neonConfig } from "@neondatabase/serverless";
 import { Insertable, Kysely, PostgresDialect, sql } from "kysely";
 import { IkeaResponse } from "./ikea-response";
 
@@ -43,6 +43,8 @@ async function checkIkeaStock(country: string, articleID: string) {
 }
 
 async function handleCron(event: ScheduledController, env: Bindings, ctx: ExecutionContext) {
+  neonConfig.wsProxy = env.WS_PROXY;
+
   const db = new Kysely<DB>({
     dialect: new PostgresDialect({
       pool: new Pool({ connectionString: env.DATABASE_URL }),

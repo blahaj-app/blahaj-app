@@ -17,7 +17,7 @@ export const getStockHistoryServer = async (context: AppLoadContext, item: strin
     "stockhistory-" + item + "-" + storeId,
     context.waitUntil,
     () => {
-      const db = getDatabase(context.env.DATABASE_URL);
+      const db = getDatabase(context);
 
       return db
         .selectFrom("stock")

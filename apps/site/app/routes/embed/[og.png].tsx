@@ -61,7 +61,7 @@ export const loader = async ({ params, request, context }: LoaderArgs) => {
     return match;
   }
 
-  const db = getDatabase(context.env.DATABASE_URL);
+  const db = getDatabase(context);
   const satoriPromise = Promise.all([
     import("satori/wasm").then((m) => m.default as typeof SatoriType),
     initalize(),

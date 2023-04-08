@@ -13,6 +13,7 @@ const handleRequest = createPagesFunctionHandler({
 });
 
 interface Env {
+  WS_PROXY: string;
   DATABASE_URL: string;
   RESVG: Fetcher;
 }

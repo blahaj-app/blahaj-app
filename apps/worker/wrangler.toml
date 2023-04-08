@@ -2,11 +2,12 @@ name = "blahaj-app-worker"
 main = "dist/index.mjs"
 compatibility_date = "2022-05-28"
 compatibility_flags = []
+usage_model = "unbound"
 
 workers_dev=false
 
 [triggers]
-crons = ["*/30 * * * *"]
+crons = ["*/5 * * * *"]
 
 [build]
 command = "node build.js"

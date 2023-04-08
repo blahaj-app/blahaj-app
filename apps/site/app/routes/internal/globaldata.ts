@@ -17,7 +17,7 @@ export const getGlobalDataServer = async (context: AppLoadContext, item: string)
     "globaldata-" + item,
     context.waitUntil,
     () => {
-      const db = getDatabase(context.env.DATABASE_URL);
+      const db = getDatabase(context);
 
       return promiseHash({
         stocks: db
