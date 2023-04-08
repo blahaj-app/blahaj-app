@@ -104,8 +104,8 @@ jobs:
       - name: Find sourcemaps
         id: sourcemaps
         run: |
-          echo "client=$(find apps/site/public -name '*.map' | tr '\n' ',' | sed 's/,$//')" >> $GITHUB_OUTPUT &&
-          echo "server=$(find apps/site/functions -name '*.map' | tr '\n' ',' | sed 's/,$//')" >> $GITHUB_OUTPUT
+          echo "client=$(find apps/site/public -name '*.map' | tr '\n' ' ')" >> $GITHUB_OUTPUT &&
+          echo "server=$(find apps/site/functions -name '*.map' | tr '\n' ' ')" >> $GITHUB_OUTPUT
 
       - name: Create client Sentry release
         uses: getsentry/action-release@v1
