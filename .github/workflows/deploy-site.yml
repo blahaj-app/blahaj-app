@@ -44,10 +44,10 @@ jobs:
           echo "recursive-install=false" >> .npmrc &&
           pnpm install
 
-      - name: Check if we should run the job
+      - name: Chceck if any files changed
         id: check
         run: |
-          echo "should_run=$(pnpm --silent run changed -p .github/workflows/deploy-site.yml ./apps/site/package.json ${{ github.event.before }})" >> $GITHUB_OUTPUT
+          echo "::set-output name=should_run::$(pnpm --silent run changed -p .github/workflows/deploy-site.yml ./apps/site/package.json ${{ github.event.before }})"
 
   publish:
     runs-on: ubuntu-latest
@@ -102,6 +102,24 @@ jobs:
         run: |
           cd apps/site &&
           pnpm build
+
+      - name: Find sourcemaps
+        id: sourcemaps
+        run: |
+          echo "::set-output name=files::$(find apps/site/public apps/site/functions -name '*.map')"
+
+      - uses: actions/checkout@v2
+      - name: Create Sentry release
+        uses: getsentry/action-release@v1
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: ${{ vars.SENTRY_ORG }}
+          SENTRY_PROJECT: ${{ vars.SENTRY_PROJECT_CLIENT }}
+          SENTRY_URL: ${{ vars.SENTRY_URL }}
+        with:
+          environment: production
+          dist: ${{ github.sha }}
+          sourcemaps: ${{ steps.sourcemaps.outputs.files }}
 
       - name: Publish to Cloudflare Pages
         uses: cloudflare/pages-action@22d9e5e143c6f9400b438a489e8d434b416d235d

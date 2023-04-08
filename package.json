@@ -10,7 +10,7 @@
     "clean": "pnpm run -r clean",
     "build": "pnpm run -r build",
     "lint": "eslint --ext js,jsx,ts,tsx .",
-    "changed": "node ./scripts/pnpm-context.mjs -p tsconfig.build.json -p tsconfig.json"
+    "changed": "node ./scripts/changed.mjs -p tsconfig.build.json -p tsconfig.json"
   },
   "devDependencies": {
     "@pnpm/filter-workspace-packages": "^7.0.4",
