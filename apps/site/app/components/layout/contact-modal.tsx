@@ -28,7 +28,7 @@ const ContactModal: FC = () => {
           <Box as="p" lineHeight="1.25" marginTop="1">
             To avoid duplicates, and to allow others to comment and contribute, please submit all suggestions and bug
             reports to the{" "}
-            <ChakraLink color="blue.400" href="https://github.com/repository/blahaj-app" target="_blank">
+            <ChakraLink color="blue.400" href="https://github.com/blahaj-app/blahaj-app" target="_blank">
               issue tracker on GitHub
             </ChakraLink>
           </Box>

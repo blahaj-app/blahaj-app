@@ -80,7 +80,7 @@ const Layout: FC = () => {
             </SidebarItem>
             <SidebarItem
               as="a"
-              href="https://github.com/repository/blahaj-app"
+              href="https://github.com/blahaj-app/blahaj-app"
               target="_blank"
               icon={<TbBrandGithub size="28" />}
             >
