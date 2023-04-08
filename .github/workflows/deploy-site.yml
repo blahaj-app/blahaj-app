@@ -40,8 +40,7 @@ jobs:
 
       - name: Install root workspace dependencies
         run: |
-          echo "recursive-install=false" >> .npmrc &&
-          pnpm install
+          pnpm install --no-recursive --filter .
 
       - name: Chceck if any files changed
         id: check
@@ -91,9 +90,7 @@ jobs:
       - name: Install dependencies
         run: |
           npm install -g wrangler &&
-          echo "recursive-install=false" >> .npmrc &&
-          cd apps/site &&
-          pnpm install
+          pnpm install --no-recursive --filter apps/site
 
       - name: Build site
         env:
