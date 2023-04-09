@@ -37,7 +37,10 @@ const Layout: FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.pathname]);
 
-  const isMap = useMemo(() => matchesPaths(["/:item/map/:storeId?"], location.pathname), [location.pathname]);
+  const isMap = useMemo(
+    () => matchesPaths(["/:item/map/:storeId", "/:item/map"], location.pathname),
+    [location.pathname],
+  );
 
   return (
     <LayoutContext.Provider value={{ sidebar, contactModal }}>
