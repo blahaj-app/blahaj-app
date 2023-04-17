@@ -176,24 +176,24 @@ export const Sidebar: FC = () => {
       <Box flexGrow="1" maxWidth="23rem" overflow="hidden">
         <Box as={SimpleBar} fontSize="14" maxHeight="100%" autoHide={false}>
           <Box paddingX="6" paddingY="4">
-            <Heading size="md">Redesigned & Rebuilt</Heading>
+            <Heading size="md">A New Look</Heading>
             <p>
-              Hey there. Long time no see. I think.
+              Hey eveyrone. Welcome to the new blahaj.app.
               <br />
               <br />
-              Anyways, as of March 26th, 2023, the new version of blahaj.app (the one you're looking at right now!) is
-              live. This has been a long time coming, so I'm glad to finally be able to push this update out.
+              As you can probably tell, lots of things have changed.
             </p>
-            <Heading size="sm" marginTop="6">
-              What's New?
-            </Heading>
-            <UnorderedList marginStart="6">
-              <ListItem>Completely redesigned interface</ListItem>
-              <ListItem>Shareable links</ListItem>
-              <ListItem>Smolhaj (55cm size) tracking</ListItem>
-              <ListItem>Stock history (up to 90 days)</ListItem>
-              <ListItem>Various fixes</ListItem>
-            </UnorderedList>
+            <br />
+            <p>
+              When I first made blahaj.app, Smolhajs (the 55cm one) were only available in Japan, so I didn't bother
+              adding tracking for them. Now, they're available in pretty much every country, so I've made it so you can
+              track the stock of those too. (You can switch sizes with the buttons at the top of the map)
+            </p>
+            <br />
+            <p>
+              You're also now able to view historical stock data for stores. Select a store on the map, and you'll see
+              up to 90 days of stock data.
+            </p>
             <Heading size="sm" marginTop="6">
               Open Source
             </Heading>
@@ -207,7 +207,8 @@ export const Sidebar: FC = () => {
             </Heading>
             <p>
               As always, if you have any feedback, suggestions, or just would like to say hi, feel free to reach out to
-              me. Details can also be found in <OpenSideMenuButton>the side menu</OpenSideMenuButton>.
+              me. Details can also be found in <OpenSideMenuButton>the side menu</OpenSideMenuButton> (there's also a
+              Discord now).
             </p>
           </Box>
         </Box>
