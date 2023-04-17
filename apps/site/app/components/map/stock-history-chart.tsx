@@ -24,7 +24,7 @@ export const colors = {
 
 // accessors
 const getDate = (d: StockChartDatum) => new Date(d.reported_at);
-const getStockQuantity = (d: StockChartDatum) => d.quantity;
+const getStockQuantity = (d: StockChartDatum) => d?.quantity;
 const bisectDate = bisector<StockChartDatum, Date>((d) => new Date(d.reported_at)).left;
 
 export type AreaProps = {
