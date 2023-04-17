@@ -1,5 +1,5 @@
 import type { Item } from "@blahaj-app/static";
-import { Box, Flex, Heading, ListItem, Spinner, UnorderedList } from "@chakra-ui/react";
+import { Box, Flex, Heading, Spinner } from "@chakra-ui/react";
 import { ParentSize } from "@visx/responsive";
 import { format } from "date-fns";
 import type { FC } from "react";
@@ -178,7 +178,7 @@ export const Sidebar: FC = () => {
           <Box paddingX="6" paddingY="4">
             <Heading size="md">A New Look</Heading>
             <p>
-              Hey eveyrone. Welcome to the new blahaj.app.
+              Hey everyone. Welcome to the new blahaj.app.
               <br />
               <br />
               As you can probably tell, lots of things have changed.
