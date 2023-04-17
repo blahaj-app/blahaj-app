@@ -2,7 +2,7 @@ import { Button } from "@chakra-ui/react";
 import eases from "eases";
 import type { Variant } from "framer-motion";
 import type { FC } from "react";
-import type { SetStateType } from "../../utils/types";
+import { useLayoutContext } from "../../layout";
 import type { MotionBoxProps } from "../motion-box";
 import { MotionBox } from "../motion-box";
 import { MotionFlex } from "../motion-flex";
@@ -28,17 +28,16 @@ const HamburgerBar: FC<MotionBoxProps & { variants: { [key in HamburgerState]?: 
   );
 };
 
-export interface HamburgerProps {
-  open: boolean;
-  setOpen: SetStateType<boolean>;
-}
+const Hamburger: FC = () => {
+  const {
+    sidebar: { isOpen, onToggle },
+  } = useLayoutContext();
 
-const Hamburger: FC<HamburgerProps> = ({ open, setOpen }) => {
   const distance = "5px";
 
   return (
-    <Button variant="ghost" px="2" onClick={() => setOpen((o) => !o)}>
-      <MotionFlex animate={open ? HamburgerState.Open : HamburgerState.Closed} flexDir="column" width="6">
+    <Button variant="ghost" px="2" onClick={onToggle}>
+      <MotionFlex animate={isOpen ? HamburgerState.Open : HamburgerState.Closed} flexDir="column" width="6">
         <HamburgerBar
           variants={{
             [HamburgerState.Open]: { transform: `rotate(45deg) translateX(${distance}) translateY(${distance})` },

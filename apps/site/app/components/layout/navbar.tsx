@@ -1,12 +1,9 @@
 import { Box, Flex } from "@chakra-ui/react";
 import type { FC } from "react";
-import { useLayoutContext } from "../../layout";
 import blahajIcon from "../../media/blahaj.png";
 import Hamburger from "./hamburger";
 
 const Navbar: FC = () => {
-  const { sidebar } = useLayoutContext();
-
   return (
     <Flex
       position="sticky"
@@ -34,7 +31,7 @@ const Navbar: FC = () => {
         </Box>
       </Flex>
       <Flex>
-        <Hamburger open={sidebar.isOpen} setOpen={sidebar.onOpen} />
+        <Hamburger />
       </Flex>
     </Flex>
   );
