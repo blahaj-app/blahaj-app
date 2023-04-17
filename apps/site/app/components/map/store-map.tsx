@@ -16,6 +16,7 @@ import { useGlobalDataQuery, useMapContext } from "../../routes/$item.map.($stor
 import { getStockStatus, stockStyles } from "../../stock-status";
 import findStore from "../../utils/find-store";
 import noop from "../../utils/noop";
+import rIC from "../../utils/ric";
 import ItemSelector from "./item-selector";
 
 const StoreMap: FC = () => {
@@ -136,7 +137,7 @@ const StoreMap: FC = () => {
 
   const mapContainerRef = useRef<HTMLDivElement>(null);
 
-  const resizeMap = throttle(1000 / 60, (ref: MapRef) => requestIdleCallback(() => ref.resize()));
+  const resizeMap = throttle(1000 / 60, (ref: MapRef) => rIC(() => ref.resize()));
 
   useResizeObserver(mapContainerRef, () => {
     if (!mapRef.current) return;

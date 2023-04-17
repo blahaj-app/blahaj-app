@@ -6,6 +6,7 @@ import { startTransition, useEffect, useState } from "react";
 import { hydrateRoot } from "react-dom/client";
 import { ClientStyleContext } from "./context";
 import { createEmotionCache, defaultCache } from "./create-emotion-cache";
+import rIC from "./utils/ric";
 
 Sentry.init({
   dsn: __sentryDsn__,
@@ -50,10 +51,4 @@ const hydrate = () => {
   });
 };
 
-if (typeof requestIdleCallback === "function") {
-  requestIdleCallback(hydrate);
-} else {
-  // Safari doesn't support requestIdleCallback
-  // https://caniuse.com/requestidlecallback
-  setTimeout(hydrate, 1);
-}
+rIC(hydrate);
