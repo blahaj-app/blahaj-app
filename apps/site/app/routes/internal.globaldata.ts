@@ -8,9 +8,11 @@ import getDatabase from "../utils/get-database";
 import getOrCache from "../utils/get-or-cache";
 import parseSearchParams from "../utils/parse-search-params";
 import type { AwaitedReturn } from "../utils/types";
+import withQuery from "../utils/with-query";
+import type { InternalGlobalDataSearchParams } from "../zod/internal-globaldata-search-params";
 import { InternalGlobalDataSearchParamsSchema } from "../zod/internal-globaldata-search-params";
 
-export type { InternalGlobalDataSearchParams } from "../zod/internal-globaldata-search-params";
+export type SearchParams = InternalGlobalDataSearchParams;
 
 export const getGlobalDataServer = async (context: AppLoadContext, item: string) =>
   getOrCache(
@@ -42,7 +44,7 @@ export const getGlobalDataServer = async (context: AppLoadContext, item: string)
   );
 
 export const getGlobalDataClient = async (item: string) => {
-  const res = await fetch(route("/internal/globaldata"));
+  const res = await fetch(withQuery<SearchParams>(route("/internal/globaldata"), { item }));
   if (!res.ok) return null;
   const data = await res.json<AwaitedReturn<typeof loader>>();
 
