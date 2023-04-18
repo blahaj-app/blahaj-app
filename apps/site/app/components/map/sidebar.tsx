@@ -177,12 +177,7 @@ export const Sidebar: FC = () => {
         <Box as={SimpleBar} fontSize="14" maxHeight="100%" autoHide={false}>
           <Box paddingX="6" paddingY="4">
             <Heading size="md">A New Look</Heading>
-            <p>
-              Hey everyone. Welcome to the new blahaj.app.
-              <br />
-              <br />
-              As you can probably tell, lots of things have changed.
-            </p>
+            <p>Hey everyone. Welcome to the new blahaj.app. As you can probably tell, lots of things have changed.</p>
             <br />
             <p>
               When I first made blahaj.app, Smolhajs (the 55cm one) were only available in Japan, so I didn't bother
