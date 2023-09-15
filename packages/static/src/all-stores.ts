@@ -2514,6 +2514,13 @@ export const ALL_STORES: Store[] = [
     longitude: 139.7032,
   },
   {
+    id: "686",
+    name: "IKEA København",
+    country: "dk",
+    latitude: 55.663885,
+    longitude: 12.561302
+  },
+  {
     id: "802",
     name: "IKEA Siyuanqiao",
     country: "cn",
