@@ -1,4 +1,3 @@
-diff --git a/dist/cli.js b/dist/cli.js
 index 7ee5f43db167b14e7ccd9fcec591d636a7075bf2..01b025714f7bf6f37b411ddb52b0d57ddb270ab4 100644
 --- a/dist/cli.js
 +++ b/dist/cli.js
